@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Fretboard Pro</title>
   <style>
-    *{
+   *{
   margin:0;
   padding:0;
   box-sizing:border-box;
@@ -387,6 +387,86 @@ h1{
 .dot.penta-minor{background:#9c27b0}
 .dot.penta-major{background:#ff5722}
 
+/* --- Ligne de notes pour l'accord sélectionné --- */
+
+.scale-notes {
+  display: flex;
+  flex-direction: column;    /* label au-dessus de la ligne de notes */
+  align-items: center;       /* centrage horizontal */
+  gap: 6px;
+  margin: 8px 0 10px;
+  font-size: 0.9rem;
+}
+
+.scale-notes-label {
+  font-weight: 600;
+  color: #ddd;
+}
+
+.scale-notes-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;   /* la suite C D E F G A B centrée */
+}
+
+
+/* pastilles de notes (mêmes couleurs que sur le manche) */
+.scale-note{
+  padding:4px 10px;
+  border-radius:999px;
+  font-weight:600;
+  font-size:0.9rem;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:32px;
+  box-shadow:0 3px 10px rgba(0,0,0,0.6);
+}
+
+/* mêmes couleurs que .note.* */
+.scale-note.root{
+  background:#ffeb3b;
+  color:#000;
+}
+
+.scale-note.chord{
+  background:#aaa;
+  color:#000;
+}
+
+.scale-note.ok{
+  background:#8bc34a;
+  color:#000;
+}
+
+.scale-note.target{
+  background:#ff9800;
+  color:#000;
+}
+
+.scale-note.avoid{
+  background:#e53935;
+  color:#fff;
+  opacity:0.85;
+}
+
+.scale-note.blues{
+  background:#2196f3;
+  color:#fff;
+}
+
+.scale-note.penta-minor{
+  background:#9c27b0;
+  color:#fff;
+}
+
+.scale-note.penta-major{
+  background:#ff5722;
+  color:#fff;
+}
+
+
 /* --- Manche de guitare --- */
 
 .fretboard{
@@ -461,10 +541,9 @@ h1{
   position:absolute;
   top:0;
   bottom:0;
-  left:50%;
+  right:0;            /* barre de frette sur le bord droit de la case */
   width:6px;
   background:#888;
-  transform:translateX(-50%);
   z-index:1;
 }
 
@@ -563,6 +642,37 @@ h1{
   color:#aaa;
   padding:0 15px;
 }
+
+#labels div{
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+#labels div.key-fret{
+  font-size: 1.2rem;   /* plus gros */
+  font-weight: 700;
+}
+
+#labels div.octave-fret{
+  color: #ffeb3b;      /* déjà dans ton JS avant, on garde l’idée */
+}
+
+#startFret option.hot-fret{
+  font-weight: 700;
+  font-size: 1.05em;   /* un poil plus gros dans la liste */
+}
+
+
+/* Aligner les labels exactement avec les frettes */
+#labels{
+  display: grid;
+  grid-template-columns: repeat(var(--fret-count), 1fr);
+  text-align: center;
+  margin-top: 12px;
+  color:#aaa;
+  padding:0 15px;
+}
+
 
 /* --- Message d’info / tonalité --- */
 
@@ -694,137 +804,165 @@ h1{
   }
 }
 
+
   </style>
 </head>
 <body>
   <main class="app">
-    <h1>Fretboard Pro</h1>
+  <h1>Fretboard Pro</h1>
 
-    <!-- Onglets principaux -->
-    <div class="tabs">
-      <button class="tab active" data-mode="pop">Pop/Rock</button>
-      <button class="tab" data-mode="blues">Blues</button>
+  <!-- Onglets principaux -->
+  <div class="tabs">
+    <button class="tab" data-mode="notes">Notes</button>
+    <button class="tab active" data-mode="pop">Pop/Rock</button>
+    <button class="tab" data-mode="blues">Blues</button>
+  </div>
+
+  <!-- === MODE POP/ROCK === -->
+  <div id="popMode" class="mode active">
+    <div class="inputs">
+      <!-- 4 accords (menus déroulants) -->
+      <select id="chord1"></select>
+      <select id="chord2"></select>
+      <select id="chord3"></select>
+      <select id="chord4"></select>
+
+      <!-- Bouton : détection de tonalité -->
+      <button id="findKey">Trouver la tonalité</button>
+
+      <!-- Nouveau : génération automatique -->
+      <select id="progressionStyle">
+        <option value="pop">Pop</option>
+        <option value="rock">Rock</option>
+        <option value="funk">Funk</option>
+      </select>
+
+      <select id="progressionLength">
+        <option value="2">2 accords</option>
+        <option value="4" selected>4 accords</option>
+      </select>
+
+      <button id="generateProg">Générer une suite</button>
     </div>
 
-    <!-- === MODE POP/ROCK === -->
-    <div id="popMode" class="mode active">
-      <div class="inputs">
-        <!-- 4 accords (menus déroulants) -->
-        <select id="chord1"></select>
-        <select id="chord2"></select>
-        <select id="chord3"></select>
-        <select id="chord4"></select>
+    <p id="popResult" class="msg"></p>
+  </div>
 
-        <!-- Bouton : détection de tonalité -->
-        <button id="findKey">Trouver la tonalité</button>
-
-        <!-- Nouveau : génération automatique -->
-        <select id="progressionStyle">
-          <option value="pop">Pop</option>
-          <option value="rock">Rock</option>
-          <option value="funk">Funk</option>
+  <!-- === MODE BLUES === -->
+  <div id="bluesMode" class="mode">
+    <div class="inputs">
+      <label>
+        Tonalité :
+        <select id="bluesKey">
+          <option>E</option>
+          <option selected>A</option>
+          <option>D</option>
+          <option>G</option>
+          <option>C</option>
+          <option>F</option>
+          <option>Bb</option>
+          <option>Eb</option>
+          <option>Ab</option>
+          <option>Db</option>
+          <option>Gb</option>
+          <option>B</option>
         </select>
-
-        <select id="progressionLength">
-          <option value="2">2 accords</option>
-          <option value="4" selected>4 accords</option>
-        </select>
-
-        <button id="generateProg">Générer une suite</button>
-      </div>
-
-      <p id="popResult" class="msg"></p>
+      </label>
+      <span id="bluesGrid" class="msg"></span>
     </div>
 
-    <!-- === MODE BLUES === -->
-    <div id="bluesMode" class="mode">
+    <div class="options">
+      <label><input type="checkbox" id="pentaMin" checked> Penta min</label>
+      <label><input type="checkbox" id="pentaMaj"> Penta maj</label>
+      <label><input type="checkbox" id="bluesNotes" checked> Notes blues</label>
+      <label>
+        Style :
+        <select id="bluesStyle">
+          <option value="standard">Standard</option>
+          <option value="slow">Slow Blues</option>
+        </select>
+      </label>
+    </div>
+  </div>
+
+    <!-- === MODE NOTES === -->
+    <div id="notesMode" class="mode">
       <div class="inputs">
         <label>
-          Tonalité :
-          <select id="bluesKey">
-            <option>E</option>
-            <option selected>A</option>
-            <option>D</option>
-            <option>G</option>
-            <option>C</option>
-            <option>F</option>
-            <option>Bb</option>
-            <option>Eb</option>
-            <option>Ab</option>
-            <option>Db</option>
-            <option>Gb</option>
-            <option>B</option>
-          </select>
-        </label>
-        <span id="bluesGrid" class="msg"></span>
-      </div>
-
-      <div class="options">
-        <label><input type="checkbox" id="pentaMin" checked> Penta min</label>
-        <label><input type="checkbox" id="pentaMaj"> Penta maj</label>
-        <label><input type="checkbox" id="bluesNotes" checked> Notes blues</label>
-        <label>
-          Style :
-          <select id="bluesStyle">
-            <option value="standard">Standard</option>
-            <option value="slow">Slow Blues</option>
+          Note :
+          <select id="noteSel">
+            <option value="C">C</option>
+            <option value="D">D</option>
+            <option value="E">E</option>
+            <option value="F">F</option>
+            <option value="G">G</option>
+            <option value="A">A</option>
+            <option value="B">B</option>
           </select>
         </label>
       </div>
-    </div>
 
-        <!-- === Zone commune (accord courant / fret / vue) === -->
-    <div class="common">
-      <label>
-        Accord actuel :
-        <select id="chordSel"></select>
-      </label>
-
-      <label>
-        Fret de départ :
-        <input id="startFret" type="number" min="0" max="12" value="5">
-      </label>
-
-      <!-- Choix 5 frettes / 15 frettes -->
-      <div class="view-toggle">
-        <button type="button" data-frets="5" class="active">5 frettes</button>
-        <button type="button" data-frets="10">10 frettes</button>
-        <button type="button" data-frets="15">15 frettes</button>
-      </div>
-
-      <!-- ✅ case pour afficher la blue note -->
-      <label>
-        <input type="checkbox" id="showBlueNote">
-        Note blue (b5)
-      </label>
+      <p class="msg">
+        Affiche toutes les positions de la note choisie sur le manche (entre la frette de départ et la vue sélectionnée).
+      </p>
     </div>
 
 
-    <!-- Légende (toutes les notes sur une ligne, géré par le CSS) -->
-    <div class="legend">
-      <span><i class="dot chord"></i>Accord (tonique en gros)</span>
-      <span><i class="dot root"></i>Tonique</span>
-      <span><i class="dot target"></i>Cible (slow blues)</span>
-      <span><i class="dot avoid"></i>À éviter</span>
-      <span><i class="dot ok"></i>Dans la gamme</span>
-      <span><i class="dot blues"></i>Note blues</span>
-      <span><i class="dot penta-minor"></i>Penta min</span>
-      <span><i class="dot penta-major"></i>Penta maj</span>
+    <!-- === Zone commune (accord courant / fret / vue) === -->
+  <div class="common">
+    <label>
+      Accord actuel :
+      <select id="chordSel"></select>
+    </label>
+
+    <label>
+      Fret de départ :
+      <select id="startFret"></select>
+    </label>
+
+    <!-- Choix 5 frettes / 15 frettes -->
+    <div class="view-toggle">
+      <button type="button" data-frets="5" class="active">5 frettes</button>
+      <button type="button" data-frets="10">10 frettes</button>
+      <button type="button" data-frets="15">15 frettes</button>
     </div>
 
-    <!-- Manche -->
-    <div class="fretboard">
-      <div id="fb"></div>
-      <div id="labels"></div>
-    </div>
+    <!-- ✅ case pour afficher la blue note -->
+    <label>
+      <input type="checkbox" id="showBlueNote">
+      Note blue (b5)
+    </label>
+  </div>
+
+  <!-- ✅ Ligne de notes pour l'accord sélectionné (centrée, AU-DESSUS de la légende) -->
+  <div id="scaleNotes" class="scale-notes"></div>
+
+  <!-- Légende (toutes les notes sur une ligne, géré par le CSS) -->
+  <div class="legend">
+    <span><i class="dot chord"></i>Accord (tonique en gros)</span>
+    <span><i class="dot root"></i>Tonique</span>
+    <span><i class="dot target"></i>Cible</span>
+    <span><i class="dot avoid"></i>À éviter</span>
+    <span><i class="dot ok"></i>Dans la gamme</span>
+    <span><i class="dot blues"></i>Note blues</span>
+    <span><i class="dot penta-minor"></i>Penta min</span>
+    <span><i class="dot penta-major"></i>Penta maj</span>
+  </div>
+
+  <!-- Manche -->
+  <div class="fretboard">
+    <div id="fb"></div>
+    <div id="labels"></div>
+  </div>
   </main>
-
   <script>
     // ================== CONSTANTES & UTILITAIRES ==================
 
 const NOTES_SHARP = ["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"];
 const NOTES_FLAT  = ["C","Db","D","Eb","E","F","Gb","G","Ab","A","Bb","B"];
 const STRINGS = ["E","B","G","D","A","E"]; // de la plus grave à la plus aiguë
+const HOT_FRETS = [3, 5, 7, 9, 12, 15];
+
 
 // Liste complète des accords de base (chromatisme + variantes)
 const CHORD_LIST = [
@@ -926,7 +1064,6 @@ function getDiatonicChordName(rootIndex, degree, style = "pop"){
 function generateDiatonicProgression(){
   const styleSel   = document.getElementById("progressionStyle");
   const lengthSel  = document.getElementById("progressionLength");
-  const resultEl   = document.getElementById("popResult");
 
   const style  = styleSel ? styleSel.value : "pop";
   const length = lengthSel ? parseInt(lengthSel.value, 10) || 4 : 4;
@@ -948,7 +1085,6 @@ function generateDiatonicProgression(){
   // Choix d'une tonalité majeure au hasard (pour varier un peu)
   const randomRoot = Math.floor(Math.random() * 12); // 0–11
   currentKeyRoot = randomRoot;                       // pour le manche
-  const keyName = i2n(randomRoot);
 
   // Conversion des degrés en noms d'accords
   const chords = fullPattern.map(deg =>
@@ -966,14 +1102,9 @@ function generateDiatonicProgression(){
   // Met à jour la liste déroulante "Accord actuel"
   initPopChordSelect();
 
-  // Message d'info
-  if(resultEl){
-    resultEl.textContent =
-      `Suite générée : ${chords.join(" - ")} (en ${keyName} majeur, style ${style})`;
-  }
-
-  // Rafraîchit le manche
-  render();
+  // Affiche / met à jour la tonalité et redessine le manche
+  // (updatePopKeyFromChords() appelle déjà render())
+  updatePopKeyFromChords();
 }
 
 
@@ -1122,20 +1253,41 @@ function render(){
   const labels = document.getElementById("labels");
   const startFret = parseInt(document.getElementById("startFret").value) || 0;
 
-  // --- centrage du "pattern principal" (box de pentatonique) ---
-  const patternWidth = 5; // startFret -> startFret + 4
-  const extra = Math.max(fretCount - patternWidth, 0);
-  const extraBefore = Math.floor(extra / 2);
-  const extraAfter = extra - extraBefore; // si besoin plus tard
+  const activeTab  = document.querySelector(".tab.active");
+  const activeMode = activeTab ? activeTab.dataset.mode : "pop";
+  const isBluesMode = activeMode === "blues";
+  const isNotesMode = activeMode === "notes";
 
-  let firstFret = startFret - extraBefore;
-  if (firstFret < 0) firstFret = 0;
+  // note sélectionnée en mode NOTES
+  const noteSel = document.getElementById("noteSel");
+  const noteFilterIdx = (isNotesMode && noteSel) ? n2i(noteSel.value) : null;
+
+  // --- gestion des frettes affichées ---
+  let localFretCount = fretCount; // valeur par défaut (5/10/15)
+  let firstFret;
+
+  if (isNotesMode) {
+    // MODE NOTES → toujours de 1 à 12
+    firstFret = 1;
+    localFretCount = 13;
+  } else {
+    // Pop / Blues → centrage du "pattern principal" (box de pentatonique)
+    const patternWidth = 5; // startFret -> startFret + 4
+    const extra = Math.max(localFretCount - patternWidth, 0);
+    const extraBefore = Math.floor(extra / 2);
+    const extraAfter = extra - extraBefore; // si besoin plus tard
+
+    firstFret = startFret - extraBefore;
+    if (firstFret < 0) firstFret = 0;
+  }
 
   fb.innerHTML = "";
   labels.innerHTML = "";
-  fb.style.gridTemplateColumns = `repeat(${fretCount}, 1fr)`;
+  fb.style.gridTemplateColumns = `repeat(${localFretCount}, 1fr)`;
 
-  const isBluesMode = document.querySelector(".tab.active").dataset.mode === "blues";
+  labels.style.setProperty("--fret-count", localFretCount);
+  labels.style.gridTemplateColumns = `repeat(${localFretCount}, 1fr)`;
+
 
   // racine de tonalité
   const keyRoot = isBluesMode
@@ -1146,7 +1298,7 @@ function render(){
     ? new Set(pentaMin(keyRoot)) // en blues on se base sur penta min de la TONALITÉ
     : new Set(majorScale(keyRoot));
 
-  // accord sélectionné
+  // accord sélectionné (inutile en mode Notes mais on garde pour réutiliser la logique)
   const selectedChordText = document.getElementById("chordSel").value || "C";
   const chord = parseChord(selectedChordText);
 
@@ -1170,37 +1322,37 @@ function render(){
 
   // === PENTAS & NOTES BLUES ===
   // → UNIQUEMENT actives en mode BLUES et si cochées.
-    const pentaMinCb   = document.getElementById("pentaMin");
-    const pentaMajCb   = document.getElementById("pentaMaj");
-    const bluesNotesCb = document.getElementById("bluesNotes");
-    const globalBlueCb = document.getElementById("showBlueNote");
+  const pentaMinCb   = document.getElementById("pentaMin");
+  const pentaMajCb   = document.getElementById("pentaMaj");
+  const bluesNotesCb = document.getElementById("bluesNotes");
+  const globalBlueCb = document.getElementById("showBlueNote");
 
-    const showPentaMin   = isBluesMode && (pentaMinCb?.checked ?? false);
-    const showPentaMaj   = isBluesMode && (pentaMajCb?.checked ?? false);
-    const showBluesNotes = isBluesMode && (bluesNotesCb?.checked ?? false);
+  const showPentaMin   = isBluesMode && (pentaMinCb?.checked ?? false);
+  const showPentaMaj   = isBluesMode && (pentaMajCb?.checked ?? false);
+  const showBluesNotes = isBluesMode && (bluesNotesCb?.checked ?? false);
 
-    const pentaMinSet = showPentaMin ? new Set(pentaMin(chord.root)) : new Set();
-    const pentaMajSet = showPentaMaj ? new Set(pentaMaj(chord.root)) : new Set();
+  const pentaMinSet = showPentaMin ? new Set(pentaMin(chord.root)) : new Set();
+  const pentaMajSet = showPentaMaj ? new Set(pentaMaj(chord.root)) : new Set();
 
-    // Blue note typique (b5) de l'accord
-    const bluesNote = (chord.root + 6) % 12;
+  // Blue note typique (b5) de l'accord
+  const bluesNote = (chord.root + 6) % 12;
 
-    // 👉 en Blues : checkbox "Notes blues"
-    // 👉 en Pop/Rock : checkbox globale "Note blue (b5)"
-    const showBlue =
-      (isBluesMode && showBluesNotes) ||
-      (!isBluesMode && (globalBlueCb?.checked ?? false));
+  // 👉 en Blues : checkbox "Notes blues"
+  // 👉 en Pop/Rock : checkbox globale "Note blue (b5)"
+  const showBlue =
+    (isBluesMode && showBluesNotes) ||
+    (!isBluesMode && (globalBlueCb?.checked ?? false));
 
-    const bluesSet = showBlue ? new Set([bluesNote]) : new Set();
+  const bluesSet = showBlue ? new Set([bluesNote]) : new Set();
 
-    const slowBlues = document.getElementById("bluesStyle")?.value === "slow";
+  const slowBlues = document.getElementById("bluesStyle")?.value === "slow";
 
 
   // --- Rendu du manche ---
   STRINGS.forEach(openString => {
     const openNoteIdx = n2i(openString);
 
-    for(let f = 0; f < fretCount; f++){
+    for(let f = 0; f < localFretCount; f++){
       const fretNum = firstFret + f;
       const noteIdx = (openNoteIdx + fretNum) % 12;
 
@@ -1218,60 +1370,65 @@ function render(){
       if([3,5,7,9,15,17,19,21].includes(fretNum)) cell.classList.add("inlay");
       if(fretNum === 12) cell.classList.add("double-inlay");
 
-            let role;
-      const intervalFromRoot = (noteIdx - chord.root + 12) % 12;
+      let role = null;
 
-      // pour classifier dynamiquement cible / à éviter :
-      const chordToneArray = [...chordNotes];
-      const isHalfStepBelowChord = chordToneArray.some(c => (noteIdx + 1) % 12 === c);   // note = -1
-      const isHalfStepAboveChord = chordToneArray.some(c => (noteIdx + 11) % 12 === c);  // note = +1
-
-      if(noteIdx === chord.root) {
-        role = "root";
-
-      } else if(chordNotes.has(noteIdx)) {
-        role = "chord";
-
-      } else if(pentaMinSet.has(noteIdx)) {
-        role = "penta-minor";
-
-      } else if(pentaMajSet.has(noteIdx)) {
-        role = "penta-major";
-
-      } else if(bluesSet.has(noteIdx)) {
-        role = "blues";
-
-      } else if(isBluesMode && slowBlues && [2,5,9].includes(intervalFromRoot)) {
-        // notes cibles typiques slow blues (2nd, 4th, 6th)
-        role = "target";
-
-      } else if(!isBluesMode && scaleSet.has(noteIdx)) {
-        // POP/ROCK : note dans la gamme → on applique la logique 1/2 ton
-        if(isHalfStepBelowChord) {
-          // demi-ton en dessous d'une note d'accord → note cible
-          role = "target";
-        } else if(isHalfStepAboveChord) {
-          // demi-ton au-dessus d'une note d'accord → note à éviter
-          role = "avoid";
-        } else {
-          // dans la gamme mais pas spécialement tendue
-          role = "ok";
+      if (isNotesMode) {
+        // MODE "NOTES" → on n'affiche QUE la note choisie
+        if (noteFilterIdx !== null && noteIdx === noteFilterIdx) {
+          role = "root"; // même style que la tonique
         }
-
-      } else if(scaleSet.has(noteIdx)) {
-        // BLUES (ou cas restant) : note correcte de la gamme
-        role = "ok";
-
       } else {
-        // Note hors gamme → on ne l'affiche pas
-        role = null;
-      }
+        const intervalFromRoot = (noteIdx - chord.root + 12) % 12;
 
+        // pour classifier dynamiquement cible / à éviter :
+        const chordToneArray = [...chordNotes];
+        const isHalfStepBelowChord = chordToneArray.some(c => (noteIdx + 1) % 12 === c);   // note = -1
+        const isHalfStepAboveChord = chordToneArray.some(c => (noteIdx + 11) % 12 === c);  // note = +1
+
+        if(noteIdx === chord.root) {
+          role = "root";
+
+        } else if(chordNotes.has(noteIdx)) {
+          role = "chord";
+
+        } else if(pentaMinSet.has(noteIdx)) {
+          role = "penta-minor";
+
+        } else if(pentaMajSet.has(noteIdx)) {
+          role = "penta-major";
+
+        } else if(bluesSet.has(noteIdx)) {
+          role = "blues";
+
+        } else if(isBluesMode && slowBlues && [2,5,9].includes(intervalFromRoot)) {
+          // notes cibles typiques slow blues (2nd, 4th, 6th)
+          role = "target";
+
+        } else if(!isBluesMode && scaleSet.has(noteIdx)) {
+          // POP/ROCK : note dans la gamme → on applique la logique 1/2 ton
+          if(isHalfStepBelowChord) {
+            role = "target";
+          } else if(isHalfStepAboveChord) {
+            role = "avoid";
+          } else {
+            role = "ok";
+          }
+
+        } else if(scaleSet.has(noteIdx)) {
+          // BLUES (ou cas restant) : note correcte de la gamme
+          role = "ok";
+
+        } else {
+          // Note hors gamme → on ne l'affiche pas
+          role = null;
+        }
+      }
 
       if(role){
         const dot = document.createElement("div");
         dot.className = `note ${role}`;
         if(role === "root") dot.classList.add("root");
+        // affichage de la note réelle (avec octave implicite)
         dot.textContent = i2n(openNoteIdx + fretNum);
         cell.appendChild(dot);
       }
@@ -1281,18 +1438,105 @@ function render(){
   });
 
   // --- Labels de frettes ---
-  for(let i = 0; i < fretCount; i++){
+  for (let i = 0; i < localFretCount; i++) {
     const num = firstFret + i;
 
     const div = document.createElement("div");
     div.textContent = num;
 
-    if([3,5,7,9,12,15].includes(num)) div.style.fontWeight = "bold";
-    if(num === 12) div.style.color = "#ffeb3b";
+    if (HOT_FRETS.includes(num)) {
+      div.classList.add("key-fret");
+    }
+    if (num === 12) {
+      div.classList.add("octave-fret");
+    }
 
     labels.appendChild(div);
   }
+
+  // ================== LIGNE DE NOTES ==================
+  const scaleNotesEl = document.getElementById("scaleNotes");
+  if (scaleNotesEl) {
+
+    // MODE NOTES → affichage simplifié
+    if (isNotesMode) {
+      const noteName = noteSel ? noteSel.value : "C";
+      scaleNotesEl.innerHTML = `
+        <span class="scale-notes-label">Note sélectionnée :</span>
+        <div class="scale-notes-list">
+          <span class="scale-note root">${noteName}</span>
+        </div>
+      `;
+      return;
+    }
+
+    // Gamme de base : majeure (Pop/Rock) ou penta mineure (Blues)
+    let orderedScale = isBluesMode ? pentaMin(keyRoot) : majorScale(keyRoot);
+
+    // on tourne la gamme pour qu'elle commence sur la tonique de l'accord
+    const idxInScale = orderedScale.indexOf(chord.root);
+    if (idxInScale !== -1) {
+      orderedScale = orderedScale
+        .slice(idxInScale)
+        .concat(orderedScale.slice(0, idxInScale));
+    }
+
+    // rôle des notes (même logique que sur le manche)
+    const chordToneArray = [...chordNotes];
+
+    const notesHtml = orderedScale.map(noteIdx => {
+      let role;
+      const intervalFromRoot = (noteIdx - chord.root + 12) % 12;
+
+      const isHalfStepBelowChord = chordToneArray.some(
+        c => (noteIdx + 1) % 12 === c
+      );
+      const isHalfStepAboveChord = chordToneArray.some(
+        c => (noteIdx + 11) % 12 === c
+      );
+
+      if (noteIdx === chord.root) {
+        role = "root";
+      } else if (chordNotes.has(noteIdx)) {
+        role = "chord";
+      } else if (pentaMinSet.has(noteIdx)) {
+        role = "penta-minor";
+      } else if (pentaMajSet.has(noteIdx)) {
+        role = "penta-major";
+      } else if (bluesSet.has(noteIdx)) {
+        role = "blues";
+      } else if (isBluesMode && slowBlues && [2,5,9].includes(intervalFromRoot)) {
+        role = "target";
+      } else if (!isBluesMode && scaleSet.has(noteIdx)) {
+        if (isHalfStepBelowChord) {
+          role = "target";
+        } else if (isHalfStepAboveChord) {
+          role = "avoid";
+        } else {
+          role = "ok";
+        }
+      } else if (scaleSet.has(noteIdx)) {
+        role = "ok";
+      } else {
+        // normalement, on n'a que des notes de la gamme ici
+        role = "ok";
+      }
+
+      const noteName = i2n(noteIdx);
+      return `<span class="scale-note ${role}">${noteName}</span>`;
+    }).join("");
+
+    const label = `Notes pour ${chord.name} :`;
+
+    scaleNotesEl.innerHTML = `
+      <span class="scale-notes-label">${label}</span>
+      <div class="scale-notes-list">
+        ${notesHtml}
+      </div>
+    `;
+  }
 }
+
 
 // ================== INIT SELECT D'ACCORD POP ==================
 
@@ -1333,9 +1577,10 @@ document.querySelectorAll(".tab").forEach(tab => {
     tab.classList.add("active");
     document.getElementById(tab.dataset.mode + "Mode").classList.add("active");
 
+    const mode = tab.dataset.mode;
     const sel = document.getElementById("chordSel");
 
-    if(tab.dataset.mode === "blues"){
+    if(mode === "blues"){
       // accords I / IV / V dans la tonalité choisie
       const key = document.getElementById("bluesKey").value;
       const keyRoot = n2i(key);
@@ -1349,24 +1594,32 @@ document.querySelectorAll(".tab").forEach(tab => {
         sel.innerHTML = "";
         [`${key}7 (I)`, `${IV}7 (IV)`, `${V}7 (V)`].forEach(c => sel.add(new Option(c)));
       }
-    } else {
+    } else if (mode === "pop") {
       // mode Pop/Rock → on reprend les accords saisis
       initPopChordSelect();
+    } else if (mode === "notes") {
+      // rien de spécial : le manche dépend seulement de noteSel / startFret / vue
     }
 
     render();
   };
 });
 
-// ================== TROUVER LA TONALITÉ POP/ROCK ==================
+// ================== TONALITÉ POP/ROCK — AUTO ==================
 
-document.getElementById("findKey").onclick = () => {
-  const inputs = ["chord1","chord2","chord3","chord4"]
-    .map(id => document.getElementById(id).value.trim())
+// Fonction appelée automatiquement dès qu'un accord change
+function updatePopKeyFromChords() {
+  const ids = ["chord1","chord2","chord3","chord4"];
+
+  const inputs = ids
+    .map(id => document.getElementById(id)?.value.trim())
     .filter(Boolean);
 
-  if(inputs.length < 2) {
-    alert("Entrez au moins 2 accords");
+  const resultEl = document.getElementById("popResult");
+
+  // Aucun accord saisi → on efface le message et on sort
+  if (!inputs.length) {
+    if (resultEl) resultEl.textContent = "";
     return;
   }
 
@@ -1374,10 +1627,10 @@ document.getElementById("findKey").onclick = () => {
   const candidates = [];
 
   // On teste les 12 tonalités MAJEURES et MINEURES
-  for(let r = 0; r < 12; r++){
+  for (let r = 0; r < 12; r++) {
     // MAJEUR
     const maj = scoreDiatonicKey(parsed, r, true);
-    if(maj.explained >= 2){
+    if (maj.explained >= 1) {            // ✅ maintenant OK dès 1 accord
       candidates.push({
         key: i2n(r),
         mode: "majeur",
@@ -1388,7 +1641,7 @@ document.getElementById("findKey").onclick = () => {
 
     // MINEUR (gamme mineure naturelle)
     const min = scoreDiatonicKey(parsed, r, false);
-    if(min.explained >= 2){
+    if (min.explained >= 1) {            // ✅ idem en mineur
       candidates.push({
         key: i2n(r) + "m",
         mode: "mineur",
@@ -1400,39 +1653,56 @@ document.getElementById("findKey").onclick = () => {
 
   // on trie : meilleur score, puis plus d'accords expliqués, puis majeur avant mineur
   candidates.sort((a, b) => {
-    if(b.score !== a.score) return b.score - a.score;
-    if(b.explained !== a.explained) return b.explained - a.explained;
-    if(a.mode !== b.mode) return a.mode === "majeur" ? -1 : 1;
+    if (b.score !== a.score) return b.score - a.score;
+    if (b.explained !== a.explained) return b.explained - a.explained;
+    if (a.mode !== b.mode) return a.mode === "majeur" ? -1 : 1;
     return 0;
   });
 
   const best = candidates[0];
-  const resultEl = document.getElementById("popResult");
 
-  if(best){
+  if (best && resultEl) {
     resultEl.textContent =
       `Tonalité probable : ${best.key} (${best.mode}) – ` +
-      `${best.explained}/${inputs.length} accords expliqués`;
+      `${best.explained}/${inputs.length} accord(s) expliqué(s)`;
 
     // on garde la racine MAJEURE pour l'affichage du manche
-    currentKeyRoot = n2i(best.key.replace("m",""));
-
-    const sel = document.getElementById("chordSel");
-    if(sel){
-      sel.innerHTML = "";
-      inputs.forEach(ch => sel.add(new Option(ch)));
-    }
-  } else {
+    currentKeyRoot = n2i(best.key.replace("m", ""));
+  } else if (resultEl) {
     resultEl.textContent = "Aucune tonalité claire détectée";
   }
 
+  // Met à jour la liste "Accord actuel" avec les accords saisis
+  const sel = document.getElementById("chordSel");
+  if (sel) {
+    sel.innerHTML = "";
+    inputs.forEach(ch => sel.add(new Option(ch)));
+  }
+
   render();
-};
+}
+
+// Quand un des 4 accords Pop/Rock change → recalcul auto de la tonalité
+["chord1","chord2","chord3","chord4"].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) {
+    el.addEventListener("change", updatePopKeyFromChords);
+  }
+});
+
+// On masque le bouton "Trouver la tonalité" (plus besoin)
+const findKeyBtn = document.getElementById("findKey");
+if (findKeyBtn) {
+  findKeyBtn.style.display = "none";
+  // Si tu veux garder la possibilité de cliquer quand même :
+  // findKeyBtn.onclick = updatePopKeyFromChords;
+}
+
 
 
 // ================== AUTRES ÉCOUTEURS ==================
 
-["pentaMin","pentaMaj","bluesNotes","bluesStyle","startFret","chordSel","showBlueNote"]
+["pentaMin","pentaMaj","bluesNotes","bluesStyle","startFret","chordSel","showBlueNote","noteSel"]
   .forEach(id => {
     const el = document.getElementById(id);
     if(el) el.addEventListener("change", render);
@@ -1485,12 +1755,39 @@ inlayStyle.textContent = `
 `;
 document.head.appendChild(inlayStyle);
 
+function initStartFretSelect() {
+  const sel = document.getElementById("startFret");
+  if (!sel) return;
+
+  sel.innerHTML = "";
+
+  for (let f = 1; f <= 21; f++) {
+    const opt = document.createElement("option");
+    opt.value = f;
+    opt.textContent = f;
+
+    if (HOT_FRETS.includes(f)) {
+      opt.classList.add("hot-fret");
+    }
+
+    if (f === 5) opt.selected = true; // comme avant
+    sel.appendChild(opt);
+  }
+}
+
+
 // ================== INITIALISATION ==================
 
 // accords init pour le mode Pop
 initPopChordSelect();
 
-// vue par défaut : 5 frettes pour TOUT (Pop & Blues)
+// options de frettes de départ 1–21
+initStartFretSelect();
+
+// accords init pour le mode Pop
+initPopChordSelect();
+
+// vue par défaut : 5 frettes pour TOUT (Pop & Blues & Notes)
 const defaultBtn5 = document.querySelector('.view-toggle button[data-frets="5"]');
 if(defaultBtn5) {
   setFretsFromButton(defaultBtn5);
@@ -1503,6 +1800,11 @@ const genBtn = document.getElementById("generateProg");
 if(genBtn){
   genBtn.addEventListener("click", generateDiatonicProgression);
 }
+
+// Calcul initial de la tonalité avec les accords par défaut
+updatePopKeyFromChords();
+
+
 
   </script>
 </body>
