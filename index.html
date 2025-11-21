@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Fretboard Pro</title>
   <style>
-   *{
+  
+*{
   margin:0;
   padding:0;
   box-sizing:border-box;
@@ -339,14 +340,19 @@ h1{
 }
 
 /* --- Légende --- */
-
 .legend{
   display:flex;
-  flex-wrap:nowrap;      /* toutes les notes sur une seule ligne */
+  flex-wrap:nowrap;
   gap:26px;
-  margin:20px 0;
+  margin:4 0 22px;          /* plus de marge en bas, aucune en haut */
   overflow-x:auto;
   padding-bottom:4px;
+}
+
+/* petit espace au-dessus du manche / portée */
+#viewWrapper{
+  max-width: 900px;
+  margin: 10px auto 0;       /* 6px au-dessus du manche */
 }
 
 .legend::-webkit-scrollbar{
@@ -391,10 +397,10 @@ h1{
 
 .scale-notes {
   display: flex;
-  flex-direction: column;    /* label au-dessus de la ligne de notes */
-  align-items: center;       /* centrage horizontal */
-  gap: 6px;
-  margin: 8px 0 10px;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;                 /* un peu plus de gap interne */
+  margin: 10px 0 14px;      /* + d’espace sous les bulles */
   font-size: 0.9rem;
 }
 
@@ -410,17 +416,27 @@ h1{
   justify-content: center;   /* la suite C D E F G A B centrée */
 }
 
+/* Centrer la ligne de notes, la légende et les vues manche/portée
+   sans toucher aux marges haut/bas définies plus haut */
+.scale-notes,
+.legend,
+#viewWrapper {
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 
 /* pastilles de notes (mêmes couleurs que sur le manche) */
 .scale-note{
-  padding:4px 10px;
+  padding:6px 14px;
   border-radius:999px;
-  font-weight:600;
-  font-size:0.9rem;
+  font-weight:700;
+  font-size:1.05rem;
   display:inline-flex;
   align-items:center;
   justify-content:center;
-  min-width:32px;
+  min-width:40px;
   box-shadow:0 3px 10px rgba(0,0,0,0.6);
 }
 
@@ -625,6 +641,14 @@ h1{
   color:#fff;
 }
 
+/* Formes Min7 / Maj6 / Maj7 / Min6 : accent discret sur les notes du pattern */
+.note.shape-min7,
+.note.shape-maj6{
+  box-shadow:
+    0 0 0 2px rgba(255,255,255,0.35),  /* léger anneau clair */
+    0 4px 12px rgba(0,0,0,0.85);       /* ombre un peu plus marquée */
+}
+
 /* Optionnel : si tu décides d’afficher les notes à éviter */
 .note.avoid{
   background:#e53935;
@@ -804,33 +828,125 @@ h1{
   }
 }
 
+/* Bouton portée */
+.toggle-staff-btn {
+  padding: 7px 16px;
+  border-radius: 12px;
+  background: #4fc3f7;
+  color: #021018;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 5px 12px rgba(0,0,0,.45);
+}
+.toggle-staff-btn:hover{
+  filter: brightness(1.1);
+}
+
+/* === Switch propre manche / portée === */
+#viewWrapper {
+  position: relative;
+}
+
+/* chaque vue est cachée par défaut */
+.view {
+  display: none;
+  opacity: 0;
+  transition: opacity .25s ease;
+}
+
+/* seule la vue active est rendue */
+.view.visible {
+  display: block;
+  opacity: 1;
+}
+
+/* Vue portée : centrée, même largeur que le manche */
+#staffView {
+  justify-content: center;
+  margin-top: 0;
+}
+
+/* quand la portée est la vue active → on l'affiche en flex */
+#staffView.visible {
+  display: flex;
+}
+
+/* Canvas portée */
+#staffCanvas {
+  background: transparent;
+  height: 140px;
+  max-width: 100%;
+}
+
+/* anneau pour les notes de la forme Min7 (penta mineure) */
+.note.shape-min7{
+  box-shadow: 0 0 0 3px rgba(156,39,176,0.9),
+              0 4px 15px rgba(0,0,0,0.7);
+}
+
+/* anneau pour les notes de la forme Maj6 / Maj7-Min6 (penta majeure) */
+.note.shape-maj6{
+  box-shadow: 0 0 0 3px rgba(255,87,34,0.9),
+              0 4px 15px rgba(0,0,0,0.7);
+}
+
+/* halo particulier pour la blue note si tu veux */
+.note.shape-blue{
+  box-shadow: 0 0 0 3px rgba(33,150,243,0.95),
+              0 4px 15px rgba(0,0,0,0.8);
+}
+
+/* formes sur la ligne de notes */
+.scale-note.shape-min7{
+  position:relative;
+  box-shadow:0 0 0 3px rgba(156,39,176,0.95);
+}
+
+.scale-note.shape-maj6{
+  position:relative;
+  box-shadow:0 0 0 3px rgba(255,149,0,0.98);
+}
+
+.scale-note.shape-min7.shape-maj6{
+  box-shadow:
+    0 0 0 3px rgba(156,39,176,0.95),
+    0 0 0 6px rgba(255,149,0,0.98);
+}
+
+.scale-note.shape-blue{
+  position:relative;
+  box-shadow:0 0 0 3px rgba(33,150,243,0.98);
+}
 
   </style>
 </head>
 <body>
   <main class="app">
-  <h1>Fretboard Pro</h1>
+    <h1>Fretboard Pro</h1>
 
-  <!-- Onglets principaux -->
-  <div class="tabs">
-    <button class="tab" data-mode="notes">Notes</button>
-    <button class="tab active" data-mode="pop">Pop/Rock</button>
-    <button class="tab" data-mode="blues">Blues</button>
-  </div>
+    <!-- Onglets principaux -->
+    <div class="tabs">
+      <button class="tab" data-mode="notes">Notes</button>
+      <button class="tab active" data-mode="pop">Pop/Rock</button>
+      <button class="tab" data-mode="blues">Blues</button>
+    </div>
 
-  <!-- === MODE POP/ROCK === -->
-  <div id="popMode" class="mode active">
+    <!-- === MODE POP/ROCK === -->
     <div class="inputs">
+      <!-- Bouton génération à gauche -->
+      <button id="generateProg">Générer une suite</button>
+
       <!-- 4 accords (menus déroulants) -->
       <select id="chord1"></select>
       <select id="chord2"></select>
       <select id="chord3"></select>
       <select id="chord4"></select>
 
-      <!-- Bouton : détection de tonalité -->
+      <!-- Bouton : détection de tonalité (caché par le JS de toute façon) -->
       <button id="findKey">Trouver la tonalité</button>
 
-      <!-- Nouveau : génération automatique -->
+      <!-- Options de génération -->
       <select id="progressionStyle">
         <option value="pop">Pop</option>
         <option value="rock">Rock</option>
@@ -841,49 +957,44 @@ h1{
         <option value="2">2 accords</option>
         <option value="4" selected>4 accords</option>
       </select>
-
-      <button id="generateProg">Générer une suite</button>
     </div>
 
-    <p id="popResult" class="msg"></p>
-  </div>
+    <!-- === MODE BLUES === -->
+    <div id="bluesMode" class="mode">
+      <div class="inputs">
+        <label>
+          Tonalité :
+          <select id="bluesKey">
+            <option>E</option>
+            <option selected>A</option>
+            <option>D</option>
+            <option>G</option>
+            <option>C</option>
+            <option>F</option>
+            <option>Bb</option>
+            <option>Eb</option>
+            <option>Ab</option>
+            <option>Db</option>
+            <option>Gb</option>
+            <option>B</option>
+          </select>
+        </label>
+        <span id="bluesGrid" class="msg"></span>
+      </div>
 
-  <!-- === MODE BLUES === -->
-  <div id="bluesMode" class="mode">
-    <div class="inputs">
-      <label>
-        Tonalité :
-        <select id="bluesKey">
-          <option>E</option>
-          <option selected>A</option>
-          <option>D</option>
-          <option>G</option>
-          <option>C</option>
-          <option>F</option>
-          <option>Bb</option>
-          <option>Eb</option>
-          <option>Ab</option>
-          <option>Db</option>
-          <option>Gb</option>
-          <option>B</option>
-        </select>
-      </label>
-      <span id="bluesGrid" class="msg"></span>
+      <div class="options">
+        <label><input type="checkbox" id="pentaMin" checked> Penta min</label>
+        <label><input type="checkbox" id="pentaMaj"> Penta maj</label>
+        <label><input type="checkbox" id="bluesNotes" checked> Notes blues</label>
+        <label>
+          Style :
+          <select id="bluesStyle">
+            <option value="standard">Standard</option>
+            <option value="slow">Slow Blues</option>
+          </select>
+        </label>
+      </div>
     </div>
-
-    <div class="options">
-      <label><input type="checkbox" id="pentaMin" checked> Penta min</label>
-      <label><input type="checkbox" id="pentaMaj"> Penta maj</label>
-      <label><input type="checkbox" id="bluesNotes" checked> Notes blues</label>
-      <label>
-        Style :
-        <select id="bluesStyle">
-          <option value="standard">Standard</option>
-          <option value="slow">Slow Blues</option>
-        </select>
-      </label>
-    </div>
-  </div>
 
     <!-- === MODE NOTES === -->
     <div id="notesMode" class="mode">
@@ -907,56 +1018,87 @@ h1{
       </p>
     </div>
 
-
     <!-- === Zone commune (accord courant / fret / vue) === -->
-  <div class="common">
-    <label>
-      Accord actuel :
-      <select id="chordSel"></select>
-    </label>
+    <div class="common">
+      <label>
+        Accord actuel :
+        <select id="chordSel"></select>
+      </label>
 
-    <label>
-      Fret de départ :
-      <select id="startFret"></select>
-    </label>
+      <label>
+        Fret de départ :
+        <select id="startFret"></select>
+      </label>
 
-    <!-- Choix 5 frettes / 15 frettes -->
-    <div class="view-toggle">
-      <button type="button" data-frets="5" class="active">5 frettes</button>
-      <button type="button" data-frets="10">10 frettes</button>
-      <button type="button" data-frets="15">15 frettes</button>
+      <!-- Choix 5 frettes / 15 frettes -->
+      <div class="view-toggle">
+        <button type="button" data-frets="5" class="active">5 frettes</button>
+        <button type="button" data-frets="10">10 frettes</button>
+        <button type="button" data-frets="15">15 frettes</button>
+      </div>
+
+      <!-- ✅ case pour afficher la blue note -->
+      <label>
+        <input type="checkbox" id="showBlueNote">
+        Note blue (b5)
+      </label>
+
+      <!-- ✅ nouvelles cases pour les formes superposées -->
+      <label>
+        <input type="checkbox" id="shapeMin7Maj6">
+        Formes Min7 / Maj6
+      </label>
+
+      <label>
+        <input type="checkbox" id="shapeMaj7Min6">
+        Formes Maj7 / Min6
+      </label>
+
+      <label><input type="checkbox" id="shapeMaj7BluesHex"> Major (7) Blues Hexaphonic</label>
+
+
+      <button id="toggleStaff" class="toggle-staff-btn">🎼 Portée</button>
     </div>
 
-    <!-- ✅ case pour afficher la blue note -->
-    <label>
-      <input type="checkbox" id="showBlueNote">
-      Note blue (b5)
-    </label>
-  </div>
+    <!-- ✅ Ligne de notes pour l'accord sélectionné (centrée, AU-DESSUS de la légende) -->
+    <div id="scaleNotes" class="scale-notes"></div>
 
-  <!-- ✅ Ligne de notes pour l'accord sélectionné (centrée, AU-DESSUS de la légende) -->
-  <div id="scaleNotes" class="scale-notes"></div>
+    <!-- Légende (toutes les notes sur une ligne, géré par le CSS) -->
+    <div class="legend">
+      <span><i class="dot chord"></i>Accord (tonique en gros)</span>
+      <span><i class="dot root"></i>Tonique</span>
+      <span><i class="dot target"></i>Cible</span>
+      <span><i class="dot avoid"></i>À éviter</span>
+      <span><i class="dot ok"></i>Dans la gamme</span>
+      <span><i class="dot blues"></i>Note blues</span>
+      <span><i class="dot penta-minor"></i>Penta min</span>
+      <span><i class="dot penta-major"></i>Penta maj</span>
+      <!-- entrées de légende pour les formes superposées (anneaux) -->
+      <span><i class="dot shape-min7"></i>Forme Min7 (calque)</span>
+      <span><i class="dot shape-maj6"></i>Forme Maj6 / Maj7-Min6</span>
+    </div>
 
-  <!-- Légende (toutes les notes sur une ligne, géré par le CSS) -->
-  <div class="legend">
-    <span><i class="dot chord"></i>Accord (tonique en gros)</span>
-    <span><i class="dot root"></i>Tonique</span>
-    <span><i class="dot target"></i>Cible</span>
-    <span><i class="dot avoid"></i>À éviter</span>
-    <span><i class="dot ok"></i>Dans la gamme</span>
-    <span><i class="dot blues"></i>Note blues</span>
-    <span><i class="dot penta-minor"></i>Penta min</span>
-    <span><i class="dot penta-major"></i>Penta maj</span>
-  </div>
+    <!-- Vues Manche / Portée (sans flip 3D) -->
+    <div id="viewWrapper">
 
-  <!-- Manche -->
-  <div class="fretboard">
-    <div id="fb"></div>
-    <div id="labels"></div>
-  </div>
+      <!-- Vue 1 : Manche -->
+      <div id="fretView" class="view visible">
+        <div class="fretboard">
+          <div id="fb"></div>
+          <div id="labels"></div>
+        </div>
+      </div>
+
+      <!-- Vue 2 : Portée -->
+      <div id="staffView" class="view">
+        <canvas id="staffCanvas"></canvas>
+      </div>
+
+    </div>
+
   </main>
   <script>
-    // ================== CONSTANTES & UTILITAIRES ==================
+   // ================== CONSTANTES & UTILITAIRES ==================
 
 const NOTES_SHARP = ["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"];
 const NOTES_FLAT  = ["C","Db","D","Eb","E","F","Gb","G","Ab","A","Bb","B"];
@@ -992,6 +1134,7 @@ let fretCount = 5;
 
 let useFlats = false;          // gestion # / b (pour plus tard)
 let currentKeyRoot = 0;        // racine de la tonalité courante en mode Pop/Rock
+let staffMode = false;         // false = manche, true = portée
 
 const MODE_NAMES = ["ionian","dorian","phrygian","lydian","mixolydian","aeolian","locrian"];
 
@@ -1167,8 +1310,22 @@ function pentaMaj(r){ return [0,2,4,7,9].map(d => (r+d)%12); }
 // Gamme mineure naturelle (pour tonalités mineures)
 function minorScale(r){ return [0,2,3,5,7,8,10].map(d => (r+d)%12); }
 
+// ===== Major (7) (blues) HEXAPHONIC =====
+// Degrés : 1, 2, ♭3, 3, 5, ♭7
+// Intervalles : 0, 2, 3, 4, 7, 10
+function major7BluesHex(root){
+  const intervals = [0, 2, 3, 4, 7, 10];
+  return intervals.map(d => (root + d) % 12);
+}
+
+// Blue note spécifique de cette gamme : ♭3
+function major7BluesHexBlue(root){
+  return (root + 3) % 12;
+}
+
 // Qualité attendue des triades dans la gamme MAJEURE : I ii iii IV V vi vii°
 const MAJOR_DEG_QUALITIES = ["M","m","m","M","M","m","dim"];
+
 
 // Qualité attendue des triades dans la gamme MINEURE naturelle : i ii° III iv v VI VII
 const MINOR_DEG_QUALITIES = ["m","dim","M","m","m","M","M"];
@@ -1258,6 +1415,13 @@ function render(){
   const isBluesMode = activeMode === "blues";
   const isNotesMode = activeMode === "notes";
 
+  // En mode Blues, on cache la case "Note blue (b5)" globale (réservée au Pop/Rock)
+  const globalBlueInput = document.getElementById("showBlueNote");
+  const globalBlueLabel = globalBlueInput ? globalBlueInput.parentElement : null;
+  if (globalBlueLabel) {
+    globalBlueLabel.style.display = isBluesMode ? "none" : "flex";
+  }
+
   // note sélectionnée en mode NOTES
   const noteSel = document.getElementById("noteSel");
   const noteFilterIdx = (isNotesMode && noteSel) ? n2i(noteSel.value) : null;
@@ -1275,7 +1439,6 @@ function render(){
     const patternWidth = 5; // startFret -> startFret + 4
     const extra = Math.max(localFretCount - patternWidth, 0);
     const extraBefore = Math.floor(extra / 2);
-    const extraAfter = extra - extraBefore; // si besoin plus tard
 
     firstFret = startFret - extraBefore;
     if (firstFret < 0) firstFret = 0;
@@ -1287,7 +1450,6 @@ function render(){
 
   labels.style.setProperty("--fret-count", localFretCount);
   labels.style.gridTemplateColumns = `repeat(${localFretCount}, 1fr)`;
-
 
   // racine de tonalité
   const keyRoot = isBluesMode
@@ -1310,31 +1472,92 @@ function render(){
   chordNotes.add((chord.root + thirdInterval) % 12); // tierce
   chordNotes.add((chord.root + fifthInterval) % 12); // quinte
 
-  if(chord.dominant7 || (chord.minor && /7/.test(chord.name))) {
+  if (chord.dominant7 || (chord.minor && /7/.test(chord.name))) {
     chordNotes.add((chord.root + 10) % 12);          // septième mineure
   }
 
-  // Quel mode correspond à cet accord (dans la tonalité majeure trouvée) ?
-  let modeName = null;
-  if(!isBluesMode){
-    modeName = getModeNameForChord(chord.root, keyRoot); // ionian / dorian / ...
-  }
+    // === PENTAS, FORMES & NOTES BLUES ===
+  const pentaMinCb          = document.getElementById("pentaMin");
+  const pentaMajCb          = document.getElementById("pentaMaj");
+  const bluesNotesCb        = document.getElementById("bluesNotes");
+  const globalBlueCb        = document.getElementById("showBlueNote");
+  const shapeMin7Maj6Cb     = document.getElementById("shapeMin7Maj6");
+  const shapeMaj7Min6Cb     = document.getElementById("shapeMaj7Min6");
+  const shapeMaj7BluesHexCb = document.getElementById("shapeMaj7BluesHex");
 
-  // === PENTAS & NOTES BLUES ===
-  // → UNIQUEMENT actives en mode BLUES et si cochées.
-  const pentaMinCb   = document.getElementById("pentaMin");
-  const pentaMajCb   = document.getElementById("pentaMaj");
-  const bluesNotesCb = document.getElementById("bluesNotes");
-  const globalBlueCb = document.getElementById("showBlueNote");
-
-  const showPentaMin   = isBluesMode && (pentaMinCb?.checked ?? false);
-  const showPentaMaj   = isBluesMode && (pentaMajCb?.checked ?? false);
+  // Pentas "classiques" du mode Blues
+  const pentaMinBlues  = isBluesMode && (pentaMinCb?.checked ?? false);
+  const pentaMajBlues  = isBluesMode && (pentaMajCb?.checked ?? false);
   const showBluesNotes = isBluesMode && (bluesNotesCb?.checked ?? false);
 
-  const pentaMinSet = showPentaMin ? new Set(pentaMin(chord.root)) : new Set();
-  const pentaMajSet = showPentaMaj ? new Set(pentaMaj(chord.root)) : new Set();
+  // Calques de formes (tous modes sauf Notes)
+  const useShapeMin7Maj6     = !isNotesMode && (shapeMin7Maj6Cb?.checked ?? false);
+  const useShapeMaj7Min6     = !isNotesMode && (shapeMaj7Min6Cb?.checked ?? false);
+  const useShapeMaj7BluesHex = !isNotesMode && (shapeMaj7BluesHexCb?.checked ?? false);
 
-  // Blue note typique (b5) de l'accord
+  let shapeMinSet = new Set(); // côté "mineur" des formes
+  let shapeMajSet = new Set(); // côté "majeur" des formes
+
+  // --- Formes Min7 / Maj6 ---
+  if (useShapeMin7Maj6) {
+    // Min7 : penta mineure sur la tonique de l'accord
+    shapeMinSet = new Set(pentaMin(chord.root));
+
+    // Maj6 : penta majeure sur la relative majeure (3 demi-tons au-dessus)
+    const relMajRoot = (chord.root + 3) % 12;
+    pentaMaj(relMajRoot).forEach(n => shapeMajSet.add(n));
+  }
+
+  // --- Formes Maj7 / Min6 ---
+  if (useShapeMaj7Min6) {
+    // Maj7 : penta majeure sur la tonique de l'accord
+    pentaMaj(chord.root).forEach(n => shapeMajSet.add(n));
+
+    // Min6 : penta mineure sur la relative mineure (9 demi-tons au-dessus)
+    const relMinRoot = (chord.root + 9) % 12;
+    pentaMin(relMinRoot).forEach(n => shapeMinSet.add(n));
+  }
+
+  // --- Forme Major7 (blues) HEXAPHONIC ---
+  if (useShapeMaj7BluesHex) {
+    // 1, 2, ♭3, 3, 5, 7 + blue note ♭3
+    major7BluesHex(chord.root).forEach(n => shapeMajSet.add(n));
+    shapeMajSet.add(major7BluesHexBlue(chord.root));
+  }
+
+
+  // --- Formes Min7 / Maj6 ---
+  if (useShapeMin7Maj6) {
+    // Min7 : penta mineure sur la tonique de l'accord
+    shapeMinSet = new Set(pentaMin(chord.root));
+
+    // Maj6 : penta majeure sur la relative majeure (3 demi-tons au-dessus)
+    const relMajRoot = (chord.root + 3) % 12;
+    pentaMaj(relMajRoot).forEach(n => shapeMajSet.add(n));
+  }
+
+  // --- Formes Maj7 / Min6 ---
+  if (useShapeMaj7Min6) {
+    // Maj7 : penta majeure sur la tonique de l'accord
+    pentaMaj(chord.root).forEach(n => shapeMajSet.add(n));
+
+    // Min6 : penta mineure sur la relative mineure (9 demi-tons au-dessus)
+    const relMinRoot = (chord.root + 9) % 12;
+    pentaMin(relMinRoot).forEach(n => shapeMinSet.add(n));
+  }
+
+  // Sets finaux utilisés partout (Blues + formes)
+  let pentaMinSet = new Set(shapeMinSet);
+  let pentaMajSet = new Set(shapeMajSet);
+
+  if (pentaMinBlues) {
+    pentaMin(chord.root).forEach(n => pentaMinSet.add(n));
+  }
+  if (pentaMajBlues) {
+    pentaMaj(chord.root).forEach(n => pentaMajSet.add(n));
+  }
+
+  // Blue note typique (b5) de l'accord (pour le manche)
   const bluesNote = (chord.root + 6) % 12;
 
   // 👉 en Blues : checkbox "Notes blues"
@@ -1347,91 +1570,96 @@ function render(){
 
   const slowBlues = document.getElementById("bluesStyle")?.value === "slow";
 
+    // Quand une forme est active : le "pattern" = union des formes (+ éventuelle blue note)
+  const shapeActive =
+    !isNotesMode && (useShapeMin7Maj6 || useShapeMaj7Min6 || useShapeMaj7BluesHex);
+
+  const patternSet = new Set();
+  if (shapeActive) {
+    shapeMinSet.forEach(n => patternSet.add(n));
+    shapeMajSet.forEach(n => patternSet.add(n));
+    if (showBlue) bluesSet.forEach(n => patternSet.add(n));
+  }
+
 
   // --- Rendu du manche ---
   STRINGS.forEach(openString => {
     const openNoteIdx = n2i(openString);
 
-    for(let f = 0; f < localFretCount; f++){
+    for (let f = 0; f < localFretCount; f++) {
       const fretNum = firstFret + f;
       const noteIdx = (openNoteIdx + fretNum) % 12;
 
       const cell = document.createElement("div");
       cell.className = "cell";
 
-      // sillet uniquement si on affiche réellement la frette 0
-      if(fretNum === 0){
+      if (fretNum === 0) {
         cell.classList.add("nut");
       } else {
         cell.classList.add("fret");
       }
 
-      // repères (inlays)
-      if([3,5,7,9,15,17,19,21].includes(fretNum)) cell.classList.add("inlay");
-      if(fretNum === 12) cell.classList.add("double-inlay");
+      if ([3,5,7,9,15,17,19,21].includes(fretNum)) cell.classList.add("inlay");
+      if (fretNum === 12) cell.classList.add("double-inlay");
 
-      let role = null;
+            let role = null;
 
       if (isNotesMode) {
-        // MODE "NOTES" → on n'affiche QUE la note choisie
         if (noteFilterIdx !== null && noteIdx === noteFilterIdx) {
           role = "root"; // même style que la tonique
         }
+      } else if (shapeActive && !patternSet.has(noteIdx)) {
+        // Une forme est active → on n’affiche que les notes du pattern
+        role = null;
       } else {
         const intervalFromRoot = (noteIdx - chord.root + 12) % 12;
 
-        // pour classifier dynamiquement cible / à éviter :
         const chordToneArray = [...chordNotes];
-        const isHalfStepBelowChord = chordToneArray.some(c => (noteIdx + 1) % 12 === c);   // note = -1
-        const isHalfStepAboveChord = chordToneArray.some(c => (noteIdx + 11) % 12 === c);  // note = +1
+        const isHalfStepBelowChord = chordToneArray.some(c => (noteIdx + 1) % 12 === c);
+        const isHalfStepAboveChord = chordToneArray.some(c => (noteIdx + 11) % 12 === c);
 
-        if(noteIdx === chord.root) {
+        if (noteIdx === chord.root) {
           role = "root";
-
-        } else if(chordNotes.has(noteIdx)) {
+        } else if (chordNotes.has(noteIdx)) {
           role = "chord";
-
-        } else if(pentaMinSet.has(noteIdx)) {
+        } else if (pentaMinSet.has(noteIdx)) {
           role = "penta-minor";
-
-        } else if(pentaMajSet.has(noteIdx)) {
+        } else if (pentaMajSet.has(noteIdx)) {
           role = "penta-major";
-
-        } else if(bluesSet.has(noteIdx)) {
+        } else if (bluesSet.has(noteIdx)) {
           role = "blues";
-
-        } else if(isBluesMode && slowBlues && [2,5,9].includes(intervalFromRoot)) {
-          // notes cibles typiques slow blues (2nd, 4th, 6th)
+        } else if (isBluesMode && slowBlues && [2,5,9].includes(intervalFromRoot)) {
           role = "target";
-
-        } else if(!isBluesMode && scaleSet.has(noteIdx)) {
-          // POP/ROCK : note dans la gamme → on applique la logique 1/2 ton
-          if(isHalfStepBelowChord) {
+        } else if (!isBluesMode && scaleSet.has(noteIdx)) {
+          if (isHalfStepBelowChord) {
             role = "target";
-          } else if(isHalfStepAboveChord) {
+          } else if (isHalfStepAboveChord) {
             role = "avoid";
           } else {
             role = "ok";
           }
-
-        } else if(scaleSet.has(noteIdx)) {
-          // BLUES (ou cas restant) : note correcte de la gamme
+        } else if (scaleSet.has(noteIdx)) {
           role = "ok";
-
         } else {
-          // Note hors gamme → on ne l'affiche pas
           role = null;
         }
       }
 
-      if(role){
+      if (role) {
         const dot = document.createElement("div");
         dot.className = `note ${role}`;
-        if(role === "root") dot.classList.add("root");
-        // affichage de la note réelle (avec octave implicite)
+        if (role === "root") dot.classList.add("root");
+
+        // marquer les notes appartenant aux formes (pour un léger style dédié)
+        if (!isNotesMode && shapeActive) {
+          if (shapeMinSet.has(noteIdx)) dot.classList.add("shape-min7");
+          if (shapeMajSet.has(noteIdx)) dot.classList.add("shape-maj6");
+        }
+
         dot.textContent = i2n(openNoteIdx + fretNum);
         cell.appendChild(dot);
       }
+
 
       fb.appendChild(cell);
     }
@@ -1440,7 +1668,6 @@ function render(){
   // --- Labels de frettes ---
   for (let i = 0; i < localFretCount; i++) {
     const num = firstFret + i;
-
     const div = document.createElement("div");
     div.textContent = num;
 
@@ -1458,13 +1685,37 @@ function render(){
   const scaleNotesEl = document.getElementById("scaleNotes");
   if (scaleNotesEl) {
 
+    // --- mapping anglais -> français pour la LIGNE DE NOTES ---
+    const FR_NAMES = {
+      C: "Do",
+      D: "Ré",
+      E: "Mi",
+      F: "Fa",
+      G: "Sol",
+      A: "La",
+      B: "Si"
+    };
+
+    function toFrenchName(eng) {
+      if (!eng) return eng;
+      const m = eng.match(/^([A-G])([#b]?)/i);
+      if (!m) return eng;
+      const letter = m[1].toUpperCase();
+      const accidental = m[2] || "";
+      let base = FR_NAMES[letter] || letter;
+      if (accidental === "#") base += "♯";
+      else if (accidental === "b") base += "♭";
+      return base;
+    }
+
     // MODE NOTES → affichage simplifié
     if (isNotesMode) {
       const noteName = noteSel ? noteSel.value : "C";
+      const displayName = staffMode ? toFrenchName(noteName) : noteName;
       scaleNotesEl.innerHTML = `
         <span class="scale-notes-label">Note sélectionnée :</span>
         <div class="scale-notes-list">
-          <span class="scale-note root">${noteName}</span>
+          <span class="scale-note root">${displayName}</span>
         </div>
       `;
       return;
@@ -1481,49 +1732,86 @@ function render(){
         .concat(orderedScale.slice(0, idxInScale));
     }
 
+    // === INSERTION BLUE NOTE AU MILIEU ===
+    // On insère la blue note dans la ligne de notes :
+    //   • en Pop/Rock → si la case "Note blue (b5)" est cochée
+    //   • en Blues    → si la case "Notes blues" est cochée
+    let blueNoteIdx = null;
+    let showBlueMid = false;
+
+    if (!isBluesMode && (globalBlueCb?.checked ?? false)) {
+      // Pop/Rock : b5 de l'accord courant
+      blueNoteIdx = (chord.root + 6) % 12;
+      showBlueMid = true;
+    } else if (isBluesMode && showBluesNotes) {
+      // Blues : b5 de la tonalité (toujours la même pour I, IV, V)
+      blueNoteIdx = (keyRoot + 6) % 12;
+      showBlueMid = true;
+    }
+
+    if (showBlueMid && blueNoteIdx !== null) {
+      if (!orderedScale.includes(blueNoteIdx)) {
+        const blueInt = (blueNoteIdx - chord.root + 12) % 12;
+        const intervals = orderedScale.map(n => (n - chord.root + 12) % 12);
+
+        let insertIndex = orderedScale.length;
+        for (let i = 0; i < intervals.length - 1; i++) {
+          if (intervals[i] <= blueInt && blueInt <= intervals[i + 1]) {
+            insertIndex = i + 1;
+            break;
+          }
+        }
+        orderedScale.splice(insertIndex, 0, blueNoteIdx);
+      }
+    }
+
     // rôle des notes (même logique que sur le manche)
     const chordToneArray = [...chordNotes];
+
+    // liste pour la portée
+    let noteObjects = [];
 
     const notesHtml = orderedScale.map(noteIdx => {
       let role;
       const intervalFromRoot = (noteIdx - chord.root + 12) % 12;
 
-      const isHalfStepBelowChord = chordToneArray.some(
-        c => (noteIdx + 1) % 12 === c
-      );
-      const isHalfStepAboveChord = chordToneArray.some(
-        c => (noteIdx + 11) % 12 === c
-      );
+      const isHalfStepBelowChord = chordToneArray.some(c => (noteIdx + 1) % 12 === c);
+      const isHalfStepAboveChord = chordToneArray.some(c => (noteIdx + 11) % 12 === c);
 
       if (noteIdx === chord.root) {
         role = "root";
       } else if (chordNotes.has(noteIdx)) {
         role = "chord";
+      } else if (noteIdx === blueNoteIdx && showBlueMid) {
+        role = "blues";
       } else if (pentaMinSet.has(noteIdx)) {
         role = "penta-minor";
       } else if (pentaMajSet.has(noteIdx)) {
         role = "penta-major";
-      } else if (bluesSet.has(noteIdx)) {
-        role = "blues";
-      } else if (isBluesMode && slowBlues && [2,5,9].includes(intervalFromRoot)) {
-        role = "target";
       } else if (!isBluesMode && scaleSet.has(noteIdx)) {
-        if (isHalfStepBelowChord) {
-          role = "target";
-        } else if (isHalfStepAboveChord) {
-          role = "avoid";
-        } else {
-          role = "ok";
-        }
-      } else if (scaleSet.has(noteIdx)) {
-        role = "ok";
+        if (isHalfStepBelowChord) role = "target";
+        else if (isHalfStepAboveChord) role = "avoid";
+        else role = "ok";
       } else {
-        // normalement, on n'a que des notes de la gamme ici
         role = "ok";
       }
 
-      const noteName = i2n(noteIdx);
-      return `<span class="scale-note ${role}">${noteName}</span>`;
+      const noteName = i2n(noteIdx);                 // notation américaine
+      const displayName = staffMode                 // ce qu'on affiche dans les bulles
+        ? toFrenchName(noteName)                    // → Do, Ré, Mi… en MODE PORTÉE
+        : noteName;                                 // → C, D, E… en MODE MANCHE
+
+      // pour la portée : on garde la note en notation américaine
+      noteObjects.push({ note: noteName, role });
+
+      // classes supplémentaires pour les calques sur la ligne
+      let extraClasses = "";
+      if (shapeMinSet.has(noteIdx)) extraClasses += " shape-min7";
+      if (shapeMajSet.has(noteIdx)) extraClasses += " shape-maj6";
+      if (noteIdx === blueNoteIdx && showBlueMid) extraClasses += " shape-blue";
+
+      return `<span class="scale-note ${role}">${displayName}</span>`;
+
     }).join("");
 
     const label = `Notes pour ${chord.name} :`;
@@ -1534,6 +1822,17 @@ function render(){
         ${notesHtml}
       </div>
     `;
+
+    // Si la portée est affichée → on la met à jour
+    if (staffMode) {
+      if (!noteObjects || noteObjects.length === 0) {
+        noteObjects = [...chordNotes].map(n => ({
+          note: i2n(n),
+          role: "chord"
+        }));
+      }
+      renderStaff(noteObjects);
+    }
   }
 }
 
@@ -1604,6 +1903,140 @@ document.querySelectorAll(".tab").forEach(tab => {
     render();
   };
 });
+
+
+function renderStaff(noteObjects) {
+  const canvas = document.getElementById("staffCanvas");
+  if (!canvas) return;
+  const ctx = canvas.getContext("2d");
+
+  // === largeur de référence ===
+  let width = 800;
+
+  // 1) largeur du wrapper (toujours présent)
+  const wrapper = document.getElementById("viewWrapper");
+  if (wrapper) {
+    const rect = wrapper.getBoundingClientRect();
+    if (rect.width > 0) width = rect.width;
+  }
+
+  // 2) si le manche est visible, on peut affiner sur #fb
+  const fb = document.getElementById("fb");
+  if (fb) {
+    const r = fb.getBoundingClientRect();
+    if (r.width > 0) width = r.width;
+  }
+
+  canvas.width = width;
+  canvas.height = 140; // portée compacte
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // ======== PARAMS GÉNÉRAUX ========
+  const top = 30;        // un peu plus haut
+  const spacing = 12;    // distance entre les lignes
+  const leftMargin = 70; // place pour la clé de sol & altérations
+
+  // ======== DESSIN PORTÉE ========
+  ctx.strokeStyle = "#eee";
+  ctx.lineWidth = 2;
+
+  for (let i = 0; i < 5; i++) {
+    const y = top + i * spacing;
+    ctx.beginPath();
+    ctx.moveTo(leftMargin, y);
+    ctx.lineTo(canvas.width - 20, y);
+    ctx.stroke();
+  }
+
+  // ======== CLÉ DE SOL SIMPLE ========
+  ctx.fillStyle = "#eee";
+  ctx.font = "40px serif";
+  try {
+    ctx.fillText("𝄞", 28, top + spacing * 3.7);
+  } catch {
+    ctx.fillText("G", 28, top + spacing * 3.5);
+  }
+
+  // ======== POSITION DE RÉFÉRENCE DES NOTES (clé de sol) ========
+  const pos = {
+    C: top + spacing * 5.5, // Do sous la portée
+    D: top + spacing * 5,
+    E: top + spacing * 4.5,
+    F: top + spacing * 4,
+    G: top + spacing * 3.5,
+    A: top + spacing * 3,
+    B: top + spacing * 2.5,
+  };
+
+  if (!noteObjects || !noteObjects.length) return;
+
+  const step = (canvas.width - leftMargin - 40) / (noteObjects.length + 1);
+  let x = leftMargin + step;
+
+  // noms français
+  const FR_NAMES = {
+    C: "Do",
+    D: "Ré",
+    E: "Mi",
+    F: "Fa",
+    G: "Sol",
+    A: "La",
+    B: "Si"
+  };
+
+  // les textes seront centrés
+  ctx.textAlign = "center";
+
+  noteObjects.forEach(n => {
+    const raw = n.note;
+    const m = raw.match(/^([A-G])([#b]?)/i);
+    const letter = m ? m[1].toUpperCase() : raw[0].toUpperCase();
+    const accidental = m && m[2] ? m[2] : null;
+
+    const y = pos[letter] ?? pos.C;
+
+    // --- nom français au-dessus de la portée ---
+    const baseNameFr = FR_NAMES[letter] || letter;
+    let label = baseNameFr;
+    if (accidental === "#") label += "♯";
+    else if (accidental === "b") label += "♭";
+
+    ctx.fillStyle = "#eee";
+    ctx.font = "14px system-ui, sans-serif";
+    ctx.fillText(label, x, top - 6); // au-dessus de la portée
+
+    // --- couleur selon le rôle ---
+    const colorMap = {
+      root: "#ffeb3b",
+      chord: "#aaaaaa",
+      ok: "#8bc34a",
+      target: "#ff9800",
+      avoid: "#e53935",
+      blues: "#2196f3",
+      "penta-minor": "#9c27b0",
+      "penta-major": "#ff5722"
+    };
+    const fill = colorMap[n.role] || "#ffffff";
+
+    // Altération (# / b) à gauche de la note
+    if (accidental) {
+      ctx.fillStyle = "#eee";
+      ctx.font = "18px serif";
+      ctx.fillText(accidental === "#" ? "♯" : "♭", x - 18, y + 6);
+    }
+
+    // tête de note colorée
+    ctx.beginPath();
+    ctx.fillStyle = fill;
+    ctx.ellipse(x, y, 11, 8, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    x += step;
+  });
+}
+
+
 
 // ================== TONALITÉ POP/ROCK — AUTO ==================
 
@@ -1702,11 +2135,14 @@ if (findKeyBtn) {
 
 // ================== AUTRES ÉCOUTEURS ==================
 
-["pentaMin","pentaMaj","bluesNotes","bluesStyle","startFret","chordSel","showBlueNote","noteSel"]
-  .forEach(id => {
-    const el = document.getElementById(id);
-    if(el) el.addEventListener("change", render);
-  });
+["pentaMin","pentaMaj","bluesNotes","bluesStyle",
+ "startFret","chordSel","showBlueNote","noteSel",
+ "shapeMin7Maj6","shapeMaj7Min6","shapeMaj7BluesHex"
+].forEach(id => {
+  const el = document.getElementById(id);
+  if(el) el.addEventListener("change", render);
+});
+
 
 
 // changement de tonalité blues → met à jour la grille et les accords
@@ -1730,6 +2166,35 @@ if(bluesKeySelect){
   });
 }
 
+// ==== SWITCH MANCHE <-> PORTÉE (sans flip 3D) ====
+const fretView = document.getElementById("fretView");
+const staffView = document.getElementById("staffView");
+const toggleBtn = document.getElementById("toggleStaff");
+
+if (toggleBtn && fretView && staffView) {
+  toggleBtn.addEventListener("click", () => {
+    staffMode = !staffMode;
+
+    if (staffMode) {
+      // Afficher la portée
+      fretView.classList.remove("visible");
+      staffView.classList.add("visible");
+      toggleBtn.textContent = "🎸 Manche";
+    } else {
+      // Revenir au manche
+      staffView.classList.remove("visible");
+      fretView.classList.add("visible");
+      toggleBtn.textContent = "🎼 Portée";
+    }
+
+    // On redessine tout en fonction du mode courant
+    render();
+  });
+}
+
+
+
+
 // ================== STYLE DES INLAYS ==================
 
 const inlayStyle = document.createElement("style");
@@ -1746,14 +2211,25 @@ inlayStyle.textContent = `
     transform:translate(-50%,-50%);
     z-index:1;
   }
+
+  /* 12e case : 2 points jaunes bien visibles */
   .double-inlay::before {
+    content:"";
+    position:absolute;
     width:12px;
-    height:36px;
-    border-radius:8px;
-    background:#888;
+    height:12px;
+    border-radius:50%;
+    background:#ffeb3b;
+    top:40%;
+    left:50%;
+    transform:translateX(-50%);
+    z-index:1;
+    /* deuxième point en dessous du premier */
+    box-shadow:0 18px 0 #666;
   }
 `;
 document.head.appendChild(inlayStyle);
+
 
 function initStartFretSelect() {
   const sel = document.getElementById("startFret");
