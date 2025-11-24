@@ -773,13 +773,13 @@ h1{
 /* ✅ Animation spéciale pour la tonique avec halo blanc */
 @keyframes pulseWithHalo{
   0%,100%{
-    box-shadow: 0 0 0 10px rgba(255,255,255,0.85),
+    box-shadow: 0 0 0 2px rgba(255,255,255,0.85),
                 0 0 12px 4px rgba(255,255,255,0.4),
                 0 0 15px #ffeb3b,
                 0 4px 15px rgba(0,0,0,0.7);
   }
   50%{
-    box-shadow: 0 0 0 10px rgba(255,255,255,0.85),
+    box-shadow: 0 0 0 2px rgba(255,255,255,0.85),
                 0 0 12px 4px rgba(255,255,255,0.4),
                 0 0 25px #ffeb3b,
                 0 4px 15px rgba(0,0,0,0.7);
@@ -1037,7 +1037,7 @@ h1{
 
 /* halo blanc pour les notes de la forme Min7 (penta mineure) */
 .note.shape-min7{
-  box-shadow: 0 0 0 10px rgba(255,255,255,0.85),
+  box-shadow: 0 0 0 2px rgba(255,255,255,0.85),
               0 0 12px 4px rgba(255,255,255,0.4),
               0 4px 15px rgba(0,0,0,0.7);
 }
@@ -1245,6 +1245,14 @@ h1{
   border-radius: 12px;
   padding: 15px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.mini-diagram:hover {
+  background: rgba(25, 25, 45, 0.9);
+  box-shadow: 0 6px 20px rgba(79, 195, 247, 0.4);
+  transform: translateY(-2px);
 }
 
 .mini-diagram-title {
@@ -1265,7 +1273,7 @@ h1{
 
 .mini-fb {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   grid-template-rows: repeat(6, 45px);
   gap: 3px;
   margin-bottom: 8px;
@@ -1365,8 +1373,8 @@ h1{
 /* Halo blanc pour pattern penta */
 .mini-fb .note.shape-min7,
 .mini-fb .note.shape-maj6 {
-  box-shadow: 0 0 0 8px rgba(255, 255, 255, 0.85),
-              0 0 10px 3px rgba(255, 255, 255, 0.4),
+  box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.85),
+              0 0 8px 2px rgba(255, 255, 255, 0.4),
               0 2px 8px rgba(0, 0, 0, 0.7);
 }
 
@@ -1390,6 +1398,30 @@ h1{
 .mini-labels div {
   font-size: 0.8rem;
   font-weight: 600;
+}
+
+/* Styles pour les mini-portées */
+.mini-staff-container {
+  background: rgba(15, 15, 30, 0.8);
+  border-radius: 12px;
+  padding: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.mini-staff-container:hover {
+  background: rgba(25, 25, 45, 0.9);
+  box-shadow: 0 6px 20px rgba(79, 195, 247, 0.4);
+  transform: translateY(-2px);
+}
+
+.mini-staff-canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: rgba(10, 10, 20, 0.6);
+  border-radius: 8px;
 }
 
 /* Responsive pour les mini-diagrammes */
@@ -1460,7 +1492,6 @@ h1{
     font-size: 0.75rem !important;
   }
 }
-
 
 
 
@@ -1763,7 +1794,7 @@ h1{
       <!-- ✅ NOUVEAU : Pattern Pentatonique avec halo -->
       <label>
         <input type="checkbox" id="showPentaPattern">
-        Pattern Penta (halo)
+        Penta Hybride
       </label>
 
       <!-- ✅ nouvelles cases pour les formes superposées -->
@@ -1844,7 +1875,7 @@ h1{
       <span><i class="dot penta-minor"></i>Penta min</span>
       <span><i class="dot penta-major"></i>Penta maj</span>
       <!-- entrée de légende pour les formes superposées (halo blanc) -->
-      <span><i class="dot shape-min7"></i>Pattern Penta (halo blanc)</span>
+      <span><i class="dot shape-min7"></i>Penta Hybride (halo blanc)</span>
       <span><i class="dot scale-highlight"></i>Gamme / Mode</span>
     </div>
 
@@ -2348,10 +2379,17 @@ function renderMiniDiagrams() {
   // Vider le wrapper
   wrapper.innerHTML = "";
   
-  // Créer un mini-diagramme pour chaque accord
+  // Créer un mini-diagramme ou mini-portée pour chaque accord
   activeChords.forEach((chordText, index) => {
-    const miniDiagram = createMiniDiagram(chordText, startFret, useShowPentaPattern, index, activeChords);
-    wrapper.appendChild(miniDiagram);
+    if (staffMode) {
+      // Mode portée : créer une mini-portée
+      const miniStaff = createMiniStaff(chordText, useShowPentaPattern, index, activeChords);
+      wrapper.appendChild(miniStaff);
+    } else {
+      // Mode manche : créer un mini-diagramme
+      const miniDiagram = createMiniDiagram(chordText, startFret, useShowPentaPattern, index, activeChords);
+      wrapper.appendChild(miniDiagram);
+    }
   });
 }
 
@@ -2377,8 +2415,8 @@ function createMiniDiagram(chordText, startFret, useShowPentaPattern, currentInd
   const fb = document.createElement("div");
   fb.className = "mini-fb";
   
-  // Toujours afficher 5 frettes pour les mini-diagrammes
-  const localFretCount = 5;
+  // Toujours afficher 4 frettes pour les mini-diagrammes
+  const localFretCount = 4;
   const firstFret = startFret;
   
   // Calculer les notes de l'accord
@@ -2417,15 +2455,22 @@ function createMiniDiagram(chordText, startFret, useShowPentaPattern, currentInd
   const pentaPatternHaloSet = new Set();
   if (useShowPentaPattern) {
     if (chord.minor) {
+      // Pour un accord mineur, on affiche seulement la penta mineure
       pentaMin(chord.root).forEach(n => pentaPatternHaloSet.add(n));
     } else {
+      // Pour un accord majeur, on affiche les deux : penta majeure ET penta mineure (hybride)
       pentaMaj(chord.root).forEach(n => pentaPatternHaloSet.add(n));
+      pentaMin(chord.root).forEach(n => pentaPatternHaloSet.add(n));
     }
   }
   
   // Gamme majeure pour les notes "dans la gamme"
   const keyRoot = chord.root;
   const scaleSet = new Set(majorScale(keyRoot));
+  
+  // Blue note (b5) - vérifier si la checkbox est cochée
+  const showBlueNote = document.getElementById("showBlueNote")?.checked ?? false;
+  const blueNote = (chord.root + 6) % 12;
   
   // Rendu des cordes et frettes
   STRINGS.forEach(openString => {
@@ -2459,7 +2504,19 @@ function createMiniDiagram(chordText, startFret, useShowPentaPattern, currentInd
         role = "target";
       } else if (chordNotes.has(noteIdx)) {
         role = "chord";
+      } else if (showBlueNote && noteIdx === blueNote) {
+        // Afficher la blue note (b5) si la checkbox est cochée
+        role = "blues";
       } else if (scaleSet.has(noteIdx)) {
+        if (isHalfStepBelowChord) {
+          role = "floating";
+        } else if (isHalfStepAboveChord) {
+          role = "avoid";
+        } else {
+          role = "ok";
+        }
+      } else if (useShowPentaPattern && pentaPatternHaloSet.has(noteIdx)) {
+        // Afficher les notes de la penta hybride même si elles ne sont pas dans la gamme majeure
         if (isHalfStepBelowChord) {
           role = "floating";
         } else if (isHalfStepAboveChord) {
@@ -2505,8 +2562,247 @@ function createMiniDiagram(chordText, startFret, useShowPentaPattern, currentInd
   fretboard.appendChild(labels);
   container.appendChild(fretboard);
   
+  // Ajouter un événement de clic pour sélectionner cet accord
+  container.style.cursor = 'pointer';
+  container.addEventListener('click', () => {
+    // Changer l'accord dans le sélecteur principal
+    const chordSel = document.getElementById("chordSel");
+    if (chordSel) {
+      chordSel.value = chordText;
+      // Déclencher le changement pour mettre à jour l'affichage
+      chordSel.dispatchEvent(new Event('change'));
+    }
+  });
+  
   return container;
 }
+
+// ================== MINI-PORTÉES PAR ACCORD ==================
+
+function createMiniStaff(chordText, useShowPentaPattern, currentIndex, allChords) {
+  // Parse l'accord
+  const chord = parseChord(chordText);
+  
+  // Créer le container
+  const container = document.createElement("div");
+  container.className = "mini-diagram mini-staff-container";
+  
+  // Titre
+  const title = document.createElement("div");
+  title.className = "mini-diagram-title";
+  title.textContent = chordText;
+  container.appendChild(title);
+  
+  // Canvas pour la portée
+  const canvas = document.createElement("canvas");
+  canvas.className = "mini-staff-canvas";
+  canvas.width = 350;
+  canvas.height = 120;
+  container.appendChild(canvas);
+  
+  const ctx = canvas.getContext("2d");
+  
+  // Paramètres de la portée
+  const top = 30;
+  const spacing = 10;
+  const leftMargin = 50;
+  
+  // Dessiner la portée
+  ctx.strokeStyle = "#eee";
+  ctx.lineWidth = 1.5;
+  
+  for (let i = 0; i < 5; i++) {
+    const y = top + i * spacing;
+    ctx.beginPath();
+    ctx.moveTo(leftMargin, y);
+    ctx.lineTo(canvas.width - 20, y);
+    ctx.stroke();
+  }
+  
+  // Clé de sol
+  ctx.fillStyle = "#eee";
+  ctx.font = "32px serif";
+  try {
+    ctx.fillText("𝄞", 18, top + spacing * 3.7);
+  } catch {
+    ctx.fillText("G", 18, top + spacing * 3.5);
+  }
+  
+  // Position des notes sur la portée
+  const pos = {
+    C: top + spacing * 5.5,
+    D: top + spacing * 5,
+    E: top + spacing * 4.5,
+    F: top + spacing * 4,
+    G: top + spacing * 3.5,
+    A: top + spacing * 3,
+    B: top + spacing * 2.5,
+  };
+  
+  // Calculer les notes de l'accord
+  const chordNotes = new Set([chord.root]);
+  const thirdInterval = (chord.dim || chord.minor) ? 3 : 4;
+  const fifthInterval = chord.dim ? 6 : 7;
+  chordNotes.add((chord.root + thirdInterval) % 12);
+  chordNotes.add((chord.root + fifthInterval) % 12);
+  if (chord.dominant7 || (chord.minor && /7/.test(chord.name))) {
+    chordNotes.add((chord.root + 10) % 12);
+  }
+  
+  // Calculer les notes cibles
+  const targetNotes = new Set();
+  if (currentIndex > 0) {
+    const prevChordText = allChords[currentIndex - 1];
+    const prevChord = parseChord(prevChordText);
+    
+    const prevChordNotes = new Set([prevChord.root]);
+    const prevThird = (prevChord.dim || prevChord.minor) ? 3 : 4;
+    const prevFifth = prevChord.dim ? 6 : 7;
+    prevChordNotes.add((prevChord.root + prevThird) % 12);
+    prevChordNotes.add((prevChord.root + prevFifth) % 12);
+    if (prevChord.dominant7 || (prevChord.minor && /7/.test(prevChord.name))) {
+      prevChordNotes.add((prevChord.root + 10) % 12);
+    }
+    
+    for (const note of chordNotes) {
+      if (!prevChordNotes.has(note)) {
+        targetNotes.add(note);
+      }
+    }
+  }
+  
+  // Pattern penta
+  const pentaPatternHaloSet = new Set();
+  if (useShowPentaPattern) {
+    if (chord.minor) {
+      pentaMin(chord.root).forEach(n => pentaPatternHaloSet.add(n));
+    } else {
+      pentaMaj(chord.root).forEach(n => pentaPatternHaloSet.add(n));
+      pentaMin(chord.root).forEach(n => pentaPatternHaloSet.add(n));
+    }
+  }
+  
+  // Gamme majeure
+  const scaleSet = new Set(majorScale(chord.root));
+  
+  // Blue note (b5) - vérifier si la checkbox est cochée
+  const showBlueNote = document.getElementById("showBlueNote")?.checked ?? false;
+  const blueNote = (chord.root + 6) % 12;
+  
+  // Créer une liste des notes à afficher
+  const notesToDisplay = [];
+  const allNoteIndices = Array.from(chordNotes);
+  
+  // Ajouter les notes de l'accord en priorité
+  allNoteIndices.forEach(noteIdx => {
+    const chordToneArray = [...chordNotes];
+    const isHalfStepAboveChord = chordToneArray.some(c => (noteIdx + 11) % 12 === c);
+    
+    let role = null;
+    if (noteIdx === chord.root) {
+      role = "root";
+    } else if (targetNotes.has(noteIdx)) {
+      role = "target";
+    } else if (chordNotes.has(noteIdx)) {
+      role = "chord";
+    }
+    
+    if (role) {
+      notesToDisplay.push({
+        noteIdx: noteIdx,
+        role: role,
+        hasHalo: pentaPatternHaloSet.has(noteIdx)
+      });
+    }
+  });
+  
+  // Ajouter la blue note si la checkbox est cochée
+  if (showBlueNote && !chordNotes.has(blueNote)) {
+    notesToDisplay.push({
+      noteIdx: blueNote,
+      role: "blues",
+      hasHalo: pentaPatternHaloSet.has(blueNote)
+    });
+  }
+  
+  // Dessiner les notes
+  const step = (canvas.width - leftMargin - 40) / (notesToDisplay.length + 1);
+  let x = leftMargin + step;
+  
+  const FR_NAMES = {
+    C: "Do", D: "Ré", E: "Mi", F: "Fa", G: "Sol", A: "La", B: "Si"
+  };
+  
+  ctx.textAlign = "center";
+  
+  notesToDisplay.forEach(n => {
+    const noteName = i2n(n.noteIdx);
+    const m = noteName.match(/^([A-G])([#b]?)/i);
+    const letter = m ? m[1].toUpperCase() : noteName[0].toUpperCase();
+    const accidental = m && m[2] ? m[2] : null;
+    
+    const y = pos[letter] ?? pos.C;
+    
+    // Nom français
+    const baseNameFr = FR_NAMES[letter] || letter;
+    let label = baseNameFr;
+    if (accidental === "#") label += "♯";
+    else if (accidental === "b") label += "♭";
+    
+    ctx.fillStyle = "#eee";
+    ctx.font = "11px system-ui, sans-serif";
+    ctx.fillText(label, x, top - 4);
+    
+    // Couleur selon le rôle
+    const colorMap = {
+      root: "#ffeb3b",
+      chord: "#aaaaaa",
+      target: "#9b59b6",
+      ok: "#8bc34a",
+      floating: "#ff9800",
+      avoid: "#e53935",
+      blues: "#2196f3"
+    };
+    const fill = colorMap[n.role] || "#ffffff";
+    
+    // Altération
+    if (accidental) {
+      ctx.fillStyle = "#eee";
+      ctx.font = "14px serif";
+      ctx.fillText(accidental === "#" ? "♯" : "♭", x - 14, y + 5);
+    }
+    
+    // Dessiner le halo si nécessaire
+    if (n.hasHalo) {
+      ctx.beginPath();
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.85)";
+      ctx.lineWidth = 3;
+      ctx.ellipse(x, y, 13, 10, 0, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+    
+    // Tête de note
+    ctx.beginPath();
+    ctx.fillStyle = fill;
+    ctx.ellipse(x, y, 9, 7, 0, 0, Math.PI * 2);
+    ctx.fill();
+    
+    x += step;
+  });
+  
+  // Ajouter un événement de clic pour sélectionner cet accord
+  container.style.cursor = 'pointer';
+  container.addEventListener('click', () => {
+    const chordSel = document.getElementById("chordSel");
+    if (chordSel) {
+      chordSel.value = chordText;
+      chordSel.dispatchEvent(new Event('change'));
+    }
+  });
+  
+  return container;
+}
+
 
 // ================== RENDU PRINCIPAL ==================
 
@@ -2786,12 +3082,13 @@ function render(){
   // ✅ PATTERN PENTA AVEC HALO : set séparé qui n'affecte que le halo blanc
   const pentaPatternHaloSet = new Set();
   if (useShowPentaPattern) {
-    // Si l'accord est mineur, on affiche la penta mineure
-    // Sinon on affiche la penta majeure
+    // Si l'accord est mineur, on affiche seulement la penta mineure
+    // Sinon on affiche les deux : penta majeure ET penta mineure (hybride)
     if (chord.minor) {
       pentaMin(chord.root).forEach(n => pentaPatternHaloSet.add(n));
     } else {
       pentaMaj(chord.root).forEach(n => pentaPatternHaloSet.add(n));
+      pentaMin(chord.root).forEach(n => pentaPatternHaloSet.add(n));
     }
   }
 
@@ -2868,6 +3165,15 @@ function render(){
           }
         } else if (scaleSet.has(noteIdx)) {
           role = "ok";
+        } else if (useShowPentaPattern && pentaPatternHaloSet.has(noteIdx)) {
+          // Afficher les notes de la penta hybride même si elles ne sont pas dans la gamme majeure
+          if (isHalfStepBelowChord) {
+            role = "floating";
+          } else if (isHalfStepAboveChord) {
+            role = "avoid";
+          } else {
+            role = "ok";
+          }
         } else {
           role = null;
         }
@@ -3489,6 +3795,9 @@ if (toggleBtn && fretView && staffView) {
 
     // On redessine tout en fonction du mode courant
     render();
+    
+    // Rafraîchir les mini-diagrammes/portées
+    renderMiniDiagrams();
   });
 }
 
@@ -3707,7 +4016,6 @@ document.querySelectorAll('.chord-select').forEach(select => {
     }, 250);
   });
 });
-
 
   </script>
 </body>
