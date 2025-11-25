@@ -151,75 +151,130 @@ h1{
 .options,
 .common{
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 6px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
   align-items: start;
   margin: 10px 0;
-  padding: 8px;
+  padding: 12px;
   background: rgba(0,0,0,0.25);
   border-radius: 8px;
 }
 
-/* Première ligne : Accord actuel, Fret, Vue toggle */
-.common > label:nth-of-type(1) { /* Accord actuel */
-  grid-column: 1;
+/* Première ligne : Accord actuel et Fret de départ */
+.common-first-row {
   grid-row: 1;
+  font-size: 0.9rem;
+  color: #ddd;
+}
+
+.common > label:nth-of-type(1) { /* Accord actuel */
+  grid-column: 1 / 3;
 }
 
 .common > label:nth-of-type(2) { /* Fret de départ */
-  grid-column: 2;
-  grid-row: 1;
+  grid-column: 3 / 5;
 }
 
-.view-toggle {
-  grid-column: 3;
-  grid-row: 1;
-  justify-self: end;
-}
-
-/* Deuxième ligne : Checkboxes compactes */
-.common > label:nth-of-type(3), /* Note blue */
-.common > label:nth-of-type(4), /* Formes Min7 */
-.common > label:nth-of-type(5) { /* Formes Maj7 */
+/* Sections scale-modes : une par colonne sur la ligne 2 */
+.common .scale-modes-section {
   grid-row: 2;
-  font-size: 0.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px;
+  background: rgba(0,0,0,0.2);
+  border-radius: 8px;
+  border: 1px solid rgba(79, 195, 247, 0.2);
 }
 
-.common > label:nth-of-type(3) { grid-column: 1; }
-.common > label:nth-of-type(4) { grid-column: 2; }
-.common > label:nth-of-type(5) { grid-column: 3; }
+.common .scale-modes-section:nth-of-type(1) { grid-column: 1; } /* Nombre de cases */
+.common .scale-modes-section:nth-of-type(2) { grid-column: 2; } /* Pentatoniques */
+.common .scale-modes-section:nth-of-type(3) { grid-column: 3; } /* Gammes */
+.common .scale-modes-section:nth-of-type(4) { grid-column: 4; } /* Modes */
 
-/* Troisième ligne : Formes longues + BOUTON PORTÉE AU MILIEU */
-.common > label:nth-of-type(6) { /* Major (7) / Diminished */
-  grid-column: 1;
-  grid-row: 3;
-  font-size: 0.8rem;
+.common .scale-modes-section h3 {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #4fc3f7;
+  margin-bottom: 6px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid rgba(79, 195, 247, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
+.common .scale-modes-section label {
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* View toggle wrapper pour la section Nombre de cases */
+.view-toggle-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.common .scale-modes-section .view-toggle {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 4px;
+  background: #101020;
+  border-radius: 8px;
+  padding: 4px;
+  border: 1px solid #252545;
+}
+
+.common .scale-modes-section .view-toggle button {
+  border: none;
+  background: transparent;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  color: #aaa;
+  cursor: pointer;
+  transition: 0.2s;
+  white-space: nowrap;
+  text-align: center;
+}
+
+.common .scale-modes-section .view-toggle button:hover {
+  color: #fff;
+}
+
+.common .scale-modes-section .view-toggle button.active {
+  background: linear-gradient(135deg, #4fc3f7, #00bcd4);
+  color: #021018;
+  box-shadow: 0 2px 8px rgba(79, 195, 247, 0.5);
+}
+
+/* Bouton Portée en bas, centré sur toute la largeur */
 .toggle-staff-btn {
-  grid-column: 2;
+  grid-column: 1 / -1;
   grid-row: 3;
   justify-self: center;
-  margin: 0;
-  padding: 6px 16px;
-  font-size: 0.85rem;
+  margin: 8px 0 0;
+  padding: 8px 24px;
+  font-size: 0.9rem;
+  background: linear-gradient(135deg, #4fc3f7, #00bcd4);
+  border: none;
+  border-radius: 14px;
+  color: #021018;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.7);
+  transition: transform 0.15s, box-shadow 0.15s, filter 0.15s;
 }
 
-.common > label:nth-of-type(7) { /* Major (7) Blues */
-  grid-column: 3;
-  grid-row: 3;
-  font-size: 0.8rem;
+.toggle-staff-btn:hover {
+  filter: brightness(1.06);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.8);
 }
 
-/* Sections Gammes et Modes côte à côte sur ligne 4 */
-.scale-modes-section:nth-of-type(1) { /* GAMMES */
-  grid-column: 1 / 3;
-  grid-row: 4;
-}
-
-.scale-modes-section:nth-of-type(2) { /* MODES */
-  grid-column: 3;
-  grid-row: 4;
+.toggle-staff-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6);
 }
 
 /* Accord actuel + Fret de départ */
@@ -349,38 +404,6 @@ h1{
 
 /* --- Boutons de choix (par ex. 5 frettes / 15 frettes) --- */
 
-.view-toggle{
-  display:inline-flex;
-  align-items:center;
-  gap:4px;
-  background:#101020;
-  border-radius:999px;
-  padding:4px;
-  border:1px solid #252545;
-  margin:10px 0 18px;
-}
-
-.view-toggle button{
-  border:none;
-  background:transparent;
-  padding:6px 14px;
-  border-radius:999px;
-  font-size:0.85rem;
-  color:#aaa;
-  cursor:pointer;
-  transition:.2s;
-  white-space:nowrap;
-}
-
-.view-toggle button:hover{
-  color:#fff;
-}
-
-.view-toggle button.active{
-  background:linear-gradient(135deg,#4fc3f7,#00bcd4);
-  color:#021018;
-  box-shadow:0 4px 12px rgba(79,195,247,0.5);
-}
 
 /* --- Légende --- */
 .legend{
@@ -451,14 +474,25 @@ h1{
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;                 /* réduction du gap */
-  margin: 10px 0 14px;      /* + d’espace sous les bulles */
+  gap: 2px;                 /* réduction du gap pour rapprocher nom et notes */
+  margin: 10px 0 18px;      /* + d'espace sous les bulles */
   font-size: 0.85rem;
 }
 
 .scale-notes-label {
-  font-weight: 600;
-  color: #ddd;
+  font-weight: 700;
+  color: #fff;
+  font-size: 1.6rem;         /* augmentation pour plus de visibilité */
+  margin-bottom: 2px;
+}
+
+.chord-tones-main {
+  font-weight: 500;
+  color: #4fc3f7;
+  font-size: 1.2rem;          /* augmentation de la taille */
+  letter-spacing: 0.08em;     /* plus d'espacement entre les caractères */
+  margin-top: 0;
+  margin-bottom: 8px;
 }
 
 .scale-notes-list {
@@ -484,7 +518,7 @@ h1{
   padding:6px 14px;
   border-radius:999px;
   font-weight:700;
-  font-size:1.05rem;
+  font-size:1.15rem;
   display:inline-flex;
   align-items:center;
   justify-content:center;
@@ -541,8 +575,14 @@ h1{
   background:rgba(0,0,0,0.5);
   padding:25px;
   border-radius:16px;
+  
+  /* Effet de surbrillance/relief comme les mini-diagrammes */
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6), 
+              inset 0 1px 0 rgba(255, 255, 255, 0.1),
+              0 0 25px rgba(79, 195, 247, 0.25);
+  border: 1px solid rgba(79, 195, 247, 0.3);
 
-  /* réduction d’environ 15% */
+  /* réduction d'environ 15% */
   transform:scale(0.85);
   transform-origin:top center;
   margin:0 auto; /* bien centré après le scale */
@@ -1244,25 +1284,61 @@ h1{
   background: rgba(15, 15, 30, 0.8);
   border-radius: 12px;
   padding: 15px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5), 
+              inset 0 1px 0 rgba(255, 255, 255, 0.1),
+              0 0 20px rgba(79, 195, 247, 0.2);
+  border: 1px solid rgba(79, 195, 247, 0.3);
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .mini-diagram:hover {
   background: rgba(25, 25, 45, 0.9);
-  box-shadow: 0 6px 20px rgba(79, 195, 247, 0.4);
-  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(79, 195, 247, 0.5),
+              inset 0 1px 0 rgba(255, 255, 255, 0.15),
+              0 0 30px rgba(79, 195, 247, 0.4);
+  border: 1px solid rgba(79, 195, 247, 0.6);
+  transform: translateY(-3px);
 }
 
 .mini-diagram-title {
   text-align: center;
-  font-size: 1.1rem;
+  font-size: 1.4rem;
   font-weight: 700;
-  color: #4fc3f7;
+  color: #fff;
   margin-bottom: 10px;
-  padding-bottom: 8px;
-  border-bottom: 2px solid rgba(79, 195, 247, 0.3);
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.chord-tones {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+  color: #aaa;
+}
+
+.chord-tone {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 3px 7px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.chord-tone-label {
+  color: #888;
+  font-size: 0.8rem;
+}
+
+.chord-tone-note {
+  color: #4fc3f7;
+  font-weight: 600;
+  font-size: 0.85rem;
 }
 
 .mini-fretboard {
@@ -1493,8 +1569,6 @@ h1{
   }
 }
 
-
-
   </style>
 </head>
 <body>
@@ -1599,6 +1673,10 @@ h1{
           </li>
 
           <li class="song-group-header">Années 80-90</li>
+          <li class="song-item" data-song="englishman">
+            <div class="song-title">Englishman in New York</div>
+            <div class="song-artist">Sting</div>
+          </li>
           <li class="song-item" data-song="everybreath">
             <div class="song-title">Every Breath You Take</div>
             <div class="song-artist">Police</div>
@@ -1669,6 +1747,10 @@ h1{
             <div class="song-title">Someone Like You</div>
             <div class="song-artist">Adele</div>
           </li>
+          <li class="song-item" data-song="setfire">
+            <div class="song-title">Set Fire to the Rain</div>
+            <div class="song-artist">Adele</div>
+          </li>
           <li class="song-item" data-song="shallow">
             <div class="song-title">Shallow</div>
             <div class="song-artist">Lady Gaga</div>
@@ -1688,6 +1770,84 @@ h1{
           <li class="song-item" data-song="getlucky">
             <div class="song-title">Get Lucky</div>
             <div class="song-artist">Daft Punk</div>
+          </li>
+          <li class="song-item" data-song="flowers">
+            <div class="song-title">Flowers</div>
+            <div class="song-artist">Miley Cyrus</div>
+          </li>
+          <li class="song-item" data-song="cheapthrills">
+            <div class="song-title">Cheap Thrills</div>
+            <div class="song-artist">Sia</div>
+          </li>
+          <li class="song-item" data-song="try">
+            <div class="song-title">Try</div>
+            <div class="song-artist">P!nk</div>
+          </li>
+
+          <li class="song-group-header">Funk</li>
+          <li class="song-item" data-song="sexmachine">
+            <div class="song-title">Sex Machine</div>
+            <div class="song-artist">James Brown</div>
+          </li>
+          <li class="song-item" data-song="goodtimes">
+            <div class="song-title">Good Times</div>
+            <div class="song-artist">Chic</div>
+          </li>
+          <li class="song-item" data-song="getdown">
+            <div class="song-title">Get Down On It</div>
+            <div class="song-artist">Kool & The Gang</div>
+          </li>
+          <li class="song-item" data-song="virtualinsanity">
+            <div class="song-title">Virtual Insanity</div>
+            <div class="song-artist">Jamiroquai</div>
+          </li>
+          <li class="song-item" data-song="superstition">
+            <div class="song-title">Superstition</div>
+            <div class="song-artist">Stevie Wonder</div>
+          </li>
+          <li class="song-item" data-song="cissystrut">
+            <div class="song-title">Cissy Strut</div>
+            <div class="song-artist">The Meters</div>
+          </li>
+          <li class="song-item" data-song="kiss">
+            <div class="song-title">Kiss</div>
+            <div class="song-artist">Prince</div>
+          </li>
+          <li class="song-item" data-song="september">
+            <div class="song-title">September</div>
+            <div class="song-artist">Earth, Wind & Fire</div>
+          </li>
+          <li class="song-item" data-song="deantown">
+            <div class="song-title">Dean Town</div>
+            <div class="song-artist">Vulfpeck</div>
+          </li>
+          <li class="song-item" data-song="passthepeas">
+            <div class="song-title">Pass the Peas</div>
+            <div class="song-artist">JB's / Fred Wesley</div>
+          </li>
+          <li class="song-item" data-song="soulpower74">
+            <div class="song-title">Soul Power 74</div>
+            <div class="song-artist">James Brown</div>
+          </li>
+          <li class="song-item" data-song="chicken">
+            <div class="song-title">The Chicken</div>
+            <div class="song-artist">Jaco / Maceo Parker</div>
+          </li>
+          <li class="song-item" data-song="coldsweat">
+            <div class="song-title">Cold Sweat</div>
+            <div class="song-artist">James Brown</div>
+          </li>
+          <li class="song-item" data-song="shakeeverything">
+            <div class="song-title">Shake Everything You Got</div>
+            <div class="song-artist">Maceo Parker</div>
+          </li>
+          <li class="song-item" data-song="soulpower92">
+            <div class="song-title">Soul Power '92</div>
+            <div class="song-artist">Maceo Parker</div>
+          </li>
+          <li class="song-item" data-song="doingit">
+            <div class="song-title">Doing It to Death</div>
+            <div class="song-artist">JB's</div>
           </li>
 
           <li class="song-group-header">Français</li>
@@ -1767,52 +1927,60 @@ h1{
 
     <!-- === Zone commune (accord courant / fret / vue) === -->
     <div class="common">
-      <label>
+      <!-- Première ligne : Accord actuel et Fret de départ -->
+      <label class="common-first-row">
         Accord actuel :
         <select id="chordSel"></select>
       </label>
 
-      <label>
+      <label class="common-first-row">
         Fret de départ :
         <select id="startFret"></select>
       </label>
 
-      <!-- Choix 5 / 8 / 10 / 15 frettes -->
-      <div class="view-toggle">
-        <button type="button" data-frets="5" class="active">5 frettes</button>
-        <button type="button" data-frets="8">8 frettes</button>
-        <button type="button" data-frets="10">10 frettes</button>
-        <button type="button" data-frets="15">15 frettes</button>
+      <!-- Colonne 1 : Nombre de cases -->
+      <div class="scale-modes-section">
+        <h3>Nombre de cases</h3>
+        <div class="view-toggle-wrapper">
+          <div class="view-toggle">
+            <button type="button" data-frets="5" class="active">5</button>
+            <button type="button" data-frets="8">8</button>
+            <button type="button" data-frets="10">10</button>
+            <button type="button" data-frets="15">15</button>
+          </div>
+        </div>
       </div>
 
-      <!-- ✅ case pour afficher la blue note -->
-      <label>
-        <input type="checkbox" id="showBlueNote">
-        Note blue (b5)
-      </label>
+      <!-- Colonne 2 : Pentatoniques -->
+      <div class="scale-modes-section">
+        <h3>Pentatoniques</h3>
+        <label>
+          <input type="checkbox" id="showBlueNote">
+          Blue note
+        </label>
+        <label>
+          <input type="checkbox" id="showPentaPattern">
+          Penta Hybride
+        </label>
+        <label>
+          <input type="checkbox" id="shapeMin7Maj6">
+          Penta Mineure
+        </label>
+        <label>
+          <input type="checkbox" id="shapeMaj7Min6">
+          Penta Majeure
+        </label>
+        <label>
+          <input type="checkbox" id="shapeMaj7DimMin6Penta">
+          Diminuée
+        </label>
+        <label>
+          <input type="checkbox" id="shapeMaj7BluesHex">
+          Hexaphonique
+        </label>
+      </div>
 
-      <!-- ✅ NOUVEAU : Pattern Pentatonique avec halo -->
-      <label>
-        <input type="checkbox" id="showPentaPattern">
-        Penta Hybride
-      </label>
-
-      <!-- ✅ nouvelles cases pour les formes superposées -->
-      <label>
-        <input type="checkbox" id="shapeMin7Maj6">
-        Formes Min7 / Maj6
-      </label>
-
-      <label>
-        <input type="checkbox" id="shapeMaj7Min6">
-        Formes Maj7 / Min6
-      </label>
-
-      <label><input type="checkbox" id="shapeMaj7DimMin6Penta"> Major (7) / Diminished / Minor (6) Pentaphonic</label>
-
-      <label><input type="checkbox" id="shapeMaj7BluesHex"> Major (7) Blues Hexaphonic</label>
-
-      <!-- ✅ NOUVELLES OPTIONS POUR LES GAMMES ET MODES -->
+      <!-- Colonne 3 : Gammes -->
       <div class="scale-modes-section">
         <h3>Gammes</h3>
         <label>
@@ -1829,6 +1997,7 @@ h1{
         </label>
       </div>
 
+      <!-- Colonne 4 : Modes -->
       <div class="scale-modes-section">
         <h3>Modes</h3>
         <label>
@@ -1903,6 +2072,7 @@ h1{
     </div>
 
   </main>
+  
   <script>
    // ================== POSITION OPTIMALE DU MANCHE ==================
 
@@ -1992,7 +2162,32 @@ const SONGS_DATABASE = {
   shape: { name: "Shape of You", artist: "Ed Sheeran", chords: ["C#m","F#m","A","B"] },
   blinding: { name: "Blinding Lights", artist: "The Weeknd", chords: ["Fm","Db","Ab","Eb"] },
   getlucky: { name: "Get Lucky", artist: "Daft Punk", chords: ["Bm","D","F#m","E"] },
-  jimmy: { name: "Jimmy", artist: "Moriarty", chords: ["Am","F","C","G"] }
+  jimmy: { name: "Jimmy", artist: "Moriarty", chords: ["Am","F","C","G"] },
+  
+  // Nouvelles chansons 2000-2020
+  flowers: { name: "Flowers", artist: "Miley Cyrus", chords: ["G","D","Em","C"] },
+  cheapthrills: { name: "Cheap Thrills", artist: "Sia", chords: ["Am","F","C","G"] },
+  try: { name: "Try", artist: "P!nk", chords: ["D","A","Bm","G"] },
+  setfire: { name: "Set Fire to the Rain", artist: "Adele", chords: ["Dm","F","C","Am"] },
+  englishman: { name: "Englishman in New York", artist: "Sting", chords: ["Bm","A","G","F#m"] },
+  
+  // Chansons Funk
+  sexmachine: { name: "Sex Machine", artist: "James Brown", chords: ["Bm7","Bm7","Bm7","Bm7"] },
+  goodtimes: { name: "Good Times", artist: "Chic", chords: ["Em7","A7","G","A"] },
+  getdown: { name: "Get Down On It", artist: "Kool & The Gang", chords: ["Fm7","Eb","Db","Fm7"] },
+  virtualinsanity: { name: "Virtual Insanity", artist: "Jamiroquai", chords: ["Fm7","Bb7","Ebmaj7","Fm7"] },
+  superstition: { name: "Superstition", artist: "Stevie Wonder", chords: ["Ebm7","Ebm7","Ebm7","Ebm7"] },
+  cissystrut: { name: "Cissy Strut", artist: "The Meters", chords: ["Dm7","G7","Dm7","G7"] },
+  kiss: { name: "Kiss", artist: "Prince", chords: ["A","E","F#m7","E"] },
+  september: { name: "September", artist: "Earth, Wind & Fire", chords: ["A","Bm7","C#m7","Bm7"] },
+  deantown: { name: "Dean Town", artist: "Vulfpeck", chords: ["Gm7","Gm7","Gm7","Gm7"] },
+  passthepeas: { name: "Pass the Peas", artist: "JB's / Fred Wesley", chords: ["G7","G7","C7","C7"] },
+  soulpower74: { name: "Soul Power 74", artist: "James Brown", chords: ["Bm7","Bm7","Bm7","Bm7"] },
+  chicken: { name: "The Chicken", artist: "Jaco / Maceo Parker", chords: ["Bb7","Bb7","Eb7","Eb7"] },
+  coldsweat: { name: "Cold Sweat", artist: "James Brown", chords: ["D7","D7","G7","D7"] },
+  shakeeverything: { name: "Shake Everything You Got", artist: "Maceo Parker", chords: ["E7","E7","E7","E7"] },
+  soulpower92: { name: "Soul Power '92", artist: "Maceo Parker", chords: ["Em7","Em7","Em7","Em7"] },
+  doingit: { name: "Doing It to Death", artist: "JB's", chords: ["F7","F7","F7","F7"] }
 };
 
 // Rempli les 8 menus d'accords du mode Pop/Rock
@@ -2182,6 +2377,31 @@ function parseChord(str){
   };
 }
 
+// Fonction pour obtenir les notes caractéristiques d'un accord
+function getChordTones(chord) {
+  const tones = [];
+  
+  // Fondamentale
+  tones.push({ label: 'F', note: i2n(chord.root), interval: 'Fondamentale' });
+  
+  // Tierce
+  const thirdInterval = (chord.dim || chord.minor) ? 3 : 4;
+  const thirdType = chord.dim ? 'Tierce dim' : (chord.minor ? 'Tierce m' : 'Tierce M');
+  tones.push({ label: '3', note: i2n((chord.root + thirdInterval) % 12), interval: thirdType });
+  
+  // Quinte
+  const fifthInterval = chord.dim ? 6 : 7;
+  const fifthType = chord.dim ? 'Quinte dim' : 'Quinte';
+  tones.push({ label: '5', note: i2n((chord.root + fifthInterval) % 12), interval: fifthType });
+  
+  // Septième (si présente)
+  if (chord.dominant7 || (chord.minor && /7/.test(chord.name))) {
+    tones.push({ label: '7', note: i2n((chord.root + 10) % 12), interval: 'Septième' });
+  }
+  
+  return tones;
+}
+
 
 function majorScale(r){ return [0,2,4,5,7,9,11].map(d => (r+d)%12); }
 function pentaMin(r){ return [0,3,5,7,10].map(d => (r+d)%12); }
@@ -2348,8 +2568,8 @@ function renderMiniDiagrams() {
   const activeTab = document.querySelector(".tab.active");
   const activeMode = activeTab ? activeTab.dataset.mode : "pop";
   
-  // Afficher seulement en mode Pop/Rock
-  if (activeMode !== "pop") {
+  // Cacher en mode Notes
+  if (activeMode === "notes") {
     wrapper.innerHTML = "";
     wrapper.style.display = "none";
     return;
@@ -2357,15 +2577,34 @@ function renderMiniDiagrams() {
   
   wrapper.style.display = "grid";
   
-  // Récupérer les accords actifs
-  const chordIds = ["chord1", "chord2", "chord3", "chord4", "chord5", "chord6", "chord7", "chord8"];
-  const activeChords = chordIds
-    .map(id => {
-      const el = document.getElementById(id);
-      if (!el || el.style.display === 'none') return null;
-      return el.value.trim();
-    })
-    .filter(Boolean);
+  let activeChords = [];
+  
+  // Mode Pop/Rock : récupérer les accords sélectionnés
+  if (activeMode === "pop") {
+    const chordIds = ["chord1", "chord2", "chord3", "chord4", "chord5", "chord6", "chord7", "chord8"];
+    activeChords = chordIds
+      .map(id => {
+        const el = document.getElementById(id);
+        if (!el || el.style.display === 'none') return null;
+        return el.value.trim();
+      })
+      .filter(Boolean);
+  }
+  // Mode Blues : créer les accords I7, IV7, V7
+  else if (activeMode === "blues") {
+    const bluesKeyEl = document.getElementById("bluesKey");
+    if (bluesKeyEl) {
+      const key = bluesKeyEl.value;
+      const rootIdx = n2i(key);
+      
+      // I7, IV7, V7 pour la progression blues 12 mesures
+      const I = i2n(rootIdx) + "7";
+      const IV = i2n((rootIdx + 5) % 12) + "7";
+      const V = i2n((rootIdx + 7) % 12) + "7";
+      
+      activeChords = [I, IV, V];
+    }
+  }
   
   if (activeChords.length === 0) {
     wrapper.innerHTML = "";
@@ -2400,6 +2639,31 @@ function createMiniDiagram(chordText, startFret, useShowPentaPattern, currentInd
   // Créer le container
   const container = document.createElement("div");
   container.className = "mini-diagram";
+  
+  // Ajouter les notes caractéristiques de l'accord
+  const chordTones = getChordTones(chord);
+  const tonesDiv = document.createElement("div");
+  tonesDiv.className = "chord-tones";
+  
+  chordTones.forEach(tone => {
+    const toneSpan = document.createElement("span");
+    toneSpan.className = "chord-tone";
+    toneSpan.title = tone.interval; // Info-bulle au survol
+    
+    const labelSpan = document.createElement("span");
+    labelSpan.className = "chord-tone-label";
+    labelSpan.textContent = tone.label + ':';
+    
+    const noteSpan = document.createElement("span");
+    noteSpan.className = "chord-tone-note";
+    noteSpan.textContent = tone.note;
+    
+    toneSpan.appendChild(labelSpan);
+    toneSpan.appendChild(noteSpan);
+    tonesDiv.appendChild(toneSpan);
+  });
+  
+  container.appendChild(tonesDiv);
   
   // Titre
   const title = document.createElement("div");
@@ -2586,6 +2850,31 @@ function createMiniStaff(chordText, useShowPentaPattern, currentIndex, allChords
   // Créer le container
   const container = document.createElement("div");
   container.className = "mini-diagram mini-staff-container";
+  
+  // Ajouter les notes caractéristiques de l'accord
+  const chordTones = getChordTones(chord);
+  const tonesDiv = document.createElement("div");
+  tonesDiv.className = "chord-tones";
+  
+  chordTones.forEach(tone => {
+    const toneSpan = document.createElement("span");
+    toneSpan.className = "chord-tone";
+    toneSpan.title = tone.interval; // Info-bulle au survol
+    
+    const labelSpan = document.createElement("span");
+    labelSpan.className = "chord-tone-label";
+    labelSpan.textContent = tone.label + ':';
+    
+    const noteSpan = document.createElement("span");
+    noteSpan.className = "chord-tone-note";
+    noteSpan.textContent = tone.note;
+    
+    toneSpan.appendChild(labelSpan);
+    toneSpan.appendChild(noteSpan);
+    tonesDiv.appendChild(toneSpan);
+  });
+  
+  container.appendChild(tonesDiv);
   
   // Titre
   const title = document.createElement("div");
@@ -3376,10 +3665,15 @@ function render(){
 
     }).join("");
 
-    const label = `Notes pour ${chord.name} :`;
+    // Créer l'affichage des notes caractéristiques de l'accord
+    const chordTones = getChordTones(chord);
+    const chordTonesText = chordTones.map(tone => `${tone.label}:${tone.note}`).join('  ');
+
+    const label = chord.name;
 
     scaleNotesEl.innerHTML = `
       <span class="scale-notes-label">${label}</span>
+      <div class="chord-tones-main">(${chordTonesText})</div>
       <div class="scale-notes-list">
         ${notesHtml}
       </div>
@@ -4016,6 +4310,7 @@ document.querySelectorAll('.chord-select').forEach(select => {
     }, 250);
   });
 });
+
 
   </script>
 </body>
