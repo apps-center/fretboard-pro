@@ -1214,10 +1214,28 @@ h1{
   animation: pulseWithHalo 2s infinite !important;
 }
 
+/* ✅ Halo bleu pour la tonique */
+.note.root.blue-halo{
+  width: 42px !important;
+  height: 42px !important;
+  font-size: 1rem !important;
+  box-shadow: 0 0 0 2px rgba(33,150,243,0.9),
+              0 0 15px 5px rgba(33,150,243,0.6),
+              0 4px 15px rgba(0,0,0,0.7) !important;
+  animation: pulseWithHalo 2s infinite !important;
+}
+
 /* halo particulier pour la blue note si tu veux */
 .note.shape-blue{
   box-shadow: 0 0 0 3px rgba(33,150,243,0.95),
               0 4px 15px rgba(0,0,0,0.8);
+}
+
+/* ✅ HALO BLEU pour les notes qui sont target/chord ET blue note */
+.note.blue-halo{
+  box-shadow: 0 0 0 2px rgba(33,150,243,0.9),
+              0 0 12px 4px rgba(33,150,243,0.5),
+              0 4px 15px rgba(0,0,0,0.7);
 }
 
 /* formes sur la ligne de notes avec halo blanc */
@@ -1570,11 +1588,29 @@ h1{
               0 2px 8px rgba(0, 0, 0, 0.7);
 }
 
+/* ✅ Halo bleu pour les notes target/chord qui sont aussi blue note */
+.mini-fb .note.blue-halo {
+  box-shadow: 0 0 0 5px rgba(33, 150, 243, 0.9),
+              0 0 8px 2px rgba(33, 150, 243, 0.5),
+              0 2px 8px rgba(0, 0, 0, 0.7);
+}
+
 .mini-fb .note.root.shape-min7,
 .mini-fb .note.root.shape-maj6 {
   width: 38px !important;
   height: 38px !important;
   font-size: 0.9rem !important;
+  animation: pulseWithHalo 2s infinite !important;
+}
+
+/* ✅ Halo bleu pour la tonique dans les mini-diagrammes */
+.mini-fb .note.root.blue-halo {
+  width: 38px !important;
+  height: 38px !important;
+  font-size: 0.9rem !important;
+  box-shadow: 0 0 0 5px rgba(33, 150, 243, 0.9),
+              0 0 10px 3px rgba(33, 150, 243, 0.6),
+              0 2px 8px rgba(0, 0, 0, 0.7) !important;
   animation: pulseWithHalo 2s infinite !important;
 }
 
@@ -1645,6 +1681,12 @@ h1{
     height: 32px !important;
     font-size: 0.8rem !important;
   }
+  
+  .mini-fb .note.root.blue-halo {
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 0.8rem !important;
+  }
 }
 
 @media (max-width: 480px) {
@@ -1679,6 +1721,12 @@ h1{
   
   .mini-fb .note.root.shape-min7,
   .mini-fb .note.root.shape-maj6 {
+    width: 28px !important;
+    height: 28px !important;
+    font-size: 0.75rem !important;
+  }
+  
+  .mini-fb .note.root.blue-halo {
     width: 28px !important;
     height: 28px !important;
     font-size: 0.75rem !important;
@@ -2235,15 +2283,34 @@ const HOT_FRETS = [3, 5, 7, 9, 12, 15];
 
 // Liste complète des accords de base (chromatisme + variantes)
 const CHORD_LIST = [
+  // Accords majeurs (dièses)
   "C","C#","D","D#","E","F","F#","G","G#","A","A#","B",
+  // Accords majeurs (bémols)
+  "Db","Eb","Gb","Ab","Bb",
+  // Accords mineurs (dièses)
   "Cm","C#m","Dm","D#m","Em","Fm","F#m","Gm","G#m","Am","A#m","Bm",
+  // Accords mineurs (bémols)
+  "Dbm","Ebm","Gbm","Abm","Bbm",
+  // Accords 7 (dièses)
   "C7","C#7","D7","D#7","E7","F7","F#7","G7","G#7","A7","A#7","B7",
+  // Accords 7 (bémols)
+  "Db7","Eb7","Gb7","Ab7","Bb7",
+  // Accords m7 (dièses)
   "Cm7","C#m7","Dm7","D#m7","Em7","Fm7","F#m7","Gm7","G#m7","Am7","A#m7","Bm7",
-  "Cdim","C#dim","Ddim","D#dim","Edim","Fdim","F#dim","Gdim","G#dim","Adim","A#dim","Bdim"
+  // Accords m7 (bémols)
+  "Dbm7","Ebm7","Gbm7","Abm7","Bbm7",
+  // Accords diminués (dièses)
+  "Cdim","C#dim","Ddim","D#dim","Edim","Fdim","F#dim","Gdim","G#dim","Adim","A#dim","Bdim",
+  // Accords diminués (bémols)
+  "Dbdim","Ebdim","Gbdim","Abdim","Bbdim",
+  // Accords sus et autres
+  "Dsus4","A7sus4","Cmaj7","Ebmaj7"
 ];
 
 // Base de données des chansons
+// ================ BASE DE DONNÉES DES CHANSONS (Corrigée et complétée) ================
 const SONGS_DATABASE = {
+  // Rock Classique
   satisfaction: { name: "Satisfaction", artist: "Rolling Stones", chords: ["E","D","A","E"] },
   letitbe: { name: "Let It Be", artist: "Beatles", chords: ["C","G","Am","F"] },
   heyjude: { name: "Hey Jude", artist: "Beatles", chords: ["F","C","C7","Bb"] },
@@ -2257,53 +2324,54 @@ const SONGS_DATABASE = {
   wildthing: { name: "Wild Thing", artist: "The Troggs", chords: ["A","D","E","D"] },
   purplehaze: { name: "Purple Haze", artist: "Jimi Hendrix", chords: ["E7","G","A","E7"] },
   sheriff: { name: "I Shot the Sheriff", artist: "Bob Marley", chords: ["Gm","Cm","Dm","Gm"] },
-  heyjoe: { name: "Hey Joe", artist: "Jimi Hendrix", chords: ["C","G","D","A"] },
-  everybreath: { name: "Every Breath You Take", artist: "Police", chords: ["A","F#m","D","E"] },
+  heyjoe: { name: "Hey Joe", artist: "Jimi Hendrix", chords: ["C","G","D","A","E"] },
+  
+  // Rock 80s-90s
+  everybreath: { name: "Every Breath You Take", artist: "Police", chords: ["G","Em","C","D"] },
   zombie: { name: "Zombie", artist: "Cranberries", chords: ["Em","C","G","D"] },
   withorwithout: { name: "With or Without You", artist: "U2", chords: ["D","A","Bm","G"] },
   wonderwall: { name: "Wonderwall", artist: "Oasis", chords: ["Em7","G","Dsus4","A7sus4"] },
   sweetchild: { name: "Sweet Child O' Mine", artist: "Guns N' Roses", chords: ["D","C","G","D"] },
   shouldistay: { name: "Should I Stay or Should I Go", artist: "Clash", chords: ["D","G","A","D"] },
   nowoman: { name: "No Woman No Cry", artist: "Bob Marley", chords: ["C","G","Am","F"] },
-  losing: { name: "Losing My Religion", artist: "R.E.M.", chords: ["Am","Em","G","D"] },
+  losing: { name: "Losing My Religion", artist: "R.E.M.", chords: ["Am","Em","Dm","G"] },
   creep: { name: "Creep", artist: "Radiohead", chords: ["G","B","C","Cm"] },
+  
+  // ✅ CORRIGÉ : Smells Like Teen Spirit
   smells: { name: "Smells Like Teen Spirit", artist: "Nirvana", chords: ["F","Bb","Ab","Db"] },
+  
   whatsup: { name: "What's Up", artist: "4 Non Blondes", chords: ["A","Bm","D","A"] },
-  karma: { name: "Karma Police", artist: "Radiohead", chords: ["Am","D","G","Em"] },
+  karma: { name: "Karma Police", artist: "Radiohead", chords: ["Am","D","Em","G"] },
+  
+  // Rock moderne / Alt
   californication: { name: "Californication", artist: "RHCP", chords: ["Am","F","C","G"] },
+  seven: { name: "Seven Nation Army", artist: "White Stripes", chords: ["Em","C","B","Em"] },
+  
+  // Pop moderne
   baby: { name: "Baby One More Time", artist: "Britney Spears", chords: ["Cm","G","Bb","Ab"] },
   imyours: { name: "I'm Yours", artist: "Jason Mraz", chords: ["G","D","Em","C"] },
-  seven: { name: "Seven Nation Army", artist: "White Stripes", chords: ["Em","C","B","Em"] },
   someone: { name: "Someone Like You", artist: "Adele", chords: ["A","E","F#m","D"] },
   shallow: { name: "Shallow", artist: "Lady Gaga", chords: ["Em","D","G","C"] },
   riptide: { name: "Riptide", artist: "Vance Joy", chords: ["Am","G","C","F"] },
   shape: { name: "Shape of You", artist: "Ed Sheeran", chords: ["C#m","F#m","A","B"] },
   blinding: { name: "Blinding Lights", artist: "The Weeknd", chords: ["Fm","Db","Ab","Eb"] },
-  getlucky: { name: "Get Lucky", artist: "Daft Punk", chords: ["Bm","D","F#m","E"] },
-  jimmy: { name: "Jimmy", artist: "Moriarty", chords: ["Am","F","C","G"] },
-  
-  // Nouvelles chansons 2000-2020
   flowers: { name: "Flowers", artist: "Miley Cyrus", chords: ["G","D","Em","C"] },
   cheapthrills: { name: "Cheap Thrills", artist: "Sia", chords: ["Am","F","C","G"] },
   try: { name: "Try", artist: "P!nk", chords: ["D","A","Bm","G"] },
   setfire: { name: "Set Fire to the Rain", artist: "Adele", chords: ["Dm","F","C","Am"] },
   englishman: { name: "Englishman in New York", artist: "Sting", chords: ["Bm","A","G","F#m"] },
   
-  // Chansons Funk
-  sexmachine: { name: "Sex Machine", artist: "James Brown", chords: ["Bm7","Bm7","Bm7","Bm7"] },
+  // Funk / Soul
+  getlucky: { name: "Get Lucky", artist: "Daft Punk", chords: ["Bm","D","F#m","E"] },
+  jimmy: { name: "Jimmy", artist: "Moriarty", chords: ["Am","F","C","G"] },
+  sexmachine: { name: "Sex Machine", artist: "James Brown", chords: ["E7","E7","E7","E7"] },
   goodtimes: { name: "Good Times", artist: "Chic", chords: ["Em7","A7","G","A"] },
   getdown: { name: "Get Down On It", artist: "Kool & The Gang", chords: ["Fm7","Eb","Db","Fm7"] },
-  virtualinsanity: { name: "Virtual Insanity", artist: "Jamiroquai", chords: ["Fm7","Bb7","Ebmaj7","Fm7"] },
+  virtualinsanity: { name: "Virtual Insanity", artist: "Jamiroquai", chords: ["Ebmaj7","Fm7","Ebmaj7","Fm7"] },
   superstition: { name: "Superstition", artist: "Stevie Wonder", chords: ["Ebm7","Ebm7","Ebm7","Ebm7"] },
-  cissystrut: { name: "Cissy Strut", artist: "The Meters", chords: ["Dm7","G7","Dm7","G7"] },
-  kiss: { name: "Kiss", artist: "Prince", chords: ["A","E","F#m7","E"] },
-  september: { name: "September", artist: "Earth, Wind & Fire", chords: ["A","Bm7","C#m7","Bm7"] },
-  deantown: { name: "Dean Town", artist: "Vulfpeck", chords: ["Gm7","Gm7","Gm7","Gm7"] },
-  passthepeas: { name: "Pass the Peas", artist: "JB's / Fred Wesley", chords: ["G7","G7","C7","C7"] },
-  soulpower74: { name: "Soul Power 74", artist: "James Brown", chords: ["Bm7","Bm7","Bm7","Bm7"] },
-  chicken: { name: "The Chicken", artist: "Jaco / Maceo Parker", chords: ["Bb7","Bb7","Eb7","Eb7"] },
-  coldsweat: { name: "Cold Sweat", artist: "James Brown", chords: ["D7","D7","G7","D7"] },
-  shakeeverything: { name: "Shake Everything You Got", artist: "Maceo Parker", chords: ["E7","E7","E7","E7"] },
+  cantfeelmyface: { name: "Can't Feel My Face", artist: "The Weeknd", chords: ["Bb","Dm","Eb","F"] },
+  uptown: { name: "Uptown Funk", artist: "Bruno Mars", chords: ["Dm7","G7","Dm7","G7"] },
+  treasure: { name: "Treasure", artist: "Bruno Mars", chords: ["Dm7","Am7","Dm7","Am7"] },
   soulpower92: { name: "Soul Power '92", artist: "Maceo Parker", chords: ["Em7","Em7","Em7","Em7"] },
   doingit: { name: "Doing It to Death", artist: "JB's", chords: ["F7","F7","F7","F7"] }
 };
@@ -2555,6 +2623,277 @@ function phrygianScale(r){ return [0,1,3,5,7,8,10].map(d => (r+d)%12); }
 // Mode Locrien (mode VII de la gamme majeure)
 // Intervalles : 0, 1, 3, 5, 6, 8, 10
 function locrianScale(r){ return [0,1,3,5,6,8,10].map(d => (r+d)%12); }
+// =====================================================
+// DÉTECTEUR AUTOMATIQUE DE MODE
+// Basé sur l'arbre de décision fourni
+// =====================================================
+
+/**
+ * Détecte le mode à partir d'une liste d'accords
+ * @param {Array<string>} chords - Liste des accords (ex: ["Bm", "D", "F#m", "E"])
+ * @returns {Object} - { mode: "dorian", tonic: 11, confidence: 0.95, notes: Set }
+ */
+function detectMode(chords) {
+  if (!chords || chords.length === 0) {
+    return { mode: "major", tonic: 0, confidence: 0 };
+  }
+  
+  // 1. Parser tous les accords
+  const parsedChords = chords.map(c => parseChord(c));
+  
+  // 2. Détecter la tonique modale (point de repos)
+  const tonic = detectTonic(parsedChords);
+  
+  // 3. Collecter toutes les notes présentes dans les accords
+  const allNotes = new Set();
+  parsedChords.forEach(chord => {
+    const chordNotes = getChordNotes(chord);
+    chordNotes.forEach(n => allNotes.add(n));
+  });
+  
+  // 4. Suivre l'arbre de décision
+  const mode = detectModeFromNotes(tonic, allNotes);
+  
+  // 5. Calculer la confiance
+  const confidence = calculateConfidence(tonic, allNotes, mode);
+  
+  return {
+    mode: mode,
+    tonic: tonic,
+    confidence: confidence,
+    notes: allNotes,
+    tonicName: i2n(tonic)
+  };
+}
+
+/**
+ * Détecte la tonique modale (note "maison")
+ * Heuristique : premier accord ou accord le plus fréquent
+ */
+function detectTonic(parsedChords) {
+  if (parsedChords.length === 0) return 0;
+  
+  // Compter la fréquence de chaque racine
+  const rootFrequency = {};
+  parsedChords.forEach(chord => {
+    rootFrequency[chord.root] = (rootFrequency[chord.root] || 0) + 1;
+  });
+  
+  // Priorité 1 : Le premier accord (souvent la tonique)
+  const firstRoot = parsedChords[0].root;
+  
+  // Priorité 2 : L'accord le plus fréquent
+  let mostFrequentRoot = firstRoot;
+  let maxFreq = rootFrequency[firstRoot] || 0;
+  
+  for (const [root, freq] of Object.entries(rootFrequency)) {
+    if (freq > maxFreq) {
+      maxFreq = freq;
+      mostFrequentRoot = parseInt(root);
+    }
+  }
+  
+  // Si le premier accord représente au moins 25% des occurrences, on le prend
+  if (rootFrequency[firstRoot] >= parsedChords.length * 0.25) {
+    return firstRoot;
+  }
+  
+  return mostFrequentRoot;
+}
+
+/**
+ * Extrait toutes les notes d'un accord
+ */
+function getChordNotes(chord) {
+  const notes = new Set([chord.root]);
+  
+  // Tierce
+  const thirdInterval = (chord.dim || chord.minor) ? 3 : 4;
+  notes.add((chord.root + thirdInterval) % 12);
+  
+  // Quinte
+  const fifthInterval = chord.dim ? 6 : 7;
+  notes.add((chord.root + fifthInterval) % 12);
+  
+  // Septième si présente
+  if (chord.dominant7 || (chord.minor && /7/.test(chord.name))) {
+    notes.add((chord.root + 10) % 12);
+  }
+  
+  // Majeur 7
+  if (/maj7/i.test(chord.name)) {
+    notes.add((chord.root + 11) % 12);
+  }
+  
+  return notes;
+}
+
+/**
+ * Suit l'arbre de décision pour déterminer le mode
+ */
+function detectModeFromNotes(tonic, allNotes) {
+  // Convertir les notes en intervalles par rapport à la tonique
+  const intervals = new Set();
+  allNotes.forEach(note => {
+    const interval = (note - tonic + 12) % 12;
+    intervals.add(interval);
+  });
+  
+  // ÉTAPE 2 : TIERCE MAJEURE ou MINEURE ?
+  const hasMinorThird = intervals.has(3);
+  const hasMajorThird = intervals.has(4);
+  
+  // Si on a les deux tierces, privilégier celle qui apparaît dans le premier accord
+  // Pour simplifier, on va privilégier la tierce mineure si présente
+  const isMinorMode = hasMinorThird;
+  
+  if (isMinorMode) {
+    // ========== BRANCHE TIERCE MINEURE ==========
+    
+    // QUESTION 3 : La 2e est-elle b (mineure) ?
+    const hasMinorSecond = intervals.has(1);
+    if (hasMinorSecond) {
+      return "phrygian"; // PHRYGIEN
+    }
+    
+    // QUESTION 4 : La 6e est-elle MAJEURE ?
+    const hasMajorSixth = intervals.has(9);
+    if (hasMajorSixth) {
+      return "dorian"; // DORIEN
+    }
+    
+    // QUESTION 5 : La 5e est-elle b (diminuée) ?
+    const hasDiminishedFifth = intervals.has(6);
+    if (hasDiminishedFifth) {
+      return "locrian"; // LOCRIEN
+    }
+    
+    // Par défaut : ÉOLIEN (mineur naturel)
+    return "aeolian";
+    
+  } else {
+    // ========== BRANCHE TIERCE MAJEURE ==========
+    
+    // QUESTION 3 : La 4e est-elle # (augmentée) ?
+    const hasAugmentedFourth = intervals.has(6);
+    if (hasAugmentedFourth) {
+      return "lydian"; // LYDIEN
+    }
+    
+    // QUESTION 4 : La 7e est-elle b (mineure) ?
+    const hasMinorSeventh = intervals.has(10);
+    if (hasMinorSeventh) {
+      return "mixolydian"; // MIXOLYDIEN
+    }
+    
+    // Par défaut : IONIEN (majeur)
+    return "major"; // IONIEN
+  }
+}
+
+/**
+ * Calcule un score de confiance (0-1)
+ */
+function calculateConfidence(tonic, allNotes, detectedMode) {
+  // Récupérer les notes théoriques du mode détecté
+  const modeScales = {
+    "major": majorScale,
+    "dorian": dorianScale,
+    "phrygian": phrygianScale,
+    "lydian": lydianScale,
+    "mixolydian": mixolydianScale,
+    "aeolian": aeolianScale,
+    "locrian": locrianScale
+  };
+  
+  const scaleFunc = modeScales[detectedMode];
+  if (!scaleFunc) return 0.5;
+  
+  const theoreticalNotes = new Set(scaleFunc(tonic));
+  
+  // Compter combien de notes observées sont dans le mode théorique
+  let matchCount = 0;
+  allNotes.forEach(note => {
+    if (theoreticalNotes.has(note)) {
+      matchCount++;
+    }
+  });
+  
+  // Confidence = ratio de notes qui matchent
+  const confidence = allNotes.size > 0 ? matchCount / allNotes.size : 0;
+  
+  return confidence;
+}
+
+/**
+ * Renvoie le nom français du mode
+ */
+function getModeName(mode) {
+  const names = {
+    "major": "Majeur (Ionien)",
+    "dorian": "Dorien",
+    "phrygian": "Phrygien",
+    "lydian": "Lydien",
+    "mixolydian": "Mixolydien",
+    "aeolian": "Mineur naturel (Éolien)",
+    "locrian": "Locrien"
+  };
+  return names[mode] || mode;
+}
+
+/**
+ * Applique automatiquement le mode détecté
+ */
+function applyDetectedMode(detection) {
+  if (!detection || detection.confidence < 0.5) {
+    console.warn("Détection de mode peu fiable, mode non appliqué");
+    return;
+  }
+  
+  // Décocher toutes les checkboxes de modes
+  const modeCheckboxes = [
+    "modeDorian", "modePhrygian", "modeLydian",
+    "modeMixolydian", "modeAeolian", "modeLocrian",
+    "scaleMajor", "scaleMinorNatural"
+  ];
+  
+  modeCheckboxes.forEach(id => {
+    const cb = document.getElementById(id);
+    if (cb) cb.checked = false;
+  });
+  
+  // Cocher le bon mode
+  const modeToCheckbox = {
+    "major": "scaleMajor",
+    "dorian": "modeDorian",
+    "phrygian": "modePhrygian",
+    "lydian": "modeLydian",
+    "mixolydian": "modeMixolydian",
+    "aeolian": "modeAeolian",
+    "locrian": "modeLocrian"
+  };
+  
+  const checkboxId = modeToCheckbox[detection.mode];
+  if (checkboxId) {
+    const cb = document.getElementById(checkboxId);
+    if (cb) {
+      cb.checked = true;
+      // Déclencher l'événement change pour mettre à jour l'affichage
+      cb.dispatchEvent(new Event('change'));
+    }
+  }
+  
+  console.log(`🎵 Mode détecté : ${getModeName(detection.mode)} en ${detection.tonicName} (confiance: ${Math.round(detection.confidence * 100)}%)`);
+}
+
+// Export pour utilisation
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = {
+    detectMode,
+    applyDetectedMode,
+    getModeName
+  };
+}
 
 
 // ===== Major (7) (blues) HEXAPHONIC =====
@@ -2733,6 +3072,12 @@ function renderMiniDiagrams() {
   const startFret = parseInt(document.getElementById("startFret").value) || 0;
   const useShowPentaPattern = document.getElementById("showPentaPattern")?.checked ?? false;
   
+  // ✅ Calculer la tonalité (keyRoot)
+  const isBluesMode = activeMode === "blues";
+  const keyRoot = isBluesMode
+    ? n2i(document.getElementById("bluesKey")?.value || "C")
+    : currentKeyRoot;
+  
   // Vider le wrapper
   wrapper.innerHTML = "";
   
@@ -2740,17 +3085,17 @@ function renderMiniDiagrams() {
   activeChords.forEach((chordText, index) => {
     if (staffMode) {
       // Mode portée : créer une mini-portée
-      const miniStaff = createMiniStaff(chordText, useShowPentaPattern, index, activeChords);
+      const miniStaff = createMiniStaff(chordText, keyRoot, useShowPentaPattern, index, activeChords);
       wrapper.appendChild(miniStaff);
     } else {
       // Mode manche : créer un mini-diagramme
-      const miniDiagram = createMiniDiagram(chordText, startFret, useShowPentaPattern, index, activeChords);
+      const miniDiagram = createMiniDiagram(chordText, keyRoot, startFret, useShowPentaPattern, index, activeChords);
       wrapper.appendChild(miniDiagram);
     }
   });
 }
 
-function createMiniDiagram(chordText, startFret, useShowPentaPattern, currentIndex, allChords) {
+function createMiniDiagram(chordText, keyRoot, startFret, useShowPentaPattern, currentIndex, allChords) {
   // Parse l'accord
   const chord = parseChord(chordText);
   
@@ -2846,13 +3191,47 @@ function createMiniDiagram(chordText, startFret, useShowPentaPattern, currentInd
     }
   }
   
-  // Gamme majeure pour les notes "dans la gamme"
-  const keyRoot = chord.root;
-  const scaleSet = new Set(majorScale(keyRoot));
+  // ✅ Utiliser le mode sélectionné (ou gamme majeure par défaut)
+  let scaleSet = new Set();
+  
+  // Vérifier les checkboxes des modes
+  const modeDorianCb = document.getElementById("modeDorian");
+  const modeAeolianCb = document.getElementById("modeAeolian");
+  const modeLydianCb = document.getElementById("modeLydian");
+  const modeMixolydianCb = document.getElementById("modeMixolydian");
+  const modePhrygianCb = document.getElementById("modePhrygian");
+  const modeLocrianCb = document.getElementById("modeLocrian");
+  const scaleMajorCb = document.getElementById("scaleMajor");
+  const scaleMinorNaturalCb = document.getElementById("scaleMinorNatural");
+  const scaleMinorMelodicCb = document.getElementById("scaleMinorMelodic");
+  
+  // Utiliser le mode coché (priorité aux modes)
+  if (modeDorianCb?.checked) {
+    scaleSet = new Set(dorianScale(keyRoot));
+  } else if (modeAeolianCb?.checked) {
+    scaleSet = new Set(aeolianScale(keyRoot));
+  } else if (modeLydianCb?.checked) {
+    scaleSet = new Set(lydianScale(keyRoot));
+  } else if (modeMixolydianCb?.checked) {
+    scaleSet = new Set(mixolydianScale(keyRoot));
+  } else if (modePhrygianCb?.checked) {
+    scaleSet = new Set(phrygianScale(keyRoot));
+  } else if (modeLocrianCb?.checked) {
+    scaleSet = new Set(locrianScale(keyRoot));
+  } else if (scaleMinorNaturalCb?.checked) {
+    scaleSet = new Set(minorScale(keyRoot));
+  } else if (scaleMinorMelodicCb?.checked) {
+    scaleSet = new Set(minorMelodicScale(keyRoot));
+  } else if (scaleMajorCb?.checked) {
+    scaleSet = new Set(majorScale(keyRoot));
+  } else {
+    // Par défaut : gamme majeure
+    scaleSet = new Set(majorScale(keyRoot));
+  }
   
   // Blue note (b5) - vérifier si la checkbox est cochée
   const showBlueNote = document.getElementById("showBlueNote")?.checked ?? false;
-  const blueNote = (chord.root + 6) % 12;
+  const blueNote = (chord.root + 3) % 12;  // ✅ Blue note = tierce mineure (♭3)
   
   // Rendu des cordes et frettes
   STRINGS.forEach(openString => {
@@ -2884,11 +3263,10 @@ function createMiniDiagram(chordText, startFret, useShowPentaPattern, currentInd
         role = "root";
       } else if (targetNotes.has(noteIdx)) {
         role = "target";
+      } else if (showBlueNote && noteIdx === blueNote) {
+        role = "blues";
       } else if (chordNotes.has(noteIdx)) {
         role = "chord";
-      } else if (showBlueNote && noteIdx === blueNote) {
-        // Afficher la blue note (b5) si la checkbox est cochée
-        role = "blues";
       } else if (scaleSet.has(noteIdx)) {
         if (isHalfStepBelowChord) {
           role = "floating";
@@ -2916,6 +3294,11 @@ function createMiniDiagram(chordText, startFret, useShowPentaPattern, currentInd
         // Halo pour pattern penta
         if (useShowPentaPattern && pentaPatternHaloSet.has(noteIdx)) {
           dot.classList.add("shape-min7");
+        }
+        
+        // ✅ Halo bleu si c'est aussi une blue note
+        if (showBlueNote && noteIdx === blueNote && role !== "blues") {
+          dot.classList.add("blue-halo");
         }
         
         dot.textContent = i2n(openNoteIdx + fretNum);
@@ -2961,7 +3344,7 @@ function createMiniDiagram(chordText, startFret, useShowPentaPattern, currentInd
 
 // ================== MINI-PORTÉES PAR ACCORD ==================
 
-function createMiniStaff(chordText, useShowPentaPattern, currentIndex, allChords) {
+function createMiniStaff(chordText, keyRoot, useShowPentaPattern, currentIndex, allChords) {
   // Parse l'accord
   const chord = parseChord(chordText);
   
@@ -3089,12 +3472,47 @@ function createMiniStaff(chordText, useShowPentaPattern, currentIndex, allChords
     }
   }
   
-  // Gamme majeure
-  const scaleSet = new Set(majorScale(chord.root));
+  // ✅ Utiliser le mode sélectionné (ou gamme majeure par défaut)
+  let scaleSet = new Set();
+  
+  // Vérifier les checkboxes des modes
+  const modeDorianCb = document.getElementById("modeDorian");
+  const modeAeolianCb = document.getElementById("modeAeolian");
+  const modeLydianCb = document.getElementById("modeLydian");
+  const modeMixolydianCb = document.getElementById("modeMixolydian");
+  const modePhrygianCb = document.getElementById("modePhrygian");
+  const modeLocrianCb = document.getElementById("modeLocrian");
+  const scaleMajorCb = document.getElementById("scaleMajor");
+  const scaleMinorNaturalCb = document.getElementById("scaleMinorNatural");
+  const scaleMinorMelodicCb = document.getElementById("scaleMinorMelodic");
+  
+  // Utiliser le mode coché (priorité aux modes)
+  if (modeDorianCb?.checked) {
+    scaleSet = new Set(dorianScale(keyRoot));
+  } else if (modeAeolianCb?.checked) {
+    scaleSet = new Set(aeolianScale(keyRoot));
+  } else if (modeLydianCb?.checked) {
+    scaleSet = new Set(lydianScale(keyRoot));
+  } else if (modeMixolydianCb?.checked) {
+    scaleSet = new Set(mixolydianScale(keyRoot));
+  } else if (modePhrygianCb?.checked) {
+    scaleSet = new Set(phrygianScale(keyRoot));
+  } else if (modeLocrianCb?.checked) {
+    scaleSet = new Set(locrianScale(keyRoot));
+  } else if (scaleMinorNaturalCb?.checked) {
+    scaleSet = new Set(minorScale(keyRoot));
+  } else if (scaleMinorMelodicCb?.checked) {
+    scaleSet = new Set(minorMelodicScale(keyRoot));
+  } else if (scaleMajorCb?.checked) {
+    scaleSet = new Set(majorScale(keyRoot));
+  } else {
+    // Par défaut : gamme majeure
+    scaleSet = new Set(majorScale(keyRoot));
+  }
   
   // Blue note (b5) - vérifier si la checkbox est cochée
   const showBlueNote = document.getElementById("showBlueNote")?.checked ?? false;
-  const blueNote = (chord.root + 6) % 12;
+  const blueNote = (chord.root + 3) % 12;  // ✅ Blue note = tierce mineure (♭3)
   
   // Créer une liste des notes à afficher
   const notesToDisplay = [];
@@ -3118,7 +3536,8 @@ function createMiniStaff(chordText, useShowPentaPattern, currentIndex, allChords
       notesToDisplay.push({
         noteIdx: noteIdx,
         role: role,
-        hasHalo: pentaPatternHaloSet.has(noteIdx)
+        hasHalo: pentaPatternHaloSet.has(noteIdx),
+        hasBlueHalo: showBlueNote && noteIdx === blueNote && role !== "blues"
       });
     }
   });
@@ -3128,7 +3547,8 @@ function createMiniStaff(chordText, useShowPentaPattern, currentIndex, allChords
     notesToDisplay.push({
       noteIdx: blueNote,
       role: "blues",
-      hasHalo: pentaPatternHaloSet.has(blueNote)
+      hasHalo: pentaPatternHaloSet.has(blueNote),
+      hasBlueHalo: false
     });
   }
   
@@ -3183,6 +3603,15 @@ function createMiniStaff(chordText, useShowPentaPattern, currentIndex, allChords
     if (n.hasHalo) {
       ctx.beginPath();
       ctx.strokeStyle = "rgba(255, 255, 255, 0.85)";
+      ctx.lineWidth = 3;
+      ctx.ellipse(x, y, 13, 10, 0, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+    
+    // ✅ Dessiner le halo bleu si c'est une blue note
+    if (n.hasBlueHalo) {
+      ctx.beginPath();
+      ctx.strokeStyle = "rgba(33, 150, 243, 0.9)"; // Bleu
       ctx.lineWidth = 3;
       ctx.ellipse(x, y, 13, 10, 0, 0, Math.PI * 2);
       ctx.stroke();
@@ -3286,33 +3715,33 @@ function render(){
   // Créer un Set combiné pour toutes les gammes/modes sélectionnés
   const combinedScaleSet = new Set();
   
-  // Ajouter les notes des gammes sélectionnées (basées sur chord.root)
+  // Ajouter les notes des gammes sélectionnées (basées sur LA TONALITÉ, pas l'accord actuel)
   if (scaleMajorCb?.checked) {
-    majorScale(chord.root).forEach(n => combinedScaleSet.add(n));
+    majorScale(keyRoot).forEach(n => combinedScaleSet.add(n));
   }
   if (scaleMinorNaturalCb?.checked) {
-    minorScale(chord.root).forEach(n => combinedScaleSet.add(n));
+    minorScale(keyRoot).forEach(n => combinedScaleSet.add(n));
   }
   if (scaleMinorMelodicCb?.checked) {
-    minorMelodicScale(chord.root).forEach(n => combinedScaleSet.add(n));
+    minorMelodicScale(keyRoot).forEach(n => combinedScaleSet.add(n));
   }
   if (modeDorianCb?.checked) {
-    dorianScale(chord.root).forEach(n => combinedScaleSet.add(n));
+    dorianScale(keyRoot).forEach(n => combinedScaleSet.add(n));
   }
   if (modeAeolianCb?.checked) {
-    aeolianScale(chord.root).forEach(n => combinedScaleSet.add(n));
+    aeolianScale(keyRoot).forEach(n => combinedScaleSet.add(n));
   }
   if (modeLydianCb?.checked) {
-    lydianScale(chord.root).forEach(n => combinedScaleSet.add(n));
+    lydianScale(keyRoot).forEach(n => combinedScaleSet.add(n));
   }
   if (modeMixolydianCb?.checked) {
-    mixolydianScale(chord.root).forEach(n => combinedScaleSet.add(n));
+    mixolydianScale(keyRoot).forEach(n => combinedScaleSet.add(n));
   }
   if (modePhrygianCb?.checked) {
-    phrygianScale(chord.root).forEach(n => combinedScaleSet.add(n));
+    phrygianScale(keyRoot).forEach(n => combinedScaleSet.add(n));
   }
   if (modeLocrianCb?.checked) {
-    locrianScale(chord.root).forEach(n => combinedScaleSet.add(n));
+    locrianScale(keyRoot).forEach(n => combinedScaleSet.add(n));
   }
   
   // Si au moins une gamme/mode est sélectionné, utiliser le Set combiné
@@ -3474,7 +3903,7 @@ function render(){
   }
 
   // Blue note typique (b5) de l'accord (pour le manche)
-  const bluesNote = (chord.root + 6) % 12;
+  const bluesNote = (chord.root + 3) % 12;  // ✅ Blue note = tierce mineure (♭3)
 
   // 👉 en Blues : checkbox "Notes blues"
   // 👉 en Pop/Rock : checkbox globale "Note blue (b5)"
@@ -3550,16 +3979,16 @@ function render(){
         if (noteIdx === chord.root) {
           role = "root";
         } else if (targetNotes.has(noteIdx)) {
-          // ✅ NOTE CIBLE : dans l'accord actuel mais PAS dans le précédent
+          // ✅ NOTE CIBLE prioritaire
           role = "target";
+        } else if (bluesSet.has(noteIdx)) {
+          role = "blues";
         } else if (chordNotes.has(noteIdx)) {
           role = "chord";
         } else if (pentaMinSet.has(noteIdx)) {
           role = "penta-minor";
         } else if (pentaMajSet.has(noteIdx)) {
           role = "penta-major";
-        } else if (bluesSet.has(noteIdx)) {
-          role = "blues";
         } else if (isBluesMode && slowBlues && [2,5,9].includes(intervalFromRoot)) {
           role = "floating"; // note planante (approche chromatique)
         } else if (!isBluesMode && scaleSet.has(noteIdx)) {
@@ -3618,6 +4047,11 @@ function render(){
         // ✅ HALO BLANC pour le pattern penta (indépendant des autres formes)
         if (!isNotesMode && useShowPentaPattern && pentaPatternHaloSet.has(noteIdx)) {
           dot.classList.add("shape-min7");
+        }
+
+        // ✅ HALO BLEU si c'est aussi une blue note
+        if (!isNotesMode && bluesSet.has(noteIdx) && role !== "blues") {
+          dot.classList.add("blue-halo");
         }
 
         dot.textContent = i2n(openNoteIdx + fretNum);
@@ -3705,7 +4139,7 @@ function render(){
 
     if (!isBluesMode && (globalBlueCb?.checked ?? false)) {
       // Pop/Rock : b5 de l'accord courant
-      blueNoteIdx = (chord.root + 6) % 12;
+      blueNoteIdx = (chord.root + 3) % 12;  // ✅ Blue note = tierce mineure (♭3)
       showBlueMid = true;
     } else if (isBluesMode && showBluesNotes) {
       // Blues : b5 de la tonalité (toujours la même pour I, IV, V)
@@ -3744,10 +4178,11 @@ function render(){
 
       if (noteIdx === chord.root) {
         role = "root";
+      } else if (noteIdx === blueNoteIdx && showBlueMid) {
+        // ✅ Blue note prioritaire
+        role = "blues";
       } else if (chordNotes.has(noteIdx)) {
         role = "chord";
-      } else if (noteIdx === blueNoteIdx && showBlueMid) {
-        role = "blues";
       } else if (pentaMinSet.has(noteIdx)) {
         role = "penta-minor";
       } else if (pentaMajSet.has(noteIdx)) {
@@ -4126,6 +4561,29 @@ function updatePopKeyFromChords() {
   if (sel) {
     sel.innerHTML = "";
     inputs.forEach(ch => sel.add(new Option(ch)));
+  }
+
+  // ✅ DÉTECTION AUTOMATIQUE DU MODE
+  if (inputs.length > 0) {
+    try {
+      console.log("🔍 Détection du mode pour les accords:", inputs);
+      const detection = detectMode(inputs);
+      console.log("📊 Résultat détection:", detection);
+      
+      if (detection && detection.confidence >= 0.5) {
+        console.log("✅ Application du mode détecté");
+        applyDetectedMode(detection);
+        
+        // Afficher le mode détecté dans l'interface
+        if (resultEl) {
+          resultEl.textContent += ` | Mode suggéré : ${getModeName(detection.mode)} (${Math.round(detection.confidence * 100)}%)`;
+        }
+      } else {
+        console.warn("⚠️ Confiance trop faible:", detection?.confidence);
+      }
+    } catch (error) {
+      console.error("❌ Erreur détection mode:", error);
+    }
   }
 
   render();
