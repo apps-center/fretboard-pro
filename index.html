@@ -1403,6 +1403,50 @@ h1{
 }
 
 
+/* ====== SÉLECTEUR DE FRETTE DE DÉPART ====== */
+
+.fret-selector-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 5px auto 10px;
+  padding: 15px;
+  max-width: 300px;
+}
+
+.fret-selector-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+  color: #e0e0e0;
+  font-weight: 500;
+}
+
+.fret-selector-label select {
+  background: rgba(30, 30, 50, 0.9);
+  color: #e0e0e0;
+  border: 1px solid rgba(79, 195, 247, 0.4);
+  border-radius: 8px;
+  padding: 8px 15px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 80px;
+}
+
+.fret-selector-label select:hover {
+  border-color: rgba(79, 195, 247, 0.7);
+  box-shadow: 0 0 10px rgba(79, 195, 247, 0.3);
+}
+
+.fret-selector-label select:focus {
+  outline: none;
+  border-color: #4fc3f7;
+  box-shadow: 0 0 15px rgba(79, 195, 247, 0.5);
+}
+
+
 /* ====== MINI-DIAGRAMMES PAR ACCORD ====== */
 
 .mini-diagrams-wrapper {
@@ -1732,7 +1776,6 @@ h1{
     font-size: 0.75rem !important;
   }
 }
-
 
 
   </style>
@@ -2093,15 +2136,10 @@ h1{
 
     <!-- === Zone commune (accord courant / fret / vue) === -->
     <div class="common">
-      <!-- Première ligne : Accord actuel et Fret de départ -->
+      <!-- Première ligne : Accord actuel -->
       <label class="common-first-row">
         Accord actuel :
         <select id="chordSel"></select>
-      </label>
-
-      <label class="common-first-row">
-        Fret de départ :
-        <select id="startFret"></select>
       </label>
 
       <!-- Colonne 1 : Nombre de cases -->
@@ -2230,6 +2268,14 @@ h1{
         <canvas id="staffCanvas"></canvas>
       </div>
 
+    </div>
+
+    <!-- ✅ SÉLECTEUR DE FRETTE DE DÉPART (placé entre le grand diagramme et les mini-diagrammes) -->
+    <div class="fret-selector-wrapper">
+      <label class="fret-selector-label">
+        Fret de départ :
+        <select id="startFret"></select>
+      </label>
     </div>
 
     <!-- ✅ MINI-DIAGRAMMES PAR ACCORD -->
@@ -2382,6 +2428,8 @@ function populateChordDropdowns(){
     const sel = document.getElementById(id);
     if(!sel) return;
     sel.innerHTML = "";
+    // ✅ Ajouter l'option vide en premier
+    sel.add(new Option("— Aucun —", ""));
     CHORD_LIST.forEach(ch => sel.add(new Option(ch, ch)));
     // Valeurs par défaut : C / G / Am / F / C / G / Am / F
     const defaults = ["C","G","Am","F","C","G","Am","F"];
