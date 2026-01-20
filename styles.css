@@ -1,0 +1,1773 @@
+  
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+/* --- Layout général --- */
+
+body{
+  background:#0d0d0d;
+  color:#eee;
+  font-family:system-ui,sans-serif;
+}
+
+.app{
+  max-width:1200px;
+  margin:15px auto;         /* réduction de la marge */
+  padding:15px;             /* réduction du padding */
+  background:rgba(20,20,35,0.95);
+  border-radius:20px;
+  backdrop-filter:blur(15px);
+  box-shadow:0 20px 40px rgba(0,0,0,0.7);
+}
+
+h1{
+  text-align:center;
+  margin-bottom:12px;       /* réduction de la marge */
+  color:#4fc3f7;
+  font-size:1.8rem;         /* réduction de la taille */
+}
+
+/* --- Onglets Pop/Rock / Blues --- */
+
+.tabs{
+  display:flex;
+  gap:12px;
+  margin-bottom:12px;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+
+.tab{
+  padding:10px 22px;
+  background:rgba(15,15,30,0.95);
+  border:1px solid #333;
+  border-radius:999px;
+  color:#bbb;
+  cursor:pointer;
+  font-weight:600;
+  font-size:0.95rem;
+  letter-spacing:0.02em;
+  transition:.25s;
+}
+
+.tab:hover{
+  border-color:#4fc3f7;
+  color:#fff;
+}
+
+.tab.active{
+  background:linear-gradient(135deg,#4fc3f7,#00bcd4);
+  color:#0b1020;
+  border-color:transparent;
+  box-shadow:0 4px 18px rgba(79,195,247,0.55);
+}
+
+/* --- Contenu des modes --- */
+
+.mode{
+  display:none;
+  padding:15px;
+  background:rgba(0,0,0,0.35);
+  border-radius:12px;
+  margin-bottom:15px;
+}
+
+.mode.active{
+  display:block;
+}
+
+/* --- Inputs & boutons --- */
+
+.inputs{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
+  gap:10px;
+  align-items:center;
+  margin-bottom:6px;
+}
+
+.inputs input,
+.inputs select,
+.inputs input[type=number]{
+  padding:11px 14px;
+  background:#161626;
+  border:1px solid #333;
+  border-radius:12px;
+  color:#f5f5f5;
+  font-size:0.95rem;
+  outline:none;
+  min-width:0;
+  transition:border-color .2s, box-shadow .2s, background .2s;
+}
+
+.inputs select{
+  cursor:pointer;
+}
+
+.inputs input:focus,
+.inputs select:focus{
+  border-color:#4fc3f7;
+  box-shadow:0 0 0 2px rgba(79,195,247,0.35);
+  background:#121222;
+}
+
+.inputs button{
+  padding:11px 20px;
+  background:linear-gradient(135deg,#4fc3f7,#00bcd4);
+  border:none;
+  border-radius:14px;
+  color:#021018;
+  font-weight:700;
+  cursor:pointer;
+  font-size:0.95rem;
+  letter-spacing:0.03em;
+  justify-self:flex-end;
+  box-shadow:0 6px 18px rgba(0,0,0,0.7);
+  transition:transform .15s, box-shadow .15s, filter .15s;
+}
+
+.inputs button:hover{
+  filter:brightness(1.06);
+  box-shadow:0 8px 22px rgba(0,0,0,0.8);
+}
+
+.inputs button:active{
+  transform:translateY(1px);
+  box-shadow:0 4px 14px rgba(0,0,0,0.6);
+}
+
+/* --- Options / cases à cocher --- */
+
+.options,
+.common{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  align-items: start;
+  margin: 10px 0;
+  padding: 12px;
+  background: rgba(0,0,0,0.25);
+  border-radius: 8px;
+}
+
+/* Première ligne : Accord actuel et Fret de départ */
+.common-first-row {
+  grid-row: 1;
+  font-size: 0.9rem;
+  color: #ddd;
+}
+
+.common > label:nth-of-type(1) { /* Accord actuel */
+  grid-column: 1 / 3;
+}
+
+.common > label:nth-of-type(2) { /* Fret de départ */
+  grid-column: 3 / 5;
+}
+
+/* Sections scale-modes : une par colonne sur la ligne 2 */
+.common .scale-modes-section {
+  grid-row: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px;
+  background: rgba(0,0,0,0.2);
+  border-radius: 8px;
+  border: 1px solid rgba(79, 195, 247, 0.2);
+}
+
+.common .scale-modes-section:nth-of-type(1) { grid-column: 1; } /* Nombre de cases */
+.common .scale-modes-section:nth-of-type(2) { grid-column: 2; } /* Pentatoniques */
+.common .scale-modes-section:nth-of-type(3) { grid-column: 3; } /* Gammes */
+.common .scale-modes-section:nth-of-type(4) { grid-column: 4; } /* Modes */
+
+.common .scale-modes-section h3 {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #4fc3f7;
+  margin-bottom: 6px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid rgba(79, 195, 247, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.common .scale-modes-section label {
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* View toggle wrapper pour la section Nombre de cases */
+.view-toggle-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.common .scale-modes-section .view-toggle {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 4px;
+  background: #101020;
+  border-radius: 8px;
+  padding: 4px;
+  border: 1px solid #252545;
+}
+
+.common .scale-modes-section .view-toggle button {
+  border: none;
+  background: transparent;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  color: #aaa;
+  cursor: pointer;
+  transition: 0.2s;
+  white-space: nowrap;
+  text-align: center;
+}
+
+.common .scale-modes-section .view-toggle button:hover {
+  color: #fff;
+}
+
+.common .scale-modes-section .view-toggle button.active {
+  background: linear-gradient(135deg, #4fc3f7, #00bcd4);
+  color: #021018;
+  box-shadow: 0 2px 8px rgba(79, 195, 247, 0.5);
+}
+
+/* Bouton Portée en bas, centré sur toute la largeur */
+.toggle-staff-btn {
+  grid-column: 1 / -1;
+  grid-row: 3;
+  justify-self: center;
+  margin: 8px 0 0;
+  padding: 8px 24px;
+  font-size: 0.9rem;
+  background: linear-gradient(135deg, #4fc3f7, #00bcd4);
+  border: none;
+  border-radius: 14px;
+  color: #021018;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.7);
+  transition: transform 0.15s, box-shadow 0.15s, filter 0.15s;
+}
+
+.toggle-staff-btn:hover {
+  filter: brightness(1.06);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.8);
+}
+
+.toggle-staff-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6);
+}
+
+/* === RESPONSIVE POUR SECTION COMMUNE === */
+
+/* Tablettes et petits écrans (768px et moins) */
+@media (max-width: 768px) {
+  .common {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    padding: 10px;
+  }
+  
+  /* Première ligne : Accord actuel et Fret de départ sur 2 colonnes */
+  .common > label:nth-of-type(1) { /* Accord actuel */
+    grid-column: 1 / 3;
+    grid-row: 1;
+  }
+  
+  .common > label:nth-of-type(2) { /* Fret de départ */
+    grid-column: 1 / 3;
+    grid-row: 2;
+  }
+  
+  /* Sections scale-modes : 2 par ligne */
+  .common .scale-modes-section:nth-of-type(1) { /* Nombre de cases */
+    grid-column: 1;
+    grid-row: 3;
+  }
+  
+  .common .scale-modes-section:nth-of-type(2) { /* Pentatoniques */
+    grid-column: 2;
+    grid-row: 3;
+  }
+  
+  .common .scale-modes-section:nth-of-type(3) { /* Gammes */
+    grid-column: 1;
+    grid-row: 4;
+  }
+  
+  .common .scale-modes-section:nth-of-type(4) { /* Modes */
+    grid-column: 2;
+    grid-row: 4;
+  }
+  
+  /* Bouton Portée */
+  .toggle-staff-btn {
+    grid-row: 5;
+  }
+}
+
+/* Mobiles (480px et moins) */
+@media (max-width: 480px) {
+  .common {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    padding: 8px;
+  }
+  
+  /* Première ligne : Accord actuel et Fret de départ sur toute la largeur */
+  .common > label:nth-of-type(1) { /* Accord actuel */
+    grid-column: 1 / 3;
+    grid-row: 1;
+  }
+  
+  .common > label:nth-of-type(2) { /* Fret de départ */
+    grid-column: 1 / 3;
+    grid-row: 2;
+  }
+  
+  /* Sections scale-modes : 2 par ligne */
+  .common .scale-modes-section:nth-of-type(1) { /* Nombre de cases */
+    grid-column: 1;
+    grid-row: 3;
+  }
+  
+  .common .scale-modes-section:nth-of-type(2) { /* Pentatoniques */
+    grid-column: 2;
+    grid-row: 3;
+  }
+  
+  .common .scale-modes-section:nth-of-type(3) { /* Gammes */
+    grid-column: 1;
+    grid-row: 4;
+  }
+  
+  .common .scale-modes-section:nth-of-type(4) { /* Modes */
+    grid-column: 2;
+    grid-row: 4;
+  }
+  
+  /* Bouton Portée */
+  .toggle-staff-btn {
+    grid-column: 1 / 3;
+    grid-row: 5;
+    padding: 6px 16px;
+    font-size: 0.85rem;
+  }
+  
+  /* Réduire les espacements et tailles sur mobile */
+  .common .scale-modes-section {
+    padding: 6px;
+  }
+  
+  .common .scale-modes-section h3 {
+    font-size: 0.75rem;
+  }
+  
+  .common .scale-modes-section label {
+    font-size: 0.7rem;
+  }
+  
+  /* Réduire les boutons de nombre de cases */
+  .common .scale-modes-section .view-toggle button {
+    padding: 4px 8px;
+    font-size: 0.75rem;
+  }
+}
+
+/* Accord actuel + Fret de départ */
+.common select,
+.common input[type=number]{
+  padding:8px 14px;
+  background:#101020;
+  border:1px solid #252545;
+  border-radius:999px;
+  color:#f5f5f5;
+  font-size:0.9rem;
+  min-width:70px;
+  outline:none;
+  transition:border-color .2s, box-shadow .2s, background .2s;
+}
+
+/* focus cohérent avec les boutons bleus */
+.common select:focus,
+.common input[type=number]:focus{
+  border-color:#4fc3f7;
+  box-shadow:0 0 0 2px rgba(79,195,247,0.35);
+  background:#121228;
+}
+
+/* retire les flèches moches des input[type=number] (Chrome/Edge) */
+.common input[type=number]::-webkit-outer-spin-button,
+.common input[type=number]::-webkit-inner-spin-button{
+  -webkit-appearance:none;
+  margin:0;
+}
+
+/* Firefox */
+.common input[type=number]{
+  -moz-appearance:textfield;
+}
+
+/* --- Options Blues : checkboxes & select --- */
+
+.options{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  align-items:center;
+  margin:15px 0;
+}
+
+/* chaque option devient une petite "pill" sombre */
+.options label{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:6px 12px;
+  background:#101020;
+  border-radius:999px;
+  border:1px solid #252545;
+  font-size:0.9rem;
+  color:#ddd;
+  cursor:pointer;
+  user-select:none;
+}
+
+/* checkbox custom - taille équilibrée */
+.options input[type=checkbox],
+.common input[type=checkbox]{
+  width:15px;               /* augmentation 14 → 15 */
+  height:15px;
+  border-radius:3px;
+  border:2px solid #4fc3f7;
+  background:transparent;
+  appearance:none;
+  -webkit-appearance:none;
+  -moz-appearance:none;
+  display:inline-block;
+  position:relative;
+  cursor:pointer;
+  outline:none;
+  transition:background .2s, box-shadow .2s, border-color .2s;
+  flex-shrink: 0;
+}
+
+.options input[type=checkbox]:checked,
+.common input[type=checkbox]:checked{
+  background:#4fc3f7;
+  box-shadow:0 0 0 2px rgba(79,195,247,0.35);
+}
+
+.options input[type=checkbox]:checked::after,
+.common input[type=checkbox]:checked::after{
+  content:"";
+  position:absolute;
+  left:2px;
+  top:-1px;
+  width:5px;
+  height:9px;
+  border-right:2px solid #021018;
+  border-bottom:2px solid #021018;
+  transform:rotate(40deg);
+}
+
+
+/* le select "Style" dans la même logique que les champs communs */
+.options select{
+  padding:6px 14px;
+  background:#101020;
+  border:1px solid #252545;
+  border-radius:999px;
+  color:#f5f5f5;
+  font-size:0.9rem;
+  outline:none;
+  min-width:110px;
+  cursor:pointer;
+  transition:border-color .2s, box-shadow .2s, background .2s;
+}
+
+.options select:focus{
+  border-color:#4fc3f7;
+  box-shadow:0 0 0 2px rgba(79,195,247,0.35);
+  background:#121228;
+}
+
+
+.options label,
+.common label{
+  font-size:0.95rem;
+  color:#ddd;
+}
+
+/* --- Boutons de choix (par ex. 5 frettes / 15 frettes) --- */
+
+
+/* --- Légende --- */
+.legend{
+  display:flex;
+  flex-wrap:nowrap;
+  gap:20px;
+  margin:0 0 8px;          /* réduction drastique des marges */
+  overflow-x:auto;
+  padding-bottom:4px;
+}
+
+/* petit espace au-dessus du manche / portée */
+#viewWrapper{
+  max-width: 900px;
+  margin: 4px auto 0;       /* réduction de la marge */
+}
+
+.legend::-webkit-scrollbar{
+  height:6px;
+}
+.legend::-webkit-scrollbar-track{
+  background:transparent;
+}
+.legend::-webkit-scrollbar-thumb{
+  background:#333;
+  border-radius:999px;
+}
+
+.legend span{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  white-space:nowrap;
+  font-size:0.9rem;        /* augmentation 0.85 → 0.9 */
+}
+
+.dot{
+  width:16px;               /* augmentation 14 → 16 */
+  height:16px;
+  border-radius:50%;
+  display:inline-block;
+}
+
+.dot.chord{background:#aaa}
+.dot.root{
+  background:#ffeb3b;
+  animation:pulse 2s infinite;
+}
+.dot.target{background:#9b59b6} /* violet pour notes cibles (différence avec accord précédent) */
+.dot.floating{background:#ff9800} /* orange pour notes planantes (approche chromatique) */
+.dot.avoid{background:#e53935}
+.dot.ok{background:#8bc34a}
+.dot.blues{background:#2196f3}
+.dot.penta-minor{background:#9c27b0}
+.dot.penta-major{background:#ff5722}
+
+/* dots pour les formes avec halo blanc */
+.dot.shape-min7,
+.dot.shape-maj6{
+  background:#777;
+  box-shadow: 0 0 0 2px rgba(255,255,255,0.85),
+              0 0 8px 2px rgba(255,255,255,0.4);
+}
+
+/* --- Ligne de notes pour l'accord sélectionné --- */
+
+.scale-notes {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;                 /* réduction du gap pour rapprocher nom et notes */
+  margin: 10px 0 18px;      /* + d'espace sous les bulles */
+  font-size: 0.85rem;
+}
+
+.scale-notes-label {
+  font-weight: 700;
+  color: #fff;
+  font-size: 1.6rem;         /* augmentation pour plus de visibilité */
+  margin-bottom: 2px;
+}
+
+.chord-tones-main {
+  font-weight: 500;
+  color: #4fc3f7;
+  font-size: 1.2rem;          /* augmentation de la taille */
+  letter-spacing: 0.08em;     /* plus d'espacement entre les caractères */
+  margin-top: 0;
+  margin-bottom: 8px;
+}
+
+.scale-notes-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;   /* la suite C D E F G A B centrée */
+}
+
+/* Centrer la ligne de notes, la légende et les vues manche/portée
+   sans toucher aux marges haut/bas définies plus haut */
+.scale-notes,
+.legend,
+#viewWrapper {
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+/* pastilles de notes (mêmes couleurs que sur le manche) */
+.scale-note{
+  padding:6px 14px;
+  border-radius:999px;
+  font-weight:700;
+  font-size:1.15rem;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:40px;
+  box-shadow:0 3px 10px rgba(0,0,0,0.6);
+}
+
+/* mêmes couleurs que .note.* */
+.scale-note.root{
+  background:#ffeb3b;
+  color:#000;
+}
+
+.scale-note.chord{
+  background:#aaa;
+  color:#000;
+}
+
+.scale-note.ok{
+  background:#8bc34a;
+  color:#000;
+}
+
+.scale-note.target{
+  background:#ff9800;
+  color:#000;
+}
+
+.scale-note.avoid{
+  background:#e53935;
+  color:#fff;
+  opacity:0.85;
+}
+
+.scale-note.blues{
+  background:#2196f3;
+  color:#fff;
+}
+
+.scale-note.penta-minor{
+  background:#9c27b0;
+  color:#fff;
+}
+
+.scale-note.penta-major{
+  background:#ff5722;
+  color:#fff;
+}
+
+
+/* --- Manche de guitare --- */
+
+.fretboard{
+  background:rgba(0,0,0,0.5);
+  padding:25px;
+  border-radius:16px;
+  
+  /* Effet de surbrillance/relief comme les mini-diagrammes */
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6), 
+              inset 0 1px 0 rgba(255, 255, 255, 0.1),
+              0 0 25px rgba(79, 195, 247, 0.25);
+  border: 1px solid rgba(79, 195, 247, 0.3);
+
+  /* réduction d'environ 15% */
+  transform:scale(0.85);
+  transform-origin:top center;
+  margin:0 auto; /* bien centré après le scale */
+}
+
+
+#fb{
+  display:grid;
+  grid-template-rows:repeat(6,70px);
+  gap:4px;
+  background:#111;
+  border-radius:12px;
+  overflow:hidden;
+  padding:10px;
+  position:relative;
+}
+
+/* 6 cordes dessinées sur tout le manche */
+#fb::before{
+  content:"";
+  position:absolute;
+  left:10px;
+  right:10px;
+  top:10px;
+  bottom:10px;
+  pointer-events:none;
+
+  /* 6 lignes horizontales espacées régulièrement */
+  background-image:
+    linear-gradient(to right,#555,#555),
+    linear-gradient(to right,#555,#555),
+    linear-gradient(to right,#555,#555),
+    linear-gradient(to right,#555,#555),
+    linear-gradient(to right,#555,#555),
+    linear-gradient(to right,#555,#555);
+  background-repeat:no-repeat;
+  background-size:100% 3px;  /* épaisseur de la corde */
+  background-position:
+    0 calc(100% * 1/12),
+    0 calc(100% * 3/12),
+    0 calc(100% * 5/12),
+    0 calc(100% * 7/12),
+    0 calc(100% * 9/12),
+    0 calc(100% * 11/12);
+}
+
+
+/* cases du manche */
+.cell{
+  position:relative;
+  background:transparent;              /* ne masque plus les cordes */
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:default;
+  box-shadow:inset 0 0 0 1px #1a1a1a;  /* pour garder les “cases” visibles */
+}
+
+
+
+/* Barre de frette pour toutes les colonnes marquées .fret */
+.cell.fret::after{
+  content:"";
+  position:absolute;
+  top:0;
+  bottom:0;
+  right:0;            /* barre de frette sur le bord droit de la case */
+  width:6px;
+  background:#888;
+  z-index:1;
+}
+
+/* Sillet (frette 0) un peu plus épais sur le bord gauche */
+.cell.nut::after{
+  content:"";
+  position:absolute;
+  top:0;
+  bottom:0;
+  left:0;
+  width:8px;
+  background:#aaa;
+  z-index:1;
+}
+
+
+/* --- Notes sur le manche --- */
+
+.note{
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:bold;
+  color:#000;
+  background:#333; /* fallback */
+  box-shadow:0 4px 15px rgba(0,0,0,0.7);
+  position:relative;
+  z-index:2;
+  transition:transform .15s, box-shadow .15s, background .15s;
+  font-size:0.9rem;
+}
+
+.note:hover{
+  transform:translateY(-1px) scale(1.03);
+  box-shadow:0 6px 18px rgba(0,0,0,0.9);
+}
+
+/* Tonique en plus gros */
+.note.root{
+  width:56px;
+  height:56px;
+  font-size:1.1rem;
+  background:#ffeb3b;
+  color:#000;
+  animation:pulse 2s infinite;
+}
+
+/* Rôle des notes */
+.note.chord{
+  background:#aaa;
+  color:#000;
+}
+
+.note.target{
+  background:#9b59b6; /* violet pour notes cibles */
+  color:#fff;
+}
+
+.note.floating{
+  background:#ff9800; /* orange pour notes planantes */
+  color:#000;
+}
+
+.note.ok{
+  background:#8bc34a;
+  color:#000;
+}
+
+.note.blues{
+  background:#2196f3;
+  color:#fff;
+}
+
+.note.penta-minor{
+  background:#9c27b0;
+  color:#fff;
+}
+
+.note.penta-major{
+  background:#ff5722;
+  color:#fff;
+}
+
+/* Formes Min7 / Maj6 / Maj7 / Min6 : accent discret sur les notes du pattern */
+.note.shape-min7,
+.note.shape-maj6{
+  box-shadow:
+    0 0 0 2px rgba(255,255,255,0.35),  /* léger anneau clair */
+    0 4px 12px rgba(0,0,0,0.85);       /* ombre un peu plus marquée */
+}
+
+/* Optionnel : si tu décides d’afficher les notes à éviter */
+.note.avoid{
+  background:#e53935;
+  color:#fff;
+  opacity:0.75;
+}
+
+/* --- Labels de frettes --- */
+
+#labels{
+  display:flex;
+  justify-content:space-between;
+  margin-top:12px;
+  font-size:0.95rem;
+  color:#aaa;
+  padding:0 15px;
+}
+
+#labels div{
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+#labels div.key-fret{
+  font-size: 1.2rem;   /* plus gros */
+  font-weight: 700;
+}
+
+#labels div.octave-fret{
+  color: #ffeb3b;      /* déjà dans ton JS avant, on garde l’idée */
+}
+
+#startFret option.hot-fret{
+  font-weight: 700;
+  font-size: 1.05em;   /* un poil plus gros dans la liste */
+}
+
+
+/* Aligner les labels exactement avec les frettes */
+#labels{
+  display: grid;
+  grid-template-columns: repeat(var(--fret-count), 1fr);
+  text-align: center;
+  margin-top: 12px;
+  color:#aaa;
+  padding:0 15px;
+}
+
+
+/* --- Message d’info / tonalité --- */
+
+.msg{
+  font-weight:600;
+  color:#4fc3f7;
+  margin-top:10px;
+}
+
+/* --- Animation pulsation (tonique) --- */
+
+@keyframes pulse{
+  0%,100%{box-shadow:0 0 15px #ffeb3b}
+  50%{box-shadow:0 0 25px #ffeb3b}
+}
+
+/* ✅ Animation spéciale pour la tonique avec halo blanc */
+@keyframes pulseWithHalo{
+  0%,100%{
+    box-shadow: 0 0 0 2px rgba(255,255,255,0.85),
+                0 0 12px 4px rgba(255,255,255,0.4),
+                0 0 15px #ffeb3b,
+                0 4px 15px rgba(0,0,0,0.7);
+  }
+  50%{
+    box-shadow: 0 0 0 2px rgba(255,255,255,0.85),
+                0 0 12px 4px rgba(255,255,255,0.4),
+                0 0 25px #ffeb3b,
+                0 4px 15px rgba(0,0,0,0.7);
+  }
+}
+
+/* Tablette */
+@media (max-width: 768px) {
+  .app{
+    margin:10px;
+    padding:18px;
+  }
+
+  h1{
+    font-size:1.6rem;
+  }
+
+  .fretboard{
+    padding:18px;
+    transform:scale(0.8);
+  }
+
+  #fb{
+    grid-template-rows:repeat(6, 55px); /* moins haut */
+  }
+}
+
+/* Petit smartphone */
+@media (max-width: 480px) {
+  .app{
+    margin:6px;
+    padding:14px;
+    border-radius:12px;
+  }
+
+  h1{
+    font-size:1.3rem;
+  }
+
+  .inputs{
+    grid-template-columns:1fr; /* 1 colonne pour les accords + bouton */
+  }
+
+  .common{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .fretboard{
+    padding:12px;
+    transform:scale(0.75);
+  }
+
+  #fb{
+    grid-template-rows:repeat(6, 45px);
+  }
+
+  .note{
+    width:38px;
+    height:38px;
+    font-size:0.8rem;
+  }
+
+  .note.root{
+    width:48px;
+    height:48px;
+    font-size:0.95rem;
+  }
+
+  /* ✅ Tonique même taille que les autres notes quand pattern penta actif */
+  .note.root.shape-min7,
+  .note.root.shape-maj6{
+    width: 38px !important;
+    height: 38px !important;
+    font-size: 0.8rem !important;
+  }
+}
+
+/* ====== STYLES POUR LES GAMMES ET MODES ====== */
+
+/* Sections de gammes/modes - ultra compact */
+.scale-modes-section {
+  margin: 0;
+  padding: 6px 8px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 6px;
+  border-left: 2px solid #9c27b0;
+}
+
+.scale-modes-section h3 {
+  margin: 0 0 4px 0;
+  font-size: 0.8rem;       /* augmentation 0.7 → 0.8 */
+  color: #9c27b0;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.scale-modes-section label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 2px 0;
+  font-size: 0.8rem;       /* augmentation 0.7 → 0.8 */
+  color: #ddd;
+}
+
+/* Couleur violette pour les notes de gamme / mode */
+.note.scale-highlight {
+  background: #9c27b0;
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(156, 39, 176, 0.5);
+}
+
+/* Style pour la légende des gammes */
+.dot.scale-highlight {
+  background: #9c27b0;
+}
+
+/* Ajustement de la largeur du fretboard pour 10 et 15 frettes */
+.app {
+  max-width: 1200px;
+  transition: max-width 0.3s ease;
+}
+
+/* Largeur étendue pour 10 frettes */
+.app.frets-10 {
+  max-width: 1400px;
+}
+
+/* Largeur étendue pour 15 frettes */
+.app.frets-15 {
+  max-width: 1600px;
+}
+
+/* Ajustement du centrage pour les vues étendues */
+.app.frets-10 .scale-notes,
+.app.frets-10 .legend,
+.app.frets-10 #viewWrapper,
+.app.frets-15 .scale-notes,
+.app.frets-15 .legend,
+.app.frets-15 #viewWrapper {
+  max-width: 100%;
+}
+
+/* Smartphone portrait */
+@media (max-width: 480px) {
+
+  .fretboard{
+    padding: 10px;
+    transform: none;          /* on enlève le scale fixe */
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  #fb{
+    padding: 6px;
+    grid-template-rows: repeat(6, 42px); /* hauteur réduite */
+    gap: 3px;
+  }
+
+  /* Cases plus compactes */
+  .cell{
+    box-shadow: inset 0 0 0 1px #222;
+  }
+
+  /* Notes plus petites mais lisibles */
+  .note{
+    width: 34px;
+    height: 34px;
+    font-size: 0.75rem;
+  }
+
+  .note.root{
+    width: 44px;
+    height: 44px;
+    font-size: 0.85rem;
+  }
+
+  /* ✅ Tonique même taille que les autres notes quand pattern penta actif */
+  .note.root.shape-min7,
+  .note.root.shape-maj6{
+    width: 34px !important;
+    height: 34px !important;
+    font-size: 0.75rem !important;
+  }
+
+  /* Labels du bas */
+  #labels{
+    font-size: 0.8rem;
+    padding: 0 8px;
+    margin-top: 8px;
+  }
+
+  /* Contours / inlays plus fins */
+  .cell.fret::after{
+    width: 4px;
+  }
+
+  .cell.nut::after{
+    width: 6px;
+  }
+}
+
+/* Bouton portée */
+.toggle-staff-btn {
+  padding: 7px 16px;
+  border-radius: 12px;
+  background: #4fc3f7;
+  color: #021018;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 5px 12px rgba(0,0,0,.45);
+}
+.toggle-staff-btn:hover{
+  filter: brightness(1.1);
+}
+
+/* === Switch propre manche / portée === */
+#viewWrapper {
+  position: relative;
+}
+
+/* chaque vue est cachée par défaut */
+.view {
+  display: none;
+  opacity: 0;
+  transition: opacity .25s ease;
+}
+
+/* seule la vue active est rendue */
+.view.visible {
+  display: block;
+  opacity: 1;
+}
+
+/* Vue portée : centrée, même largeur que le manche */
+#staffView {
+  justify-content: center;
+  margin-top: 0;
+}
+
+/* quand la portée est la vue active → on l'affiche en flex */
+#staffView.visible {
+  display: flex;
+}
+
+/* Canvas portée */
+#staffCanvas {
+  background: transparent;
+  height: 140px;
+  max-width: 100%;
+}
+
+/* halo blanc pour les notes de la forme Min7 (penta mineure) */
+.note.shape-min7{
+  box-shadow: 0 0 0 2px rgba(255,255,255,0.85),
+              0 0 12px 4px rgba(255,255,255,0.4),
+              0 4px 15px rgba(0,0,0,0.7);
+}
+
+/* halo blanc pour les notes de la forme Maj6 / Maj7-Min6 (penta majeure) */
+.note.shape-maj6{
+  box-shadow: 0 0 0 2px rgba(255,255,255,0.85),
+              0 0 12px 4px rgba(255,255,255,0.4),
+              0 4px 15px rgba(0,0,0,0.7);
+}
+
+/* ✅ IMPORTANT : Halo blanc aussi pour la tonique quand elle fait partie du pattern */
+.note.root.shape-min7,
+.note.root.shape-maj6{
+  width: 42px !important;
+  height: 42px !important;
+  font-size: 1rem !important;
+  animation: pulseWithHalo 2s infinite !important;
+}
+
+/* ✅ Halo bleu pour la tonique */
+.note.root.blue-halo{
+  width: 42px !important;
+  height: 42px !important;
+  font-size: 1rem !important;
+  box-shadow: 0 0 0 2px rgba(33,150,243,0.9),
+              0 0 15px 5px rgba(33,150,243,0.6),
+              0 4px 15px rgba(0,0,0,0.7) !important;
+  animation: pulseWithHalo 2s infinite !important;
+}
+
+/* halo particulier pour la blue note si tu veux */
+.note.shape-blue{
+  box-shadow: 0 0 0 3px rgba(33,150,243,0.95),
+              0 4px 15px rgba(0,0,0,0.8);
+}
+
+/* ✅ HALO BLEU pour les notes qui sont target/chord ET blue note */
+.note.blue-halo{
+  box-shadow: 0 0 0 2px rgba(33,150,243,0.9),
+              0 0 12px 4px rgba(33,150,243,0.5),
+              0 4px 15px rgba(0,0,0,0.7);
+}
+
+/* formes sur la ligne de notes avec halo blanc */
+.scale-note.shape-min7{
+  position:relative;
+  box-shadow: 0 0 0 2px rgba(255,255,255,0.85),
+              0 0 10px 3px rgba(255,255,255,0.4);
+}
+
+.scale-note.shape-maj6{
+  position:relative;
+  box-shadow: 0 0 0 2px rgba(255,255,255,0.85),
+              0 0 10px 3px rgba(255,255,255,0.4);
+}
+
+/* ✅ Halo blanc pour la tonique dans la ligne de notes */
+.scale-note.root.shape-min7,
+.scale-note.root.shape-maj6{
+  box-shadow: 0 0 0 10px rgba(255,255,255,0.85),
+              0 0 10px 3px rgba(255,255,255,0.4) !important;
+}
+
+.scale-note.shape-min7.shape-maj6{
+  box-shadow: 0 0 0 2px rgba(255,255,255,0.85),
+              0 0 10px 3px rgba(255,255,255,0.4);
+}
+
+.scale-note.shape-blue{
+  position:relative;
+  box-shadow:0 0 0 3px rgba(33,150,243,0.98);
+}
+
+/* Sélecteur de chansons personnalisé */
+.song-selector {
+  background: linear-gradient(135deg, #1e3a5f 0%, #2d5a7b 100%);
+  border: 2px solid #4a9eff;
+  border-radius: 12px;
+  padding: 15px;
+  color: #ffffff;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.song-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 15px 0;
+}
+
+.song-group-header {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #4fc3f7;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 12px 10px 8px;
+  margin-top: 15px;
+  border-bottom: 2px solid rgba(79, 195, 247, 0.3);
+}
+
+.song-group-header:first-child {
+  margin-top: 0;
+}
+
+.song-item {
+  padding: 12px 15px;
+  margin: 5px 0;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-left: 3px solid transparent;
+}
+
+.song-item:hover {
+  background: rgba(74, 158, 255, 0.2);
+  border-left-color: #4a9eff;
+  transform: translateX(5px);
+}
+
+.song-item.selected {
+  background: rgba(74, 158, 255, 0.3);
+  border-left-color: #4a9eff;
+}
+
+.song-title {
+  font-weight: 600;
+  font-size: 14px;
+  color: #ffffff;
+}
+
+.song-artist {
+  font-size: 12px;
+  color: #a0c4e8;
+  margin-top: 3px;
+}
+
+.song-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.song-btn {
+  padding: 10px 24px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.load-btn {
+  background: linear-gradient(135deg, #4fc3f7 0%, #357abd 100%);
+  color: #021018;
+}
+
+.load-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(74, 158, 255, 0.5);
+}
+
+.cancel-btn {
+  background: #555;
+  color: #fff;
+}
+
+.cancel-btn:hover {
+  background: #666;
+  transform: translateY(-2px);
+}
+
+.song-selector::-webkit-scrollbar {
+  width: 8px;
+}
+
+.song-selector::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.song-selector::-webkit-scrollbar-thumb {
+  background: rgba(74, 158, 255, 0.5);
+  border-radius: 4px;
+}
+
+.song-selector::-webkit-scrollbar-thumb:hover {
+  background: rgba(74, 158, 255, 0.7);
+}
+
+/* Selects d'accords - comportement spécial */
+.chord-select {
+  cursor: pointer;
+  position: relative;
+}
+
+.chord-select:focus {
+  outline: 2px solid #4fc3f7;
+}
+
+
+/* ====== SÉLECTEUR DE FRETTE DE DÉPART ====== */
+
+.fret-selector-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 5px auto 10px;
+  padding: 15px;
+  max-width: 300px;
+}
+
+.fret-selector-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+  color: #e0e0e0;
+  font-weight: 500;
+}
+
+.fret-selector-label select {
+  background: rgba(30, 30, 50, 0.9);
+  color: #e0e0e0;
+  border: 1px solid rgba(79, 195, 247, 0.4);
+  border-radius: 8px;
+  padding: 8px 15px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 80px;
+}
+
+.fret-selector-label select:hover {
+  border-color: rgba(79, 195, 247, 0.7);
+  box-shadow: 0 0 10px rgba(79, 195, 247, 0.3);
+}
+
+.fret-selector-label select:focus {
+  outline: none;
+  border-color: #4fc3f7;
+  box-shadow: 0 0 15px rgba(79, 195, 247, 0.5);
+}
+
+
+/* ====== MINI-DIAGRAMMES PAR ACCORD ====== */
+
+.mini-diagrams-wrapper {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  margin: 30px auto 0;
+  max-width: 900px;
+  padding: 20px;
+}
+
+.mini-diagram {
+  background: rgba(15, 15, 30, 0.8);
+  border-radius: 12px;
+  padding: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5), 
+              inset 0 1px 0 rgba(255, 255, 255, 0.1),
+              0 0 20px rgba(79, 195, 247, 0.2);
+  border: 1px solid rgba(79, 195, 247, 0.3);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.mini-diagram:hover {
+  background: rgba(25, 25, 45, 0.9);
+  box-shadow: 0 6px 20px rgba(79, 195, 247, 0.5),
+              inset 0 1px 0 rgba(255, 255, 255, 0.15),
+              0 0 30px rgba(79, 195, 247, 0.4);
+  border: 1px solid rgba(79, 195, 247, 0.6);
+  transform: translateY(-3px);
+}
+
+.mini-diagram-title {
+  text-align: center;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 10px;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.chord-tones {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+  color: #aaa;
+}
+
+.chord-tone {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 3px 7px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.chord-tone-label {
+  color: #888;
+  font-size: 0.8rem;
+}
+
+.chord-tone-note {
+  color: #4fc3f7;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.mini-fretboard {
+  background: rgba(10, 10, 20, 0.6);
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.mini-fb {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(6, 45px);
+  gap: 3px;
+  margin-bottom: 8px;
+}
+
+.mini-fb .cell {
+  background: rgba(80, 60, 40, 0.4);
+  border: 1px solid #222;
+  border-radius: 3px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mini-fb .cell.nut {
+  background: rgba(40, 40, 40, 0.8);
+}
+
+.mini-fb .cell.inlay {
+  background: rgba(120, 90, 60, 0.3);
+}
+
+.mini-fb .cell.double-inlay {
+  background: rgba(140, 110, 80, 0.4);
+}
+
+.mini-fb .note {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 0.9rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
+  position: relative;
+  z-index: 1;
+}
+
+/* Appliquer les mêmes couleurs que le diagramme principal */
+.mini-fb .note.root {
+  width: 38px;
+  height: 38px;
+  font-size: 0.9rem;
+  background: #ffeb3b;
+  color: #000;
+  animation: pulse 2s infinite;
+}
+
+.mini-fb .note.chord {
+  background: #aaa;
+  color: #000;
+}
+
+.mini-fb .note.target {
+  background: #9b59b6;
+  color: #fff;
+}
+
+.mini-fb .note.floating {
+  background: #ff9800;
+  color: #fff;
+}
+
+.mini-fb .note.avoid {
+  background: #e53935;
+  color: #fff;
+}
+
+.mini-fb .note.ok {
+  background: #8bc34a;
+  color: #000;
+}
+
+.mini-fb .note.blues {
+  background: #2196f3;
+  color: #fff;
+}
+
+.mini-fb .note.penta-minor {
+  background: #9c27b0;
+  color: #fff;
+}
+
+.mini-fb .note.penta-major {
+  background: #ff5722;
+  color: #fff;
+}
+
+.mini-fb .note.scale-highlight {
+  background: #ab47bc;
+  color: #fff;
+}
+
+/* Halo blanc pour pattern penta */
+.mini-fb .note.shape-min7,
+.mini-fb .note.shape-maj6 {
+  box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.85),
+              0 0 8px 2px rgba(255, 255, 255, 0.4),
+              0 2px 8px rgba(0, 0, 0, 0.7);
+}
+
+/* ✅ Halo bleu pour les notes target/chord qui sont aussi blue note */
+.mini-fb .note.blue-halo {
+  box-shadow: 0 0 0 5px rgba(33, 150, 243, 0.9),
+              0 0 8px 2px rgba(33, 150, 243, 0.5),
+              0 2px 8px rgba(0, 0, 0, 0.7);
+}
+
+.mini-fb .note.root.shape-min7,
+.mini-fb .note.root.shape-maj6 {
+  width: 38px !important;
+  height: 38px !important;
+  font-size: 0.9rem !important;
+  animation: pulseWithHalo 2s infinite !important;
+}
+
+/* ✅ Halo bleu pour la tonique dans les mini-diagrammes */
+.mini-fb .note.root.blue-halo {
+  width: 38px !important;
+  height: 38px !important;
+  font-size: 0.9rem !important;
+  box-shadow: 0 0 0 5px rgba(33, 150, 243, 0.9),
+              0 0 10px 3px rgba(33, 150, 243, 0.6),
+              0 2px 8px rgba(0, 0, 0, 0.7) !important;
+  animation: pulseWithHalo 2s infinite !important;
+}
+
+.mini-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: #aaa;
+  padding: 0 10px;
+  margin-top: 5px;
+}
+
+.mini-labels div {
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+/* Styles pour les mini-portées */
+.mini-staff-container {
+  background: rgba(15, 15, 30, 0.8);
+  border-radius: 12px;
+  padding: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.mini-staff-container:hover {
+  background: rgba(25, 25, 45, 0.9);
+  box-shadow: 0 6px 20px rgba(79, 195, 247, 0.4);
+  transform: translateY(-2px);
+}
+
+.mini-staff-canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: rgba(10, 10, 20, 0.6);
+  border-radius: 8px;
+}
+
+/* Responsive pour les mini-diagrammes */
+@media (max-width: 768px) {
+  .mini-diagrams-wrapper {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    padding: 15px;
+  }
+  
+  .mini-fb {
+    grid-template-rows: repeat(6, 38px);
+  }
+  
+  .mini-fb .note {
+    width: 32px;
+    height: 32px;
+    font-size: 0.8rem;
+  }
+  
+  .mini-fb .note.root {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .mini-fb .note.root.shape-min7,
+  .mini-fb .note.root.shape-maj6 {
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 0.8rem !important;
+  }
+  
+  .mini-fb .note.root.blue-halo {
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 0.8rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .mini-diagrams-wrapper {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 10px;
+  }
+  
+  .mini-diagram {
+    padding: 10px;
+  }
+  
+  .mini-diagram-title {
+    font-size: 0.95rem;
+  }
+  
+  .mini-fb {
+    grid-template-rows: repeat(6, 32px);
+  }
+  
+  .mini-fb .note {
+    width: 28px;
+    height: 28px;
+    font-size: 0.75rem;
+  }
+  
+  .mini-fb .note.root {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .mini-fb .note.root.shape-min7,
+  .mini-fb .note.root.shape-maj6 {
+    width: 28px !important;
+    height: 28px !important;
+    font-size: 0.75rem !important;
+  }
+  
+  .mini-fb .note.root.blue-halo {
+    width: 28px !important;
+    height: 28px !important;
+    font-size: 0.75rem !important;
+  }
+}
+
+

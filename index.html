@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fretboard Pro</title>
+  <link rel="icon" type="image/png" href="/favicon-fretboard.png">
+  <link rel="apple-touch-icon" href="/favicon-fretboard.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="app">
+    <h1>Fretboard Pro</h1>
+
+    <!-- Onglets principaux -->
+    <div class="tabs">
+      <button class="tab" data-mode="notes">Notes</button>
+      <button class="tab active" data-mode="pop">Pop/Rock</button>
+      <button class="tab" data-mode="blues">Blues</button>
+    </div>
+
+    <!-- === MODE POP/ROCK === -->
+    <div class="inputs">
+      <!-- Première ligne : Bouton chanson + accords -->
+      <button id="chooseSong">Chanson</button>
+      <select id="chord1" class="chord-select"></select>
+      <select id="chord2" class="chord-select"></select>
+      <select id="chord3" class="chord-select"></select>
+      <select id="chord4" class="chord-select"></select>
+      <select id="chord5" class="chord-select" style="display:none;"></select>
+      <select id="chord6" class="chord-select" style="display:none;"></select>
+      <select id="chord7" class="chord-select" style="display:none;"></select>
+      <select id="chord8" class="chord-select" style="display:none;"></select>
+
+      <!-- Deuxième ligne : Style + Nombre + Bouton Aléatoire -->
+      <select id="progressionStyle">
+        <option value="pop">Pop</option>
+        <option value="rock">Rock</option>
+        <option value="funk">Funk</option>
+      </select>
+
+      <select id="progressionLength">
+        <option value="2">2 accords</option>
+        <option value="4" selected>4 accords</option>
+      </select>
+
+      <button id="generateRandom">Aléatoire</button>
+    </div>
+
+    <!-- Menu des chansons (caché par défaut) -->
+    <div id="songListWrapper" style="display:none; margin: 15px 0;">
+      <div class="song-selector">
+        <ul class="song-list" id="songList">
+          <li class="song-group-header">Années 60-70</li>
+          <li class="song-item" data-song="satisfaction">
+            <div class="song-title">Satisfaction</div>
+            <div class="song-artist">Rolling Stones</div>
+          </li>
+          <li class="song-item" data-song="letitbe">
+            <div class="song-title">Let It Be</div>
+            <div class="song-artist">Beatles</div>
+          </li>
+          <li class="song-item" data-song="heyjude">
+            <div class="song-title">Hey Jude</div>
+            <div class="song-artist">Beatles</div>
+          </li>
+          <li class="song-item" data-song="knockin">
+            <div class="song-title">Knockin' on Heaven's Door</div>
+            <div class="song-artist">Bob Dylan</div>
+          </li>
+          <li class="song-item" data-song="standbyme">
+            <div class="song-title">Stand By Me</div>
+            <div class="song-artist">Ben E. King</div>
+          </li>
+          <li class="song-item" data-song="wishyou">
+            <div class="song-title">Wish You Were Here</div>
+            <div class="song-artist">Pink Floyd</div>
+          </li>
+          <li class="song-item" data-song="california">
+            <div class="song-title">Hotel California</div>
+            <div class="song-artist">Eagles</div>
+          </li>
+          <li class="song-item" data-song="sweet">
+            <div class="song-title">Sweet Home Alabama</div>
+            <div class="song-artist">Lynyrd Skynyrd</div>
+          </li>
+          <li class="song-item" data-song="imagine">
+            <div class="song-title">Imagine</div>
+            <div class="song-artist">John Lennon</div>
+          </li>
+          <li class="song-item" data-song="joker">
+            <div class="song-title">The Joker</div>
+            <div class="song-artist">Steve Miller Band</div>
+          </li>
+          <li class="song-item" data-song="wildthing">
+            <div class="song-title">Wild Thing</div>
+            <div class="song-artist">The Troggs</div>
+          </li>
+          <li class="song-item" data-song="purplehaze">
+            <div class="song-title">Purple Haze</div>
+            <div class="song-artist">Jimi Hendrix</div>
+          </li>
+          <li class="song-item" data-song="sheriff">
+            <div class="song-title">I Shot the Sheriff</div>
+            <div class="song-artist">Bob Marley</div>
+          </li>
+          <li class="song-item" data-song="heyjoe">
+            <div class="song-title">Hey Joe</div>
+            <div class="song-artist">Jimi Hendrix</div>
+          </li>
+
+          <li class="song-group-header">Années 80-90</li>
+          <li class="song-item" data-song="englishman">
+            <div class="song-title">Englishman in New York</div>
+            <div class="song-artist">Sting</div>
+          </li>
+          <li class="song-item" data-song="everybreath">
+            <div class="song-title">Every Breath You Take</div>
+            <div class="song-artist">Police</div>
+          </li>
+          <li class="song-item" data-song="zombie">
+            <div class="song-title">Zombie</div>
+            <div class="song-artist">Cranberries</div>
+          </li>
+          <li class="song-item" data-song="withorwithout">
+            <div class="song-title">With or Without You</div>
+            <div class="song-artist">U2</div>
+          </li>
+          <li class="song-item" data-song="wonderwall">
+            <div class="song-title">Wonderwall</div>
+            <div class="song-artist">Oasis</div>
+          </li>
+          <li class="song-item" data-song="sweetchild">
+            <div class="song-title">Sweet Child O' Mine</div>
+            <div class="song-artist">Guns N' Roses</div>
+          </li>
+          <li class="song-item" data-song="shouldistay">
+            <div class="song-title">Should I Stay or Should I Go</div>
+            <div class="song-artist">Clash</div>
+          </li>
+          <li class="song-item" data-song="nowoman">
+            <div class="song-title">No Woman No Cry</div>
+            <div class="song-artist">Bob Marley</div>
+          </li>
+          <li class="song-item" data-song="losing">
+            <div class="song-title">Losing My Religion</div>
+            <div class="song-artist">R.E.M.</div>
+          </li>
+          <li class="song-item" data-song="creep">
+            <div class="song-title">Creep</div>
+            <div class="song-artist">Radiohead</div>
+          </li>
+          <li class="song-item" data-song="smells">
+            <div class="song-title">Smells Like Teen Spirit</div>
+            <div class="song-artist">Nirvana</div>
+          </li>
+          <li class="song-item" data-song="whatsup">
+            <div class="song-title">What's Up</div>
+            <div class="song-artist">4 Non Blondes</div>
+          </li>
+          <li class="song-item" data-song="karma">
+            <div class="song-title">Karma Police</div>
+            <div class="song-artist">Radiohead</div>
+          </li>
+          <li class="song-item" data-song="californication">
+            <div class="song-title">Californication</div>
+            <div class="song-artist">RHCP</div>
+          </li>
+
+          <li class="song-group-header">Années 2000-2020</li>
+          <li class="song-item" data-song="baby">
+            <div class="song-title">Baby One More Time</div>
+            <div class="song-artist">Britney Spears</div>
+          </li>
+          <li class="song-item" data-song="imyours">
+            <div class="song-title">I'm Yours</div>
+            <div class="song-artist">Jason Mraz</div>
+          </li>
+          <li class="song-item" data-song="seven">
+            <div class="song-title">Seven Nation Army</div>
+            <div class="song-artist">White Stripes</div>
+          </li>
+          <li class="song-item" data-song="someone">
+            <div class="song-title">Someone Like You</div>
+            <div class="song-artist">Adele</div>
+          </li>
+          <li class="song-item" data-song="setfire">
+            <div class="song-title">Set Fire to the Rain</div>
+            <div class="song-artist">Adele</div>
+          </li>
+          <li class="song-item" data-song="shallow">
+            <div class="song-title">Shallow</div>
+            <div class="song-artist">Lady Gaga</div>
+          </li>
+          <li class="song-item" data-song="riptide">
+            <div class="song-title">Riptide</div>
+            <div class="song-artist">Vance Joy</div>
+          </li>
+          <li class="song-item" data-song="shape">
+            <div class="song-title">Shape of You</div>
+            <div class="song-artist">Ed Sheeran</div>
+          </li>
+          <li class="song-item" data-song="blinding">
+            <div class="song-title">Blinding Lights</div>
+            <div class="song-artist">The Weeknd</div>
+          </li>
+          <li class="song-item" data-song="getlucky">
+            <div class="song-title">Get Lucky</div>
+            <div class="song-artist">Daft Punk</div>
+          </li>
+          <li class="song-item" data-song="flowers">
+            <div class="song-title">Flowers</div>
+            <div class="song-artist">Miley Cyrus</div>
+          </li>
+          <li class="song-item" data-song="cheapthrills">
+            <div class="song-title">Cheap Thrills</div>
+            <div class="song-artist">Sia</div>
+          </li>
+          <li class="song-item" data-song="try">
+            <div class="song-title">Try</div>
+            <div class="song-artist">P!nk</div>
+          </li>
+
+          <li class="song-group-header">Funk</li>
+          <li class="song-item" data-song="sexmachine">
+            <div class="song-title">Sex Machine</div>
+            <div class="song-artist">James Brown</div>
+          </li>
+          <li class="song-item" data-song="goodtimes">
+            <div class="song-title">Good Times</div>
+            <div class="song-artist">Chic</div>
+          </li>
+          <li class="song-item" data-song="getdown">
+            <div class="song-title">Get Down On It</div>
+            <div class="song-artist">Kool & The Gang</div>
+          </li>
+          <li class="song-item" data-song="virtualinsanity">
+            <div class="song-title">Virtual Insanity</div>
+            <div class="song-artist">Jamiroquai</div>
+          </li>
+          <li class="song-item" data-song="superstition">
+            <div class="song-title">Superstition</div>
+            <div class="song-artist">Stevie Wonder</div>
+          </li>
+          <li class="song-item" data-song="cantfeelmyface">
+            <div class="song-title">Can't Feel My Face</div>
+            <div class="song-artist">The Weeknd</div>
+          </li>
+          <li class="song-item" data-song="uptown">
+            <div class="song-title">Uptown Funk</div>
+            <div class="song-artist">Bruno Mars</div>
+          </li>
+          <li class="song-item" data-song="treasure">
+            <div class="song-title">Treasure</div>
+            <div class="song-artist">Bruno Mars</div>
+          </li>
+          <li class="song-item" data-song="soulpower92">
+            <div class="song-title">Soul Power '92</div>
+            <div class="song-artist">Maceo Parker</div>
+          </li>
+          <li class="song-item" data-song="doingit">
+            <div class="song-title">Doing It to Death</div>
+            <div class="song-artist">JB's</div>
+          </li>
+        </ul>
+
+        <div class="song-actions">
+          <button id="loadSong" class="song-btn load-btn">Charger</button>
+          <button id="cancelSong" class="song-btn cancel-btn">Annuler</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Affichage tonalité -->
+    <p id="popResult" class="msg"></p>
+
+    <!-- === MODE BLUES === -->
+    <div id="bluesMode" class="mode">
+      <div class="inputs">
+        <label>
+          Tonalité :
+          <select id="bluesKey">
+            <option>E</option>
+            <option selected>A</option>
+            <option>D</option>
+            <option>G</option>
+            <option>C</option>
+            <option>F</option>
+            <option>Bb</option>
+            <option>Eb</option>
+            <option>Ab</option>
+            <option>Db</option>
+            <option>Gb</option>
+            <option>B</option>
+          </select>
+        </label>
+        <span id="bluesGrid" class="msg"></span>
+      </div>
+
+      <div class="options">
+        <label><input type="checkbox" id="pentaMin" checked> Penta min</label>
+        <label><input type="checkbox" id="pentaMaj"> Penta maj</label>
+        <label><input type="checkbox" id="bluesNotes" checked> Notes blues</label>
+        <label>
+          Style :
+          <select id="bluesStyle">
+            <option value="standard">Standard</option>
+            <option value="slow">Slow Blues</option>
+          </select>
+        </label>
+      </div>
+    </div>
+
+    <!-- === MODE NOTES === -->
+    <div id="notesMode" class="mode">
+      <div class="inputs">
+        <label>
+          Note :
+          <select id="noteSel">
+            <option value="C">C</option>
+            <option value="D">D</option>
+            <option value="E">E</option>
+            <option value="F">F</option>
+            <option value="G">G</option>
+            <option value="A">A</option>
+            <option value="B">B</option>
+          </select>
+        </label>
+      </div>
+
+      <p class="msg">
+        Affiche toutes les positions de la note choisie sur le manche (entre la frette de départ et la vue sélectionnée).
+      </p>
+    </div>
+
+    <!-- === Zone commune (accord courant / fret / vue) === -->
+    <div class="common">
+      <!-- Première ligne : Accord actuel -->
+      <label class="common-first-row">
+        Accord actuel :
+        <select id="chordSel"></select>
+      </label>
+
+      <!-- Colonne 1 : Nombre de cases -->
+      <div class="scale-modes-section">
+        <h3>Nombre de cases</h3>
+        <div class="view-toggle-wrapper">
+          <div class="view-toggle">
+            <button type="button" data-frets="5" class="active">5</button>
+            <button type="button" data-frets="8">8</button>
+            <button type="button" data-frets="10">10</button>
+            <button type="button" data-frets="15">15</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Colonne 2 : Pentatoniques -->
+      <div class="scale-modes-section">
+        <h3>Pentatoniques</h3>
+        <label>
+          <input type="checkbox" id="showBlueNote">
+          Blue note
+        </label>
+        <label>
+          <input type="checkbox" id="showPentaPattern">
+          Penta Hybride
+        </label>
+        <label>
+          <input type="checkbox" id="shapeMin7Maj6">
+          Penta Mineure
+        </label>
+        <label>
+          <input type="checkbox" id="shapeMaj7Min6">
+          Penta Majeure
+        </label>
+        <label>
+          <input type="checkbox" id="shapeMaj7DimMin6Penta">
+          Diminuée
+        </label>
+        <label>
+          <input type="checkbox" id="shapeMaj7BluesHex">
+          Hexaphonique
+        </label>
+      </div>
+
+      <!-- Colonne 3 : Gammes -->
+      <div class="scale-modes-section">
+        <h3>Gammes</h3>
+        <label>
+          <input type="checkbox" id="scaleMajor">
+          Gamme Majeure
+        </label>
+        <label>
+          <input type="checkbox" id="scaleMinorNatural">
+          Gamme Mineure Naturelle
+        </label>
+        <label>
+          <input type="checkbox" id="scaleMinorMelodic">
+          Gamme Mineure Mélodique
+        </label>
+      </div>
+
+      <!-- Colonne 4 : Modes -->
+      <div class="scale-modes-section">
+        <h3>Modes</h3>
+        <label>
+          <input type="checkbox" id="modeDorian">
+          Dorien
+        </label>
+        <label>
+          <input type="checkbox" id="modeAeolian">
+          Aeolien
+        </label>
+        <label>
+          <input type="checkbox" id="modeLydian">
+          Lydien
+        </label>
+        <label>
+          <input type="checkbox" id="modeMixolydian">
+          Mixolydien
+        </label>
+        <label>
+          <input type="checkbox" id="modePhrygian">
+          Phrygien
+        </label>
+        <label>
+          <input type="checkbox" id="modeLocrian">
+          Locrien
+        </label>
+      </div>
+
+      <button id="toggleStaff" class="toggle-staff-btn">🎼 Portée</button>
+    </div>
+
+    <!-- ✅ Ligne de notes pour l'accord sélectionné (centrée, AU-DESSUS de la légende) -->
+    <div id="scaleNotes" class="scale-notes"></div>
+
+    <!-- Légende (toutes les notes sur une ligne, géré par le CSS) -->
+    <div class="legend">
+      <span><i class="dot chord"></i>Accord (tonique en gros)</span>
+      <span><i class="dot root"></i>Tonique</span>
+      <span><i class="dot target"></i>Cible</span>
+      <span><i class="dot floating"></i>Note planante</span>
+      <span><i class="dot avoid"></i>À éviter</span>
+      <span><i class="dot ok"></i>Dans la gamme</span>
+      <span><i class="dot blues"></i>Note blues</span>
+      <span><i class="dot penta-minor"></i>Penta min</span>
+      <span><i class="dot penta-major"></i>Penta maj</span>
+      <!-- entrée de légende pour les formes superposées (halo blanc) -->
+      <span><i class="dot shape-min7"></i>Penta Hybride (halo blanc)</span>
+      <span><i class="dot scale-highlight"></i>Gamme / Mode</span>
+    </div>
+
+    <!-- Vues Manche / Portée (sans flip 3D) -->
+    <div id="viewWrapper">
+
+      <!-- Vue 1 : Manche -->
+      <div id="fretView" class="view visible">
+        <div class="fretboard">
+          <div id="fb"></div>
+          <div id="labels"></div>
+        </div>
+      </div>
+
+      <!-- Vue 2 : Portée -->
+      <div id="staffView" class="view">
+        <canvas id="staffCanvas"></canvas>
+      </div>
+
+    </div>
+
+    <!-- ✅ SÉLECTEUR DE FRETTE DE DÉPART (placé entre le grand diagramme et les mini-diagrammes) -->
+    <div class="fret-selector-wrapper">
+      <label class="fret-selector-label">
+        Fret de départ :
+        <select id="startFret"></select>
+      </label>
+    </div>
+
+    <!-- ✅ MINI-DIAGRAMMES PAR ACCORD -->
+    <div id="miniDiagramsWrapper" class="mini-diagrams-wrapper">
+      <!-- Les mini-diagrammes seront générés ici par JavaScript -->
+    </div>
+
+  </main>
+  
+  <script src="app.js"></script>
+</body>
+</html>
