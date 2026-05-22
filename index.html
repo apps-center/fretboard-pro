@@ -183,13 +183,18 @@ h1{
 
 /* Quand le mode Pédago est actif, on cache toutes les zones du fretboard
    (manche, portée, légende, sélecteurs, mini-diagrammes) sans casser le render */
+body.pedago-active .app > .inputs,
+body.pedago-active #songListWrapper,
+body.pedago-active #popResult,
 body.pedago-active .common,
 body.pedago-active #scaleNotes,
 body.pedago-active .legend,
 body.pedago-active #viewWrapper,
 body.pedago-active .fret-selector-wrapper,
+body.pedago-active #miniDiagramsWrapper,
 body.pedago-active #miniDiagrams,
 body.pedago-active .mini-diagrams,
+body.pedago-active .mini-diagrams-wrapper,
 body.pedago-active #bluesGrid{
   display:none !important;
 }
