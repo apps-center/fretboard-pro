@@ -88,6 +88,112 @@ h1{
   display:block;
 }
 
+/* --- Mode Pédago : galerie de fiches --- */
+
+.pedago-intro{
+  text-align:center;
+  margin-bottom:18px;
+}
+
+.pedago-intro h2{
+  font-size:1.3rem;
+  color:#4fc3f7;
+  margin-bottom:6px;
+}
+
+.pedago-intro p{
+  font-size:0.9rem;
+  color:#bbb;
+}
+
+.pedago-category{
+  margin-bottom:22px;
+}
+
+.pedago-cat-title{
+  font-size:1rem;
+  color:#4fc3f7;
+  text-transform:uppercase;
+  letter-spacing:0.06em;
+  padding-bottom:6px;
+  margin-bottom:12px;
+  border-bottom:1px solid rgba(79,195,247,0.25);
+}
+
+.pedago-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+  gap:14px;
+}
+
+.pedago-card{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  padding:14px 14px 36px;
+  background:linear-gradient(135deg,rgba(15,15,30,0.95),rgba(25,25,50,0.95));
+  border:1px solid #2a2a4a;
+  border-radius:14px;
+  color:#eee;
+  text-decoration:none;
+  cursor:pointer;
+  transition:transform .2s, border-color .2s, box-shadow .2s;
+  min-height:130px;
+}
+
+.pedago-card:hover{
+  transform:translateY(-2px);
+  border-color:#4fc3f7;
+  box-shadow:0 8px 22px rgba(79,195,247,0.25);
+}
+
+.pedago-icon{
+  font-size:1.5rem;
+  line-height:1;
+}
+
+.pedago-card-title{
+  font-size:0.95rem;
+  font-weight:700;
+  color:#fff;
+  line-height:1.25;
+}
+
+.pedago-card-desc{
+  font-size:0.82rem;
+  color:#aab2bd;
+  line-height:1.35;
+  flex-grow:1;
+}
+
+.pedago-card-tag{
+  position:absolute;
+  bottom:10px;
+  right:12px;
+  font-size:0.7rem;
+  color:#021018;
+  background:linear-gradient(135deg,#4fc3f7,#00bcd4);
+  padding:2px 8px;
+  border-radius:999px;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:0.04em;
+}
+
+/* Quand le mode Pédago est actif, on cache toutes les zones du fretboard
+   (manche, portée, légende, sélecteurs, mini-diagrammes) sans casser le render */
+body.pedago-active .common,
+body.pedago-active #scaleNotes,
+body.pedago-active .legend,
+body.pedago-active #viewWrapper,
+body.pedago-active .fret-selector-wrapper,
+body.pedago-active #miniDiagrams,
+body.pedago-active .mini-diagrams,
+body.pedago-active #bluesGrid{
+  display:none !important;
+}
+
 /* --- Inputs & boutons --- */
 
 .inputs{
@@ -1791,6 +1897,7 @@ h1{
       <button class="tab" data-mode="notes">Notes</button>
       <button class="tab active" data-mode="pop">Pop/Rock</button>
       <button class="tab" data-mode="blues">Blues</button>
+      <button class="tab" data-mode="pedago">🎓 Pédago</button>
     </div>
 
     <!-- === MODE POP/ROCK === -->
@@ -2134,6 +2241,65 @@ h1{
       <p class="msg">
         Affiche toutes les positions de la note choisie sur le manche (entre la frette de départ et la vue sélectionnée).
       </p>
+    </div>
+
+    <!-- === MODE PÉDAGO === -->
+    <div id="pedagoMode" class="mode">
+      <div class="pedago-intro">
+        <h2>Fiches pédagogiques</h2>
+        <p>Diagrammes, structure, phrasés. Cliquez une fiche pour l'ouvrir — chaque page est prévue pour impression A4 paysage.</p>
+      </div>
+
+      <!-- Catégorie : Slow blues en La -->
+      <div class="pedago-category">
+        <h3 class="pedago-cat-title">🎷 Slow blues en La</h3>
+        <div class="pedago-grid">
+
+          <a class="pedago-card" href="./pedago/slow_blues_la_diagrammes.html" target="_blank" rel="noopener">
+            <div class="pedago-icon">🎸</div>
+            <div class="pedago-card-title">Diagrammes manche — A7 · D7 · E7</div>
+            <div class="pedago-card-desc">Notes cibles sur le manche en position case 5 et case 12.</div>
+            <div class="pedago-card-tag">Diagrammes</div>
+          </a>
+
+          <a class="pedago-card" href="./pedago/slow_blues_la_phrase_QR.html" target="_blank" rel="noopener">
+            <div class="pedago-icon">📝</div>
+            <div class="pedago-card-title">Phrasé Question / Réponse</div>
+            <div class="pedago-card-desc">Structure AAB sur 12 mesures : énoncé, variation, résolution.</div>
+            <div class="pedago-card-tag">Phrasé</div>
+          </a>
+
+          <a class="pedago-card" href="./pedago/bb_king_box_la.html" target="_blank" rel="noopener">
+            <div class="pedago-icon">👑</div>
+            <div class="pedago-card-title">BB King Box</div>
+            <div class="pedago-card-desc">Case 9–15 · penta majeure + ♭3 · bend ½ ton ♭3 → 3M.</div>
+            <div class="pedago-card-tag">Box & bend</div>
+          </a>
+
+          <a class="pedago-card" href="./pedago/albert_king_box_la.html" target="_blank" rel="noopener">
+            <div class="pedago-icon">🔥</div>
+            <div class="pedago-card-title">Albert King Box</div>
+            <div class="pedago-card-desc">Case 14–19 · royaume des gros bends d'un ton.</div>
+            <div class="pedago-card-tag">Box & bend</div>
+          </a>
+
+        </div>
+      </div>
+
+      <!-- Catégorie : Gammes & théorie -->
+      <div class="pedago-category">
+        <h3 class="pedago-cat-title">🎼 Gammes & théorie</h3>
+        <div class="pedago-grid">
+
+          <a class="pedago-card" href="./pedago/pentas_majeures_blues_la.html" target="_blank" rel="noopener">
+            <div class="pedago-icon">🎶</div>
+            <div class="pedago-card-title">Pentas majeures — Blues en La</div>
+            <div class="pedago-card-desc">Pentatoniques majeures applicables au blues en La.</div>
+            <div class="pedago-card-tag">Gammes</div>
+          </a>
+
+        </div>
+      </div>
     </div>
 
     <!-- === Zone commune (accord courant / fret / vue) === -->
@@ -4357,6 +4523,14 @@ document.querySelectorAll(".tab").forEach(tab => {
 
     const mode = tab.dataset.mode;
     const sel = document.getElementById("chordSel");
+
+    // Mode Pédago : on masque tout le fretboard et on sort sans render()
+    if (mode === "pedago") {
+      document.body.classList.add("pedago-active");
+      return;
+    } else {
+      document.body.classList.remove("pedago-active");
+    }
 
     if(mode === "blues"){
       // accords I / IV / V dans la tonalité choisie
