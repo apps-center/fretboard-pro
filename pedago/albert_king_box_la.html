@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Albert King Box — Slow blues en La</title>
+<style>
+  @page { size: A4 landscape; margin: 8mm; }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'Segoe UI', Arial, sans-serif;
+    background: #f0f2f5;
+    color: #1a1a1a;
+    padding: 10mm 8mm;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  @media print {
+    body { background: white; padding: 0; }
+    .no-print { display: none !important; }
+  }
+
+  .sheet { max-width: 281mm; margin: 0 auto; }
+
+  .toolbar { text-align: right; margin-bottom: 4mm; }
+
+  button.print-btn {
+    background: #1a73e8;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    font-size: 10pt;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+  }
+
+  .tip-banner {
+    background: #fff7e6;
+    border-left: 3px solid #ffa940;
+    padding: 6px 10px;
+    margin: 0 0 8px 0;
+    font-size: 9pt;
+    color: #5a4a1a;
+    border-radius: 3px;
+  }
+
+  header { text-align: center; margin-bottom: 3mm; }
+
+  h1 {
+    font-size: 15pt;
+    margin: 0 0 1mm 0;
+    font-weight: 700;
+    letter-spacing: -0.2px;
+  }
+
+  .subtitle {
+    font-size: 9pt;
+    color: #666;
+    margin-bottom: 2.5mm;
+  }
+
+  .legend {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 14px;
+    font-size: 8.5pt;
+    color: #2a2a2a;
+  }
+
+  .legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .legend-dot {
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
+    border: 1px solid rgba(0,0,0,0.1);
+  }
+
+  .legend-dot.glow { box-shadow: 0 0 6px 1px #FFD700; }
+
+  .main-diagram {
+    display: flex;
+    justify-content: center;
+    margin: 3mm 0;
+  }
+
+  .main-diagram svg {
+    width: 100%;
+    max-width: 240mm;
+    height: auto;
+    display: block;
+  }
+
+  .cards-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4mm;
+    margin: 3mm 0;
+  }
+
+  .card {
+    background: white;
+    border: 1px solid #e0e4ea;
+    border-radius: 7px;
+    padding: 3mm 4mm;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  }
+
+  .card.c-anchor { border-top: 4px solid #FFD700; }
+  .card.c-bend   { border-top: 4px solid #E53935; }
+  .card.c-style  { border-top: 4px solid #8e44ad; }
+
+  .card-title {
+    font-size: 10pt;
+    font-weight: 700;
+    margin-bottom: 1.5mm;
+    color: #1a1a1a;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .card-icon {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 18px;
+    font-size: 9pt;
+    color: white;
+    font-weight: 800;
+    flex-shrink: 0;
+  }
+
+  .card.c-anchor .card-icon { background: #FFD700; color: #1a1a1a; box-shadow: 0 0 5px rgba(255,215,0,0.5); }
+  .card.c-bend .card-icon   { background: #E53935; }
+  .card.c-style .card-icon  { background: #8e44ad; }
+
+  .card-body {
+    font-size: 8.5pt;
+    line-height: 1.4;
+    color: #2a2a2a;
+  }
+
+  .card-body b { color: #1a1a1a; }
+
+  .footer {
+    padding: 3mm 5mm;
+    background: #fff8dc;
+    border-left: 3px solid #FFD700;
+    border-radius: 3px;
+    font-size: 8.5pt;
+    color: #5a4a1a;
+    line-height: 1.45;
+  }
+
+  .footer b { color: #3a2e0a; }
+</style>
+</head>
+<body>
+<div class="sheet">
+  <div class="toolbar no-print">
+    <div class="tip-banner">
+      💡 Pour l'impression : active <b>« Graphismes d'arrière-plan »</b> dans les options du navigateur.
+    </div>
+    <button class="print-btn" onclick="window.print()">🖨️  Imprimer / Sauvegarder en PDF</button>
+  </div>
+
+  <header>
+    <h1>Albert King Box — Slow blues en La</h1>
+    <div class="subtitle">Position 5 de la penta mineure · case 14–19 · royaume des gros bends d'un ton</div>
+    <div class="legend">
+      <div class="legend-item"><span class="legend-dot glow" style="background:#FFD700"></span><span><b>T</b> — Tonique (A)</span></div>
+      <div class="legend-item"><span class="legend-dot" style="background:#FF8C00"></span><span><b>♭7</b> — G</span></div>
+      <div class="legend-item"><span class="legend-dot" style="background:#7CB342"></span><span><b>3M</b> — C#</span></div>
+      <div class="legend-item"><span class="legend-dot" style="background:#E53935"></span><span><b>♭3</b> — C (blue note)</span></div>
+      <div class="legend-item"><span class="legend-dot" style="background:#9E9E9E"></span><span><b>4 · 5 · 6 · 9</b></span></div>
+      <div class="legend-item"><span style="display:inline-block;width:16px;height:16px;border-radius:50%;background:#1a73e8;color:white;font-weight:800;font-size:9pt;text-align:center;line-height:16px;">1</span><span>doigt d'ancrage</span></div>
+    </div>
+  </header>
+
+  <div class="main-diagram" id="main-diagram"></div>
+
+  <div class="cards-row">
+    <div class="card c-anchor">
+      <div class="card-title"><span class="card-icon">⚓</span>Position & ancrage</div>
+      <div class="card-body">
+        Position 5 de la penta mineure de La. <b>Index calé en case 14</b> (A sur corde Sol), pinky/annulaire en case 17. La <b>tonique haute (A) sur corde Mi aiguë case 17</b> est le point d'arrivée du bend signature — c'est elle qui chante.
+      </div>
+    </div>
+
+    <div class="card c-bend">
+      <div class="card-title"><span class="card-icon">🎯</span>Bend signature — 1 ton</div>
+      <div class="card-body">
+        <b>G → A</b> sur corde Mi aiguë (case 15 → 17). Bend <b>un ton entier</b>, parfois poussé au-delà (1½ ton vers Bb). 3ème doigt qui pousse, 2ème en renfort. <b>Pendant identique</b> sur corde Si : <b>D → E</b> (case 15 → 17), mêmes 2 frets, même intervalle.
+      </div>
+    </div>
+
+    <div class="card c-style">
+      <div class="card-title"><span class="card-icon">🎸</span>Style Albert King</div>
+      <div class="card-body">
+        <b>Pre-bend</b> : bende la corde AVANT de plaquer, puis attaque — la note arrive "déjà tendue". <b>Vibrato large</b> et lent, à l'opposé du papillon BB King. Attaque au <b>pouce nu</b>. Albert jouait gaucher sur Flying V cordée à l'envers → bends tirés vers le bas, son unique.
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <b>BB King vs Albert King —</b> deux boxes voisines, deux philosophies. <b>BB</b> (case 9–15) : bend <i>½ ton</i> subtil ♭3→3M, vibrato papillon, focus sur la couleur majeure (C#). <b>Albert</b> (case 14–19) : bend <i>1 ton</i> franc ♭7→T, vibrato large, focus penta mineure pure et tension dominante. Les deux boxes se touchent à la case 14-15 — on passe de l'une à l'autre en glissant la main d'une case.
+    &nbsp;·&nbsp;
+    <b>Quand l'utiliser —</b> royal sur le <b>I (A7)</b>. Sur le <b>IV (D7)</b>, la penta mineure de La fonctionne bien (le C devient ♭7 de D, parfait) — évite C# qui devient ♮7 de D. Sur le <b>V (E7)</b>, le D (4 de A) devient ♭7 de E : note pivot idéale pour souligner le V.
+  </div>
+</div>
+
+<script>
+const COLORS = {
+  T:   { fill: '#FFD700', glow: true,  textColor: '#1a1a1a' },
+  b7:  { fill: '#FF8C00', glow: false, textColor: '#ffffff' },
+  '3M': { fill: '#7CB342', glow: false, textColor: '#ffffff' },
+  b3:  { fill: '#E53935', glow: false, textColor: '#ffffff' },
+  '4': { fill: '#9E9E9E', glow: false, textColor: '#ffffff' },
+  '5': { fill: '#9E9E9E', glow: false, textColor: '#ffffff' },
+  '6': { fill: '#9E9E9E', glow: false, textColor: '#ffffff' },
+  '9': { fill: '#9E9E9E', glow: false, textColor: '#ffffff' }
+};
+
+const albertKingBox = {
+  startFret: 14,
+  endFret: 19,
+  notes: [
+    // String 1 (high e)
+    [1, 15, 'G',  'b7'],   // BEND SOURCE
+    [1, 17, 'A',  'T'],    // BEND TARGET + high anchor
+    [1, 19, 'B',  '9'],
+    // String 2 (B)
+    [2, 14, 'C#', '3M'],
+    [2, 15, 'D',  '4'],
+    [2, 17, 'E',  '5'],
+    [2, 19, 'F#', '6'],
+    // String 3 (G) — index anchor here
+    [3, 14, 'A',  'T'],
+    [3, 17, 'C',  'b3'],
+    [3, 18, 'C#', '3M'],
+    // String 4 (D)
+    [4, 14, 'E',  '5'],
+    [4, 17, 'G',  'b7'],
+    [4, 19, 'A',  'T'],
+    // String 5 (A)
+    [5, 15, 'C',  'b3'],
+    [5, 17, 'D',  '4'],
+    [5, 19, 'E',  '5'],
+    // String 6 (low E)
+    [6, 15, 'G',  'b7'],
+    [6, 17, 'A',  'T'],
+    [6, 19, 'B',  '9']
+  ],
+  bend: { string: 1, fromFret: 15, toFret: 17, amount: '1 ton' },
+  anchor: { string: 3, fret: 14, finger: '1' }
+};
+
+function buildBigDiagram(d) {
+  const W = 700, H = 340;
+  const padL = 24, padR = 24, padT = 50, padB = 40;
+  const fbX = padL, fbY = padT;
+  const fbW = W - padL - padR;
+  const fbH = H - padT - padB;
+
+  const numSlots = d.endFret - d.startFret + 1;
+  const slotW = fbW / numSlots;
+  const stringCount = 6;
+  const stringGap = fbH / (stringCount - 1);
+
+  let svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">`;
+
+  svg += `<defs>
+    <linearGradient id="bg-grad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#162a40"/>
+      <stop offset="100%" stop-color="#0d1b2a"/>
+    </linearGradient>
+    <marker id="arrow-head" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#FFD700"/>
+    </marker>
+  </defs>`;
+
+  // panel
+  svg += `<rect x="2" y="2" width="${W-4}" height="${H-4}" fill="#0d1b2a" rx="10" ry="10" stroke="#3b556e" stroke-width="1.5"/>`;
+  svg += `<rect x="8" y="8" width="${W-16}" height="${H-16}" fill="url(#bg-grad)" rx="6" ry="6"/>`;
+
+  // inlays
+  const singleInlayFrets = [3, 5, 7, 9, 15, 17, 19, 21];
+  const doubleInlayFrets = [12, 24];
+  for (let f = d.startFret; f <= d.endFret; f++) {
+    const slotIdx = f - d.startFret;
+    const cx = fbX + slotIdx * slotW + slotW / 2;
+    if (singleInlayFrets.includes(f)) {
+      svg += `<circle cx="${cx}" cy="${fbY + fbH/2}" r="5.5" fill="#3b556e" opacity="0.55"/>`;
+    }
+    if (doubleInlayFrets.includes(f)) {
+      svg += `<circle cx="${cx}" cy="${fbY + fbH*0.30}" r="5.5" fill="#3b556e" opacity="0.55"/>`;
+      svg += `<circle cx="${cx}" cy="${fbY + fbH*0.70}" r="5.5" fill="#3b556e" opacity="0.55"/>`;
+    }
+  }
+
+  // fret lines
+  for (let i = 0; i <= numSlots; i++) {
+    const x = fbX + i * slotW;
+    const sw = (i === 0) ? 3 : 1.5;
+    const stroke = (i === 0) ? '#cfd8e3' : '#5a6776';
+    svg += `<line x1="${x}" y1="${fbY}" x2="${x}" y2="${fbY + fbH}" stroke="${stroke}" stroke-width="${sw}"/>`;
+  }
+
+  // strings
+  for (let s = 0; s < stringCount; s++) {
+    const y = fbY + s * stringGap;
+    const sw = 0.7 + s * 0.2;
+    svg += `<line x1="${fbX}" y1="${y}" x2="${fbX + fbW}" y2="${y}" stroke="#94a0ad" stroke-width="${sw}"/>`;
+  }
+
+  // notes
+  const noteR = 17;
+  for (const note of d.notes) {
+    const [stringNum, fret, label, type] = note;
+    const slotIdx = fret - d.startFret;
+    if (slotIdx < 0 || slotIdx >= numSlots) continue;
+    const cx = fbX + slotIdx * slotW + slotW / 2;
+    const cy = fbY + (stringNum - 1) * stringGap;
+    const color = COLORS[type] || COLORS['5'];
+
+    if (color.glow) {
+      svg += `<circle cx="${cx}" cy="${cy}" r="${noteR + 9}" fill="${color.fill}" opacity="0.18"/>`;
+      svg += `<circle cx="${cx}" cy="${cy}" r="${noteR + 5}" fill="${color.fill}" opacity="0.32"/>`;
+    }
+    svg += `<circle cx="${cx}" cy="${cy}" r="${noteR}" fill="${color.fill}" stroke="#fff8dc" stroke-width="${color.glow ? 0.8 : 0.4}"/>`;
+
+    const fontSize = label.length === 1 ? 14 : (label.length === 2 ? 12 : 10);
+    svg += `<text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="central" fill="${color.textColor}" font-family="Helvetica, Arial, sans-serif" font-weight="800" font-size="${fontSize}">${label}</text>`;
+  }
+
+  // bend arrow — drawn ABOVE the high e string (in the extra top padding)
+  if (d.bend) {
+    const xStart = fbX + (d.bend.fromFret - d.startFret) * slotW + slotW / 2;
+    const xEnd   = fbX + (d.bend.toFret - d.startFret) * slotW + slotW / 2;
+    const yStr   = fbY + (d.bend.string - 1) * stringGap;
+    const yArr   = yStr - noteR - 8;
+    const yPeak  = yArr - 18;
+    const xMid   = (xStart + xEnd) / 2;
+
+    svg += `<path d="M ${xStart} ${yArr} Q ${xMid} ${yPeak} ${xEnd} ${yArr}"
+                  fill="none" stroke="#FFD700" stroke-width="3" stroke-linecap="round"
+                  marker-end="url(#arrow-head)"/>`;
+    svg += `<text x="${xMid}" y="${yPeak - 5}" text-anchor="middle" fill="#FFD700"
+                  font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="800">bend ${d.bend.amount}</text>`;
+  }
+
+  // anchor badge (index finger on G string fret 14)
+  if (d.anchor) {
+    const cx = fbX + (d.anchor.fret - d.startFret) * slotW + slotW / 2;
+    const cy = fbY + (d.anchor.string - 1) * stringGap;
+    const bx = cx - noteR - 8;
+    const by = cy - noteR - 8;
+    svg += `<line x1="${cx - noteR*0.7}" y1="${cy - noteR*0.7}" x2="${bx + 8}" y2="${by + 8}" stroke="#1a73e8" stroke-width="1.5" stroke-dasharray="2,2"/>`;
+    svg += `<circle cx="${bx}" cy="${by}" r="9.5" fill="#1a73e8" stroke="white" stroke-width="1.5"/>`;
+    svg += `<text x="${bx}" y="${by}" text-anchor="middle" dominant-baseline="central" fill="white" font-family="Helvetica, Arial, sans-serif" font-size="11" font-weight="800">${d.anchor.finger}</text>`;
+  }
+
+  // fret numbers
+  for (let f = d.startFret; f <= d.endFret; f++) {
+    const slotIdx = f - d.startFret;
+    const cx = fbX + slotIdx * slotW + slotW / 2;
+    const cy = fbY + fbH + 22;
+    const highlight = (f === 17);
+    const color = highlight ? '#FFD700' : '#9aa5b1';
+    const weight = highlight ? '800' : '600';
+    const size = highlight ? 13 : 12;
+    svg += `<text x="${cx}" y="${cy}" text-anchor="middle" fill="${color}"
+                  font-family="Helvetica, Arial, sans-serif" font-size="${size}" font-weight="${weight}">${f}</text>`;
+  }
+
+  svg += `</svg>`;
+  return svg;
+}
+
+document.getElementById('main-diagram').innerHTML = buildBigDiagram(albertKingBox);
+</script>
+</body>
+</html>

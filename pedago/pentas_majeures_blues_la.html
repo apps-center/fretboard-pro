@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Pentas majeures × accords — Blues en La</title>
+<style>
+  @page { size: A4 landscape; margin: 8mm; }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'Segoe UI', Arial, sans-serif;
+    background: #f0f2f5;
+    color: #1a1a1a;
+    padding: 10mm 8mm;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  @media print {
+    body { background: white; padding: 0; }
+    .no-print { display: none !important; }
+  }
+
+  .sheet { max-width: 281mm; margin: 0 auto; }
+
+  .toolbar { text-align: right; margin-bottom: 4mm; }
+
+  button.print-btn {
+    background: #1a73e8;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    font-size: 10pt;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+  }
+
+  .tip-banner {
+    background: #fff7e6;
+    border-left: 3px solid #ffa940;
+    padding: 6px 10px;
+    margin: 0 0 8px 0;
+    font-size: 9pt;
+    color: #5a4a1a;
+    border-radius: 3px;
+  }
+
+  header { text-align: center; margin-bottom: 3mm; }
+
+  h1 {
+    font-size: 15pt;
+    margin: 0 0 1mm 0;
+    font-weight: 700;
+    letter-spacing: -0.2px;
+  }
+
+  .subtitle {
+    font-size: 9pt;
+    color: #666;
+    margin-bottom: 0;
+  }
+
+  /* Matrix table */
+  .matrix-wrap { margin: 3mm 0; }
+
+  table.matrix {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 9pt;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+
+  table.matrix th,
+  table.matrix td {
+    padding: 5px 9px;
+    text-align: center;
+    border-right: 1px solid #e0e4ea;
+    border-bottom: 1px solid #e0e4ea;
+  }
+
+  table.matrix th:last-child,
+  table.matrix td:last-child { border-right: none; }
+
+  table.matrix tr:last-child th,
+  table.matrix tr:last-child td { border-bottom: none; }
+
+  table.matrix thead th {
+    background: #2c3e50;
+    color: white;
+    font-weight: 700;
+    font-size: 9.5pt;
+    padding: 6px 9px;
+  }
+
+  table.matrix tbody th {
+    background: #ecf0f1;
+    text-align: left;
+    font-weight: 700;
+    color: #2c3e50;
+    font-size: 9pt;
+  }
+
+  table.matrix tbody th .scale-notes {
+    display: block;
+    font-weight: 400;
+    font-size: 7.5pt;
+    color: #7a8a99;
+    margin-top: 1px;
+    font-family: 'Courier New', monospace;
+  }
+
+  td.ideal {
+    background: #e8f5e9;
+    color: #2e7d32;
+    font-weight: 700;
+  }
+
+  td.neutral {
+    background: #fafafa;
+    color: #555;
+  }
+
+  td.danger {
+    background: #ffebee;
+    color: #c62828;
+    font-weight: 600;
+  }
+
+  td .verdict-icon {
+    font-size: 11pt;
+    display: inline-block;
+    margin-right: 3px;
+  }
+
+  /* Mini fretboards row */
+  .mini-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4mm;
+    margin: 3mm 0;
+  }
+
+  .mini-card {
+    background: white;
+    border: 1px solid #e0e4ea;
+    border-radius: 7px;
+    padding: 2.5mm 3mm 3mm;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  }
+
+  .mini-card.c-A7 { border-top: 4px solid #d4a017; }
+  .mini-card.c-D7 { border-top: 4px solid #1b9d8f; }
+  .mini-card.c-E7 { border-top: 4px solid #d9534f; }
+
+  .mini-card-title {
+    font-size: 10.5pt;
+    font-weight: 700;
+    margin: 0 0 0.5mm 0;
+    color: #1a1a1a;
+  }
+
+  .mini-card.c-A7 .mini-card-title { color: #b8860b; }
+  .mini-card.c-D7 .mini-card-title { color: #0e7c70; }
+  .mini-card.c-E7 .mini-card-title { color: #c0392b; }
+
+  .mini-card-subtitle {
+    font-size: 8pt;
+    color: #666;
+    margin-bottom: 1.5mm;
+    font-style: italic;
+  }
+
+  .mini-card svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* Footer */
+  .footer {
+    padding: 3mm 5mm;
+    background: #fff8dc;
+    border-left: 3px solid #FFD700;
+    border-radius: 3px;
+    font-size: 8.5pt;
+    color: #5a4a1a;
+    line-height: 1.5;
+  }
+
+  .footer b { color: #3a2e0a; }
+  .footer .recipe { display: block; margin-top: 1mm; }
+</style>
+</head>
+<body>
+<div class="sheet">
+  <div class="toolbar no-print">
+    <div class="tip-banner">
+      💡 Pour l'impression : active <b>« Graphismes d'arrière-plan »</b> dans les options du navigateur.
+    </div>
+    <button class="print-btn" onclick="window.print()">🖨️  Imprimer / Sauvegarder en PDF</button>
+  </div>
+
+  <header>
+    <h1>Pentas majeures × accords dominants — Blues en La</h1>
+    <div class="subtitle">Règle d'or : éviter la ♮7 de chaque accord (= note qui frotte avec la ♭7 jouée par la rythmique) — valable slow blues comme shuffle</div>
+  </header>
+
+  <div class="matrix-wrap">
+    <table class="matrix">
+      <thead>
+        <tr>
+          <th style="width: 22%; text-align: left; padding-left: 12px;">Penta majeure</th>
+          <th style="width: 26%;">Sur A7 &nbsp;<small style="opacity:0.7">(I) — ♮7 = G#</small></th>
+          <th style="width: 26%;">Sur D7 &nbsp;<small style="opacity:0.7">(IV) — ♮7 = C#</small></th>
+          <th style="width: 26%;">Sur E7 &nbsp;<small style="opacity:0.7">(V) — ♮7 = D#</small></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th>Penta A maj <span class="scale-notes">A B C# E F#</span></th>
+          <td class="ideal"><span class="verdict-icon">⭐</span> Idéale — donne C# (3M de A)</td>
+          <td class="danger"><span class="verdict-icon">❌</span> Contient C# = ♮7 de D</td>
+          <td class="neutral"><span class="verdict-icon">✓</span> Ok, neutre — pas de G#</td>
+        </tr>
+        <tr>
+          <th>Penta D maj <span class="scale-notes">D E F# A B</span></th>
+          <td class="neutral"><span class="verdict-icon">✓</span> Ok, neutre — manque C#</td>
+          <td class="ideal"><span class="verdict-icon">⭐</span> Idéale — donne F# (3M de D)</td>
+          <td class="neutral"><span class="verdict-icon">✓</span> Ok, neutre — manque G#</td>
+        </tr>
+        <tr>
+          <th>Penta E maj <span class="scale-notes">E F# G# B C#</span></th>
+          <td class="danger"><span class="verdict-icon">❌</span> Contient G# = ♮7 de A</td>
+          <td class="danger"><span class="verdict-icon">❌</span> Contient C# = ♮7 de D</td>
+          <td class="ideal"><span class="verdict-icon">⭐</span> Idéale — donne G# (3M de E)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="mini-row">
+    <div class="mini-card c-A7">
+      <div class="mini-card-title">Sur A7 — penta A maj idéale</div>
+      <div class="mini-card-subtitle">À éviter : G# (en rouge, dispersé sur le manche)</div>
+      <div id="fb-A7"></div>
+    </div>
+    <div class="mini-card c-D7">
+      <div class="mini-card-title">Sur D7 — penta D maj idéale</div>
+      <div class="mini-card-subtitle">À éviter : C# (en rouge)</div>
+      <div id="fb-D7"></div>
+    </div>
+    <div class="mini-card c-E7">
+      <div class="mini-card-title">Sur E7 — penta E maj idéale</div>
+      <div class="mini-card-subtitle">Aucun danger : D# n'est dans aucune des 3 pentas</div>
+      <div id="fb-E7"></div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <b>Recette minimale pour démarrer demain matin —</b> penta mineure de La <b>partout</b>, et le temps des 2 mesures de D7 (mesures 5-6 et 10), tu remplaces mentalement le <b>C par le F#</b>. C'est tout. Tu viens de jouer chord-specific sur le IV, et personne ne distinguera ça d'un travail de 6 mois.
+    <span class="recipe"><b>Étape suivante —</b> ajouter la penta A maj sur les mesures du I (1-4, 7-8, 11) pour le contraste majeur/mineur. À ce stade tu sonnes BB King / Robben Ford / Clapton-ère-blues.</span>
+    <span class="recipe"><b>Slow vs shuffle —</b> la théorie est identique. En slow blues les "danger notes" sont impardonnables (durée des notes). En shuffle elles passent en notes de passage rapide à condition de ne pas tomber dessus sur un temps fort tenu.</span>
+    <span class="recipe"><b>Note pratique —</b> la <i>penta D maj est safe sur les 3 accords</i> — c'est ta passe-partout si tu doutes. Elle n'aura juste pas le caractère 3M sur A7 ni E7.</span>
+  </div>
+</div>
+
+<script>
+const COLORS = {
+  T:    { fill: '#FFD700', glow: true,  textColor: '#1a1a1a' },
+  '3M': { fill: '#7CB342', glow: false, textColor: '#ffffff' },
+  '4':  { fill: '#9E9E9E', glow: false, textColor: '#ffffff' },
+  '5':  { fill: '#9E9E9E', glow: false, textColor: '#ffffff' },
+  '6':  { fill: '#9E9E9E', glow: false, textColor: '#ffffff' },
+  '9':  { fill: '#9E9E9E', glow: false, textColor: '#ffffff' },
+  DANGER: { fill: '#c0392b', glow: false, textColor: '#ffffff', danger: true }
+};
+
+// Each chart: penta notes (color-coded by degree) + danger notes (red)
+const charts = {
+  A7: {
+    chord: 'A7',
+    startFret: 4, endFret: 12,
+    notes: [
+      // A maj pent: A B C# E F#  — degrees over A: T 9 3M 5 6
+      [1, 5, 'A',  'T'],  [1, 7, 'B',  '9'],  [1, 9, 'C#', '3M'], [1, 12, 'E', '5'],
+      [2, 5, 'E',  '5'],  [2, 7, 'F#', '6'],  [2, 10, 'A', 'T'],  [2, 12, 'B', '9'],
+      [3, 6, 'C#', '3M'], [3, 9, 'E',  '5'],  [3, 11, 'F#', '6'],
+      [4, 4, 'F#', '6'],  [4, 7, 'A',  'T'],  [4, 9, 'B',  '9'],  [4, 11, 'C#', '3M'],
+      [5, 4, 'C#', '3M'], [5, 7, 'E',  '5'],  [5, 9, 'F#', '6'],  [5, 12, 'A',  'T'],
+      [6, 5, 'A',  'T'],  [6, 7, 'B',  '9'],  [6, 9, 'C#', '3M'], [6, 12, 'E', '5']
+    ],
+    danger: [
+      // G# positions in fret 4-12 (the ♮7 of A — frotte avec G = ♭7 de A7)
+      [1, 4, 'G#', 'DANGER'],
+      [2, 9, 'G#', 'DANGER'],
+      [4, 6, 'G#', 'DANGER'],
+      [5, 11, 'G#', 'DANGER'],
+      [6, 4, 'G#', 'DANGER']
+    ]
+  },
+  D7: {
+    chord: 'D7',
+    startFret: 4, endFret: 12,
+    notes: [
+      // D maj pent: D E F# A B  — degrees over D: T 9 3M 5 6
+      [1, 7, 'B',  '6'],  [1, 10, 'D', 'T'],  [1, 12, 'E', '9'],
+      [2, 7, 'F#', '3M'], [2, 10, 'A', '5'],  [2, 12, 'B', '6'],
+      [3, 7, 'D',  'T'],  [3, 9, 'E',  '9'],  [3, 11, 'F#', '3M'],
+      [4, 4, 'F#', '3M'], [4, 7, 'A',  '5'],  [4, 9, 'B',  '6'],  [4, 12, 'D', 'T'],
+      [5, 5, 'D',  'T'],  [5, 7, 'E',  '9'],  [5, 9, 'F#', '3M'], [5, 12, 'A', '5'],
+      [6, 5, 'A',  '5'],  [6, 7, 'B',  '6'],  [6, 10, 'D', 'T'],  [6, 12, 'E', '9']
+    ],
+    danger: [
+      // C# positions in fret 4-12 (the ♮7 of D — frotte avec C = ♭7 de D7)
+      [1, 9, 'C#', 'DANGER'],
+      [3, 6, 'C#', 'DANGER'],
+      [4, 11, 'C#', 'DANGER'],
+      [5, 4, 'C#', 'DANGER'],
+      [6, 9, 'C#', 'DANGER']
+    ]
+  },
+  E7: {
+    chord: 'E7',
+    startFret: 4, endFret: 12,
+    notes: [
+      // E maj pent: E F# G# B C#  — degrees over E: T 9 3M 5 6
+      [1, 7, 'B',  '5'],  [1, 9, 'C#', '6'],  [1, 12, 'E', 'T'],
+      [2, 7, 'F#', '9'],  [2, 9, 'G#', '3M'], [2, 12, 'B', '5'],
+      [3, 6, 'C#', '6'],  [3, 9, 'E',  'T'],  [3, 11, 'F#', '9'],
+      [4, 6, 'G#', '3M'], [4, 9, 'B',  '5'],  [4, 11, 'C#', '6'],
+      [5, 4, 'C#', '6'],  [5, 7, 'E',  'T'],  [5, 9, 'F#', '9'],  [5, 11, 'G#', '3M'],
+      [6, 4, 'G#', '3M'], [6, 7, 'B',  '5'],  [6, 9, 'C#', '6'],  [6, 12, 'E', 'T']
+    ],
+    danger: []  // D# n'est dans aucune des 3 pentas → pas de danger sur E7
+  }
+};
+
+function buildMiniFretboard(chart) {
+  const W = 450, H = 280;
+  const padL = 22, padR = 18, padT = 20, padB = 30;
+  const fbX = padL, fbY = padT;
+  const fbW = W - padL - padR;
+  const fbH = H - padT - padB;
+
+  const numSlots = chart.endFret - chart.startFret + 1;
+  const slotW = fbW / numSlots;
+  const stringCount = 6;
+  const stringGap = fbH / (stringCount - 1);
+
+  let svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">`;
+
+  svg += `<defs>
+    <linearGradient id="bg-grad-${chart.chord}" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#162a40"/>
+      <stop offset="100%" stop-color="#0d1b2a"/>
+    </linearGradient>
+  </defs>`;
+
+  // panel
+  svg += `<rect x="2" y="2" width="${W-4}" height="${H-4}" fill="#0d1b2a" rx="8" ry="8" stroke="#3b556e" stroke-width="1.2"/>`;
+  svg += `<rect x="7" y="7" width="${W-14}" height="${H-14}" fill="url(#bg-grad-${chart.chord})" rx="5" ry="5"/>`;
+
+  // inlays
+  const singleInlayFrets = [3, 5, 7, 9, 15, 17, 19, 21];
+  const doubleInlayFrets = [12, 24];
+  for (let f = chart.startFret; f <= chart.endFret; f++) {
+    const slotIdx = f - chart.startFret;
+    const cx = fbX + slotIdx * slotW + slotW / 2;
+    if (singleInlayFrets.includes(f)) {
+      svg += `<circle cx="${cx}" cy="${fbY + fbH/2}" r="4.5" fill="#3b556e" opacity="0.5"/>`;
+    }
+    if (doubleInlayFrets.includes(f)) {
+      svg += `<circle cx="${cx}" cy="${fbY + fbH*0.30}" r="4.5" fill="#3b556e" opacity="0.5"/>`;
+      svg += `<circle cx="${cx}" cy="${fbY + fbH*0.70}" r="4.5" fill="#3b556e" opacity="0.5"/>`;
+    }
+  }
+
+  // fret lines
+  for (let i = 0; i <= numSlots; i++) {
+    const x = fbX + i * slotW;
+    const sw = (i === 0) ? 2.5 : 1.2;
+    const stroke = (i === 0) ? '#cfd8e3' : '#5a6776';
+    svg += `<line x1="${x}" y1="${fbY}" x2="${x}" y2="${fbY + fbH}" stroke="${stroke}" stroke-width="${sw}"/>`;
+  }
+
+  // strings
+  for (let s = 0; s < stringCount; s++) {
+    const y = fbY + s * stringGap;
+    const sw = 0.6 + s * 0.16;
+    svg += `<line x1="${fbX}" y1="${y}" x2="${fbX + fbW}" y2="${y}" stroke="#94a0ad" stroke-width="${sw}"/>`;
+  }
+
+  // notes (penta majeure)
+  const noteR = 13;
+  for (const note of chart.notes) {
+    const [stringNum, fret, label, type] = note;
+    const slotIdx = fret - chart.startFret;
+    if (slotIdx < 0 || slotIdx >= numSlots) continue;
+    const cx = fbX + slotIdx * slotW + slotW / 2;
+    const cy = fbY + (stringNum - 1) * stringGap;
+    const color = COLORS[type] || COLORS['5'];
+
+    if (color.glow) {
+      svg += `<circle cx="${cx}" cy="${cy}" r="${noteR + 7}" fill="${color.fill}" opacity="0.16"/>`;
+      svg += `<circle cx="${cx}" cy="${cy}" r="${noteR + 4}" fill="${color.fill}" opacity="0.30"/>`;
+    }
+    svg += `<circle cx="${cx}" cy="${cy}" r="${noteR}" fill="${color.fill}" stroke="#fff8dc" stroke-width="${color.glow ? 0.7 : 0.3}"/>`;
+
+    const fontSize = label.length === 1 ? 11 : (label.length === 2 ? 10 : 8);
+    svg += `<text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="central" fill="${color.textColor}" font-family="Helvetica, Arial, sans-serif" font-weight="800" font-size="${fontSize}">${label}</text>`;
+  }
+
+  // danger notes (drawn after so they sit on top)
+  for (const note of chart.danger) {
+    const [stringNum, fret, label, type] = note;
+    const slotIdx = fret - chart.startFret;
+    if (slotIdx < 0 || slotIdx >= numSlots) continue;
+    const cx = fbX + slotIdx * slotW + slotW / 2;
+    const cy = fbY + (stringNum - 1) * stringGap;
+    const color = COLORS.DANGER;
+    const dR = noteR + 1;
+
+    svg += `<circle cx="${cx}" cy="${cy}" r="${dR + 5}" fill="${color.fill}" opacity="0.18"/>`;
+    svg += `<circle cx="${cx}" cy="${cy}" r="${dR}" fill="${color.fill}" stroke="#fff" stroke-width="1.5"/>`;
+
+    const off = dR * 0.62;
+    svg += `<line x1="${cx - off}" y1="${cy - off}" x2="${cx + off}" y2="${cy + off}" stroke="#fff" stroke-width="2" opacity="0.7" stroke-linecap="round"/>`;
+
+    svg += `<text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="central" fill="${color.textColor}" font-family="Helvetica, Arial, sans-serif" font-weight="800" font-size="9">${label}</text>`;
+  }
+
+  // fret numbers
+  for (let f = chart.startFret; f <= chart.endFret; f++) {
+    const slotIdx = f - chart.startFret;
+    const cx = fbX + slotIdx * slotW + slotW / 2;
+    const cy = fbY + fbH + 18;
+    svg += `<text x="${cx}" y="${cy}" text-anchor="middle" fill="#9aa5b1" font-family="Helvetica, Arial, sans-serif" font-size="9.5" font-weight="600">${f}</text>`;
+  }
+
+  svg += `</svg>`;
+  return svg;
+}
+
+document.getElementById('fb-A7').innerHTML = buildMiniFretboard(charts.A7);
+document.getElementById('fb-D7').innerHTML = buildMiniFretboard(charts.D7);
+document.getElementById('fb-E7').innerHTML = buildMiniFretboard(charts.E7);
+</script>
+</body>
+</html>

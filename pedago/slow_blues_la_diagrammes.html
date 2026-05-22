@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Slow blues en La — Diagrammes manche</title>
+<style>
+  @page { size: A4 landscape; margin: 8mm; }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'Segoe UI', Arial, sans-serif;
+    background: #f0f2f5;
+    color: #1a1a1a;
+    padding: 10mm 8mm;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  @media print {
+    body { background: white; padding: 0; }
+    .no-print { display: none !important; }
+  }
+
+  .sheet {
+    max-width: 281mm;
+    margin: 0 auto;
+  }
+
+  .toolbar {
+    text-align: right;
+    margin-bottom: 4mm;
+  }
+
+  button.print-btn {
+    background: #1a73e8;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    font-size: 10pt;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+  }
+  button.print-btn:hover { background: #1557b0; }
+
+  .tip {
+    background: #fff7e6;
+    border-left: 3px solid #ffa940;
+    padding: 6px 10px;
+    margin: 0 0 8px 0;
+    font-size: 9pt;
+    color: #5a4a1a;
+    border-radius: 3px;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 4mm;
+  }
+
+  h1 {
+    font-size: 15pt;
+    margin: 0 0 1mm 0;
+    font-weight: 700;
+    letter-spacing: -0.2px;
+  }
+
+  .subtitle {
+    font-size: 9pt;
+    color: #666;
+    margin-bottom: 3mm;
+  }
+
+  .legend {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 14px;
+    font-size: 8.5pt;
+    color: #2a2a2a;
+  }
+
+  .legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .legend-dot {
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
+    border: 1px solid rgba(0,0,0,0.1);
+  }
+
+  .legend-dot.glow {
+    box-shadow: 0 0 6px 1px #FFD700;
+  }
+
+  .zone {
+    margin-top: 3mm;
+  }
+
+  .zone-label {
+    font-size: 9.5pt;
+    font-weight: 700;
+    margin: 0 0 2mm 0;
+    color: #444;
+    text-align: center;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    position: relative;
+  }
+  .zone-label::before,
+  .zone-label::after {
+    content: '';
+    display: inline-block;
+    width: 30mm;
+    height: 1px;
+    background: #ccc;
+    vertical-align: middle;
+    margin: 0 8px;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 5mm;
+  }
+
+  .card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .chord-title {
+    font-size: 12pt;
+    font-weight: 700;
+    margin-bottom: 1.5mm;
+    color: #1a1a1a;
+    letter-spacing: 0.3px;
+  }
+
+  svg.fretboard {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .bend-note {
+    text-align: center;
+    font-size: 8pt;
+    color: #777;
+    font-style: italic;
+    margin-top: 4mm;
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+  <div class="toolbar no-print">
+    <div class="tip">
+      💡 Pour l'impression : active <b>« Graphismes d'arrière-plan »</b> (ou « Background graphics ») dans les options du navigateur, sinon le fretboard sortira blanc.
+    </div>
+    <button class="print-btn" onclick="window.print()">🖨️  Imprimer / Sauvegarder en PDF</button>
+  </div>
+
+  <header>
+    <h1>Slow blues en La — A7 · D7 · E7</h1>
+    <div class="subtitle">Notes cibles sur le manche · positions case 5 (haut) et case 12 (bas)</div>
+    <div class="legend">
+      <div class="legend-item"><span class="legend-dot glow" style="background:#FFD700"></span><span><b>T</b> — Tonique</span></div>
+      <div class="legend-item"><span class="legend-dot" style="background:#FF8C00"></span><span><b>♭7</b> — septième mineure</span></div>
+      <div class="legend-item"><span class="legend-dot" style="background:#7CB342"></span><span><b>3M</b> — tierce majeure</span></div>
+      <div class="legend-item"><span class="legend-dot" style="background:#E53935"></span><span><b>♭3</b> — note bleue (bend ♭3→3M)</span></div>
+      <div class="legend-item"><span class="legend-dot" style="background:#9E9E9E"></span><span><b>4 · 5 · 9</b> — autres degrés</span></div>
+    </div>
+  </header>
+
+  <div class="zone">
+    <div class="zone-label">Position case 5</div>
+    <div class="row" id="row-case-5"></div>
+  </div>
+
+  <div class="zone">
+    <div class="zone-label">Position case 12</div>
+    <div class="row" id="row-case-12"></div>
+  </div>
+
+  <div class="bend-note">
+    Réflexe blues : viser <b>T</b> et <b>♭7</b> comme points d'arrivée, faire chanter le bend <b>♭3 → 3M</b>, utiliser la <b>4</b> comme tension expressive avant retour sur la <b>5</b> ou la <b>T</b>.
+  </div>
+</div>
+
+<script>
+// ---- color mapping ----
+const COLORS = {
+  T:   { fill: '#FFD700', glow: true,  textColor: '#1a1a1a' },
+  b7:  { fill: '#FF8C00', glow: false, textColor: '#ffffff' },
+  '3M': { fill: '#7CB342', glow: false, textColor: '#ffffff' },
+  b3:  { fill: '#E53935', glow: false, textColor: '#ffffff' },
+  '4': { fill: '#9E9E9E', glow: false, textColor: '#ffffff' },
+  '5': { fill: '#9E9E9E', glow: false, textColor: '#ffffff' },
+  '9': { fill: '#9E9E9E', glow: false, textColor: '#ffffff' },
+  '6': { fill: '#9E9E9E', glow: false, textColor: '#ffffff' }
+};
+
+// ---- diagram data ----
+// [string (1 = high e ... 6 = low E), fret, label, type]
+const diagrams = {
+  case5: [
+    {
+      chord: 'A7',
+      startFret: 4, endFret: 8,
+      notes: [
+        [1, 5, 'A', 'T'],    [1, 8, 'C', 'b3'],
+        [2, 5, 'E', '5'],    [2, 8, 'G', 'b7'],
+        [3, 5, 'C', 'b3'],   [3, 6, 'C#', '3M'], [3, 7, 'D', '4'],
+        [4, 5, 'G', 'b7'],   [4, 7, 'A', 'T'],
+        [5, 5, 'D', '4'],    [5, 7, 'E', '5'],
+        [6, 5, 'A', 'T'],    [6, 8, 'C', 'b3']
+      ]
+    },
+    {
+      chord: 'D7',
+      startFret: 4, endFret: 8,
+      notes: [
+        [1, 5, 'A', '5'],    [1, 8, 'C', 'b7'],
+        [2, 5, 'E', '9'],    [2, 6, 'F', 'b3'], [2, 7, 'F#', '3M'], [2, 8, 'G', '4'],
+        [3, 5, 'C', 'b7'],   [3, 7, 'D', 'T'],
+        [4, 5, 'G', '4'],    [4, 7, 'A', '5'],
+        [5, 5, 'D', 'T'],    [5, 7, 'E', '9'],  [5, 8, 'F', 'b3'],
+        [6, 5, 'A', '5'],    [6, 8, 'C', 'b7']
+      ]
+    },
+    {
+      chord: 'E7',
+      startFret: 4, endFret: 8,
+      notes: [
+        [1, 4, 'G#', '3M'],  [1, 5, 'A', '4'],  [1, 7, 'B', '5'],
+        [2, 5, 'E', 'T'],    [2, 7, 'F#', '9'], [2, 8, 'G', 'b3'],
+        [3, 4, 'B', '5'],    [3, 7, 'D', 'b7'],
+        [4, 5, 'G', 'b3'],   [4, 6, 'G#', '3M'],[4, 7, 'A', '4'],
+        [5, 5, 'D', 'b7'],   [5, 7, 'E', 'T'],
+        [6, 4, 'G#', '3M'],  [6, 5, 'A', '4'],  [6, 7, 'B', '5']
+      ]
+    }
+  ],
+  case12: [
+    {
+      chord: 'A7',
+      startFret: 11, endFret: 15,
+      notes: [
+        [1, 12, 'E', '5'],   [1, 15, 'G', 'b7'],
+        [2, 13, 'C', 'b3'],  [2, 14, 'C#', '3M'], [2, 15, 'D', '4'],
+        [3, 12, 'G', 'b7'],  [3, 14, 'A', 'T'],
+        [4, 12, 'D', '4'],   [4, 14, 'E', '5'],
+        [5, 12, 'A', 'T'],   [5, 15, 'C', 'b3'],
+        [6, 12, 'E', '5'],   [6, 15, 'G', 'b7']
+      ]
+    },
+    {
+      chord: 'D7',
+      startFret: 11, endFret: 15,
+      notes: [
+        [1, 12, 'E', '9'],   [1, 13, 'F', 'b3'], [1, 14, 'F#', '3M'], [1, 15, 'G', '4'],
+        [2, 13, 'C', 'b7'],  [2, 15, 'D', 'T'],
+        [3, 11, 'F#', '3M'], [3, 12, 'G', '4'],  [3, 14, 'A', '5'],
+        [4, 12, 'D', 'T'],   [4, 14, 'E', '9'],  [4, 15, 'F', 'b3'],
+        [5, 12, 'A', '5'],   [5, 15, 'C', 'b7'],
+        [6, 12, 'E', '9'],   [6, 13, 'F', 'b3'], [6, 14, 'F#', '3M'], [6, 15, 'G', '4']
+      ]
+    },
+    {
+      chord: 'E7',
+      startFret: 11, endFret: 15,
+      notes: [
+        [1, 12, 'E', 'T'],   [1, 15, 'G', 'b3'],
+        [2, 12, 'B', '5'],   [2, 15, 'D', 'b7'],
+        [3, 12, 'G', 'b3'],  [3, 13, 'G#', '3M'], [3, 14, 'A', '4'],
+        [4, 12, 'D', 'b7'],  [4, 14, 'E', 'T'],
+        [5, 11, 'G#', '3M'], [5, 12, 'A', '4'],   [5, 14, 'B', '5'],
+        [6, 12, 'E', 'T'],   [6, 15, 'G', 'b3']
+      ]
+    }
+  ]
+};
+
+// ---- SVG builder ----
+function buildDiagram(d) {
+  const W = 400, H = 240;
+  const padL = 16, padR = 16, padT = 16, padB = 28;
+  const fbX = padL, fbY = padT;
+  const fbW = W - padL - padR;
+  const fbH = H - padT - padB;
+
+  const numSlots = d.endFret - d.startFret + 1;
+  const slotW = fbW / numSlots;
+  const stringCount = 6;
+  const stringGap = fbH / (stringCount - 1);
+
+  let svg = `<svg class="fretboard" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">`;
+
+  // outer rounded panel
+  svg += `<rect x="1.5" y="1.5" width="${W-3}" height="${H-3}" fill="#0d1b2a" rx="9" ry="9" stroke="#3b556e" stroke-width="1.2"/>`;
+  // subtle inner gradient feel via second rect (lighter on top)
+  svg += `<defs>
+    <linearGradient id="grad-${d.chord}-${d.startFret}" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#162a40"/>
+      <stop offset="100%" stop-color="#0d1b2a"/>
+    </linearGradient>
+  </defs>`;
+  svg += `<rect x="6" y="6" width="${W-12}" height="${H-12}" fill="url(#grad-${d.chord}-${d.startFret})" rx="6" ry="6"/>`;
+
+  // inlays (sit behind strings/frets)
+  const singleInlayFrets = [3, 5, 7, 9, 15, 17, 19, 21];
+  const doubleInlayFrets = [12, 24];
+  for (let f = d.startFret; f <= d.endFret; f++) {
+    const slotIdx = f - d.startFret;
+    const cx = fbX + slotIdx * slotW + slotW / 2;
+    if (singleInlayFrets.includes(f)) {
+      svg += `<circle cx="${cx}" cy="${fbY + fbH/2}" r="4.5" fill="#3b556e" opacity="0.55"/>`;
+    }
+    if (doubleInlayFrets.includes(f)) {
+      svg += `<circle cx="${cx}" cy="${fbY + fbH*0.30}" r="4.5" fill="#3b556e" opacity="0.55"/>`;
+      svg += `<circle cx="${cx}" cy="${fbY + fbH*0.70}" r="4.5" fill="#3b556e" opacity="0.55"/>`;
+    }
+  }
+
+  // fret lines (vertical) — leftmost slightly bolder
+  for (let i = 0; i <= numSlots; i++) {
+    const x = fbX + i * slotW;
+    const sw = (i === 0) ? 2.5 : 1.2;
+    const stroke = (i === 0) ? '#cfd8e3' : '#5a6776';
+    svg += `<line x1="${x}" y1="${fbY}" x2="${x}" y2="${fbY + fbH}" stroke="${stroke}" stroke-width="${sw}"/>`;
+  }
+
+  // strings (horizontal) — thicker for bass strings
+  for (let s = 0; s < stringCount; s++) {
+    const y = fbY + s * stringGap;
+    const sw = 0.6 + s * 0.18;
+    svg += `<line x1="${fbX}" y1="${y}" x2="${fbX + fbW}" y2="${y}" stroke="#94a0ad" stroke-width="${sw}"/>`;
+  }
+
+  // notes
+  for (const note of d.notes) {
+    const [stringNum, fret, label, type] = note;
+    const slotIdx = fret - d.startFret;
+    if (slotIdx < 0 || slotIdx >= numSlots) continue;
+    const cx = fbX + slotIdx * slotW + slotW / 2;
+    const cy = fbY + (stringNum - 1) * stringGap;
+    const color = COLORS[type] || COLORS['5'];
+    const r = 13.5;
+
+    if (color.glow) {
+      svg += `<circle cx="${cx}" cy="${cy}" r="${r + 7}" fill="${color.fill}" opacity="0.18"/>`;
+      svg += `<circle cx="${cx}" cy="${cy}" r="${r + 4}" fill="${color.fill}" opacity="0.32"/>`;
+    }
+    svg += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${color.fill}" stroke="${color.glow ? '#fff8dc' : '#ffffff'}" stroke-width="${color.glow ? 0.8 : 0.4}"/>`;
+
+    const fontSize = label.length === 1 ? 12 : (label.length === 2 ? 10.5 : 9);
+    svg += `<text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="central" fill="${color.textColor}" font-family="Helvetica, Arial, sans-serif" font-weight="800" font-size="${fontSize}">${label}</text>`;
+  }
+
+  // fret numbers (below)
+  for (let f = d.startFret; f <= d.endFret; f++) {
+    const slotIdx = f - d.startFret;
+    const cx = fbX + slotIdx * slotW + slotW / 2;
+    const cy = fbY + fbH + 16;
+    const highlight = (f === 5 && d.startFret === 4) || (f === 12 && d.startFret === 11);
+    const color = highlight ? '#FFD700' : '#9aa5b1';
+    const weight = highlight ? '800' : '600';
+    const size = highlight ? 11.5 : 10.5;
+    svg += `<text x="${cx}" y="${cy}" text-anchor="middle" fill="${color}" font-family="Helvetica, Arial, sans-serif" font-size="${size}" font-weight="${weight}">${f}</text>`;
+  }
+
+  svg += `</svg>`;
+  return svg;
+}
+
+function renderRow(rowEl, diagramList) {
+  for (const d of diagramList) {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `<div class="chord-title">${d.chord}</div>` + buildDiagram(d);
+    rowEl.appendChild(card);
+  }
+}
+
+renderRow(document.getElementById('row-case-5'), diagrams.case5);
+renderRow(document.getElementById('row-case-12'), diagrams.case12);
+</script>
+</body>
+</html>

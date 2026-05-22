@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Slow blues en La — Phrasé Q/R sur 12 mesures</title>
+<style>
+  @page { size: A4 landscape; margin: 8mm; }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'Segoe UI', Arial, sans-serif;
+    background: #f0f2f5;
+    color: #1a1a1a;
+    padding: 10mm 8mm;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  @media print {
+    body { background: white; padding: 0; }
+    .no-print { display: none !important; }
+  }
+
+  .sheet { max-width: 281mm; margin: 0 auto; }
+
+  .toolbar { text-align: right; margin-bottom: 4mm; }
+
+  button.print-btn {
+    background: #1a73e8;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    font-size: 10pt;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+  }
+
+  .tip-banner {
+    background: #fff7e6;
+    border-left: 3px solid #ffa940;
+    padding: 6px 10px;
+    margin: 0 0 8px 0;
+    font-size: 9pt;
+    color: #5a4a1a;
+    border-radius: 3px;
+  }
+
+  header { text-align: center; margin-bottom: 3mm; }
+
+  h1 {
+    font-size: 15pt;
+    margin: 0 0 1mm 0;
+    font-weight: 700;
+    letter-spacing: -0.2px;
+  }
+
+  .subtitle {
+    font-size: 9pt;
+    color: #666;
+    margin-bottom: 2.5mm;
+  }
+
+  .legend-chord {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    font-size: 8.5pt;
+  }
+
+  .legend-chord-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .legend-chip {
+    display: inline-block;
+    padding: 2px 9px;
+    border-radius: 3px;
+    font-weight: 700;
+    color: white;
+    font-size: 9pt;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 28mm repeat(4, 1fr);
+    gap: 3mm;
+    margin-top: 4mm;
+  }
+
+  .phrase-label {
+    background: linear-gradient(135deg, #0d1b2a 0%, #1f3a5f 100%);
+    color: white;
+    border-radius: 7px;
+    padding: 3mm;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .phrase-label .role {
+    font-size: 22pt;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: #FFD700;
+    text-shadow: 0 0 6px rgba(255, 215, 0, 0.4);
+    line-height: 1;
+  }
+
+  .phrase-label .role-fr {
+    font-size: 8.5pt;
+    color: #cbd5e0;
+    margin-top: 2mm;
+    font-style: italic;
+  }
+
+  .phrase-label .bars-range {
+    font-size: 7.5pt;
+    color: #94a0ad;
+    margin-top: 2mm;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .bar {
+    background: white;
+    border: 1px solid #e0e4ea;
+    border-radius: 7px;
+    padding: 2.5mm 3mm 3mm;
+    position: relative;
+    min-height: 39mm;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  }
+
+  .bar.chord-A7 { border-top: 4px solid #d4a017; }
+  .bar.chord-D7 { border-top: 4px solid #1b9d8f; }
+  .bar.chord-E7 { border-top: 4px solid #d9534f; }
+
+  .bar-num {
+    position: absolute;
+    top: 2mm;
+    right: 3mm;
+    font-size: 7.5pt;
+    color: #aab2bd;
+    font-weight: 600;
+  }
+
+  .bar-chord {
+    font-size: 16pt;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 1mm;
+  }
+
+  .bar.chord-A7 .bar-chord { color: #b8860b; }
+  .bar.chord-D7 .bar-chord { color: #0e7c70; }
+  .bar.chord-E7 .bar-chord { color: #c0392b; }
+
+  .bar-role {
+    font-size: 7.5pt;
+    color: #888;
+    font-style: italic;
+    margin-bottom: 1.5mm;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .bar-tip {
+    font-size: 8.5pt;
+    color: #2a2a2a;
+    line-height: 1.35;
+    flex-grow: 1;
+  }
+
+  .bar-tip b { color: #1a1a1a; }
+
+  .footer {
+    margin-top: 4mm;
+    padding: 3mm 5mm;
+    background: #fff8dc;
+    border-left: 3px solid #FFD700;
+    border-radius: 3px;
+    font-size: 8.5pt;
+    color: #5a4a1a;
+    line-height: 1.45;
+  }
+
+  .footer b { color: #3a2e0a; }
+</style>
+</head>
+<body>
+<div class="sheet">
+  <div class="toolbar no-print">
+    <div class="tip-banner">
+      💡 Pour l'impression : active <b>« Graphismes d'arrière-plan »</b> dans les options du navigateur pour conserver les couleurs des en-têtes.
+    </div>
+    <button class="print-btn" onclick="window.print()">🖨️  Imprimer / Sauvegarder en PDF</button>
+  </div>
+
+  <header>
+    <h1>Slow blues en La — Phrasé question / réponse sur 12 mesures</h1>
+    <div class="subtitle">Forme AAB : énoncé (Q) · variation (Q') · résolution (R) — un chorus = une histoire racontée en trois temps</div>
+    <div class="legend-chord">
+      <div class="legend-chord-item"><span class="legend-chip" style="background:#d4a017">A7</span><span>I — tonique</span></div>
+      <div class="legend-chord-item"><span class="legend-chip" style="background:#1b9d8f">D7</span><span>IV — sous-dominante</span></div>
+      <div class="legend-chord-item"><span class="legend-chip" style="background:#d9534f">E7</span><span>V — dominante</span></div>
+    </div>
+  </header>
+
+  <div class="grid">
+
+    <!-- PHRASE 1 -->
+    <div class="phrase-label">
+      <div class="role">Q</div>
+      <div class="role-fr">Question · énoncé</div>
+      <div class="bars-range">Mes. 1 — 4</div>
+    </div>
+
+    <div class="bar chord-A7">
+      <div class="bar-num">M.1</div>
+      <div class="bar-chord">A7</div>
+      <div class="bar-role">Pose</div>
+      <div class="bar-tip">Énonce. Appui sur la <b>T (A)</b>. Laisse respirer — l'espace est ton ami sur un slow.</div>
+    </div>
+    <div class="bar chord-A7">
+      <div class="bar-num">M.2</div>
+      <div class="bar-chord">A7</div>
+      <div class="bar-role">Caractérise</div>
+      <div class="bar-tip">Affirme le caractère dominant. Bend <b>♭3→3M (C→C#)</b> ou descente sur <b>♭7 (G)</b>.</div>
+    </div>
+    <div class="bar chord-A7">
+      <div class="bar-num">M.3</div>
+      <div class="bar-chord">A7</div>
+      <div class="bar-role">Développe</div>
+      <div class="bar-tip">Élargis. Joue avec la <b>5 (E)</b>, tension via la <b>4 (D)</b>, retour vers <b>T</b>.</div>
+    </div>
+    <div class="bar chord-A7">
+      <div class="bar-num">M.4</div>
+      <div class="bar-chord">A7</div>
+      <div class="bar-role">Anticipe</div>
+      <div class="bar-tip">Prépare le IV. Le <b>♭7 (G)</b> de A7 devient la <b>4 de D7</b> : note pivot idéale pour glisser.</div>
+    </div>
+
+    <!-- PHRASE 2 -->
+    <div class="phrase-label">
+      <div class="role">Q'</div>
+      <div class="role-fr">Question variée</div>
+      <div class="bars-range">Mes. 5 — 8</div>
+    </div>
+
+    <div class="bar chord-D7">
+      <div class="bar-num">M.5</div>
+      <div class="bar-chord">D7</div>
+      <div class="bar-role">Nouvelle couleur</div>
+      <div class="bar-tip">Cible <b>F# (3M)</b> ou <b>C (♭7)</b>. <b>⚠️ évite C#</b> = ♮7 de D, ça frotte avec la rythmique.</div>
+    </div>
+    <div class="bar chord-D7">
+      <div class="bar-num">M.6</div>
+      <div class="bar-chord">D7</div>
+      <div class="bar-role">Insiste</div>
+      <div class="bar-tip">Bend <b>F→F#</b> (♭3→3M sur D), équivalent du bend signature mais déplacé sur le IV.</div>
+    </div>
+    <div class="bar chord-A7">
+      <div class="bar-num">M.7</div>
+      <div class="bar-chord">A7</div>
+      <div class="bar-role">Retour maison</div>
+      <div class="bar-tip">Repos relatif sur <b>T (A)</b>. Phrase plus calme, on respire avant la conclusion.</div>
+    </div>
+    <div class="bar chord-A7">
+      <div class="bar-num">M.8</div>
+      <div class="bar-chord">A7</div>
+      <div class="bar-role">Élan</div>
+      <div class="bar-tip">Prépare la montée vers le V. Approche chromatique de <b>E</b>, ou ligne ascendante.</div>
+    </div>
+
+    <!-- PHRASE 3 -->
+    <div class="phrase-label">
+      <div class="role">R</div>
+      <div class="role-fr">Réponse · résolution</div>
+      <div class="bars-range">Mes. 9 — 12</div>
+    </div>
+
+    <div class="bar chord-E7">
+      <div class="bar-num">M.9</div>
+      <div class="bar-chord">E7</div>
+      <div class="bar-role">Pic de tension</div>
+      <div class="bar-tip">Sommet du chorus. Cible <b>G# (3M)</b> — leading tone vers A — et <b>D (♭7)</b>. Phrase forte.</div>
+    </div>
+    <div class="bar chord-D7">
+      <div class="bar-num">M.10</div>
+      <div class="bar-chord">D7</div>
+      <div class="bar-role">Redescente</div>
+      <div class="bar-tip">La tension retombe. Désescalade <b>F# → F → E</b> ou ligne descendante vers le I.</div>
+    </div>
+    <div class="bar chord-A7">
+      <div class="bar-num">M.11</div>
+      <div class="bar-chord">A7</div>
+      <div class="bar-role">Résolution</div>
+      <div class="bar-tip">Atterrissage sur <b>T (A)</b>. Phrase de conclusion, narration "fermée".</div>
+    </div>
+    <div class="bar chord-E7">
+      <div class="bar-num">M.12</div>
+      <div class="bar-chord">E7</div>
+      <div class="bar-role">Turnaround</div>
+      <div class="bar-tip">Relance vers le chorus suivant. Lick turnaround classique : descente chromatique vers <b>E</b>.</div>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    <b>Lecture du schéma —</b> chaque ligne est une "phrase" de 4 mesures qui forme une unité narrative. Le blues fonctionne en <b>AAB</b> : tu énonces (Q), tu redis avec une variation harmonique (Q', le déplacement vers le IV), tu réponds et tu conclues (R). À l'intérieur de chaque ligne, pense aussi <b>2 mesures = question, 2 mesures = réponse</b> à plus petite échelle — c'est ce qui donne la respiration. Sur slow blues, <b>l'espace vaut plus que les notes</b> : la phrase qui se termine par un silence "habité" sonne mille fois mieux qu'une phrase qui sature les mesures.
+  </div>
+</div>
+</body>
+</html>
